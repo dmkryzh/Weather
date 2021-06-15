@@ -39,7 +39,7 @@ class OnboardingViewController: UIViewController {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.05
         
-        let attributedText = NSMutableAttributedString(string: "ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ  УСТРОЙСТВА", attributes: [NSAttributedString.Key.kern: -0.12, NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12), NSAttributedString.Key.foregroundColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1)])
+        let attributedText = NSMutableAttributedString(string: "ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ  УСТРОЙСТВА", attributes: [NSAttributedString.Key.kern: -0.12, NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 12) as Any, NSAttributedString.Key.foregroundColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1)])
         
         button.setAttributedTitle(attributedText, for: .normal)
         
@@ -55,18 +55,18 @@ class OnboardingViewController: UIViewController {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.11
         
-        let attributedText = NSMutableAttributedString(string: "НЕТ, Я БУДУ ДОБАВЛЯТЬ ЛОКАЦИИ", attributes: [NSAttributedString.Key.kern: 0.16, NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor(red: 0.992, green: 0.986, blue: 0.963, alpha: 1)])
+        let attributedText = NSMutableAttributedString(string: "НЕТ, Я БУДУ ДОБАВЛЯТЬ ЛОКАЦИИ", attributes: [NSAttributedString.Key.kern: 0.16, NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 16) as Any, NSAttributedString.Key.foregroundColor: UIColor(red: 0.992, green: 0.986, blue: 0.963, alpha: 1)])
         
         button.setAttributedTitle(attributedText, for: .normal)
         button.contentHorizontalAlignment = .right
-
+        
         return button
     }()
     
     let headerLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(red: 0.973, green: 0.961, blue: 0.961, alpha: 1)
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         
@@ -81,12 +81,12 @@ class OnboardingViewController: UIViewController {
     let firstTextLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.21
-
+        
         label.attributedText = NSMutableAttributedString(string: "Чтобы получить более точные прогнозы погоды во время движения или путешествия", attributes: [NSAttributedString.Key.kern: 0.14, NSAttributedString.Key.paragraphStyle: paragraphStyle])
         
         return label
@@ -95,13 +95,13 @@ class OnboardingViewController: UIViewController {
     let secondTextLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 1.21
-
+        
         label.attributedText = NSMutableAttributedString(string: "Вы можете изменить свой выбор в любое время из меню приложения", attributes: [NSAttributedString.Key.kern: 0.14, NSAttributedString.Key.paragraphStyle: paragraphStyle])
         
         return label
@@ -113,7 +113,6 @@ class OnboardingViewController: UIViewController {
         startLocationManager()
         let main = CarouselViewController()
         navigationController?.pushViewController(main, animated: true)
-        
     }
     
     func startLocationManager() {
@@ -172,6 +171,7 @@ class OnboardingViewController: UIViewController {
         }
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
@@ -179,20 +179,19 @@ class OnboardingViewController: UIViewController {
         scrollView.addSubview(containertView)
         containertView.addSubviews(onboardingLogo, headerLabel, firstTextLabel, secondTextLabel, useLocationButton, denyButton)
         constraints()
-        navigationController?.isNavigationBarHidden = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        navigationController?.isNavigationBarHidden = true
     }
     
 }
 
 extension OnboardingViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-            print("locations = \(locValue.latitude) \(locValue.longitude)")
-        }
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+    }
 }
 

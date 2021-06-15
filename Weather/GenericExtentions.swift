@@ -38,45 +38,49 @@ extension UIImage {
     }
 }
 
-extension NSManagedObjectContext {
-    /// Only performs a save if there are changes to commit.
-    public func saveIfNeeded() throws {
-        guard hasChanges else { return }
-        try save()
+extension NSMutableAttributedString {
+    func trunc(length: Int, trailing: String = "…") -> NSMutableAttributedString {
+        return (self.string.count > length ? NSMutableAttributedString(string: self.string.prefix(length - 3) + trailing) : self)
     }
-}
-
-extension UIPageControl {
-
-    func customPageControl(dotFillColor: UIColor, dotBorderColor: UIColor, dotBorderWidth: CGFloat) {
-        for (pageIndex, dotView) in self.subviews.enumerated() {
-            dotView.backgroundColor = currentPage == pageIndex ? dotFillColor : .clear
-            dotView.layer.cornerRadius = dotView.frame.size.height / 2
-            dotView.layer.borderColor = dotBorderColor.cgColor
-            dotView.layer.borderWidth = dotBorderWidth
-        }
-    }
-
-}
+}  
 
 extension UIImage {
-    class func outlinedEllipse(size: CGSize, color: UIColor, lineWidth: CGFloat = 1.0) -> UIImage? {
+    
+    func maskWithColor(color: UIColor) -> UIImage? {
+        let maskImage = cgImage!
         
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        guard let context = UIGraphicsGetCurrentContext() else {
+        let width = size.width
+        let height = size.height
+        let bounds = CGRect(x: 0, y: 0, width: width, height: height)
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let context = CGContext(data: nil, width: Int(width), height: Int(height), bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)!
+        
+        context.clip(to: bounds, mask: maskImage)
+        context.setFillColor(color.cgColor)
+        context.fill(bounds)
+        
+        if let cgImage = context.makeImage() {
+            let coloredImage = UIImage(cgImage: cgImage)
+            return coloredImage
+        } else {
             return nil
         }
-        
-        context.setStrokeColor(color.cgColor)
-        context.setLineWidth(lineWidth)
-        let rect = CGRect(origin: .zero, size: size).insetBy(dx: lineWidth * 0.5, dy: lineWidth * 0.5)
-        context.addEllipse(in: rect)
-        context.strokePath()
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
+    }
+    
+}
+
+extension Date {
+    func getFormattedDate(format: String) -> String {
+        let dateformat = DateFormatter()
+        dateformat.locale = Locale(identifier: "ru_RU")
+        dateformat.dateFormat = format
+        return dateformat.string(from: self)
     }
 }
+
+
+
 
 

@@ -11,10 +11,21 @@ import SnapKit
 
 class CarouselViewController: UIPageViewController {
     
+    func configureBarItems() {
+        let options = UIBarButtonItem(image: UIImage(named: "burger"), style: .done, target: self, action: nil)
+        navigationItem.setLeftBarButton(options, animated: true)
+        let location = UIBarButtonItem(image: UIImage(named: "location"), style: .done, target: self, action: nil)
+        navigationItem.setRightBarButton(location, animated: true)
+        navigationController?.navigationBar.backgroundColor = .clear
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.tintColor = .black
+    }
+    
     var items: [UIViewController] = []
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         view.backgroundColor = .yellow
         dataSource = self
@@ -22,17 +33,19 @@ class CarouselViewController: UIPageViewController {
             setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
         }
         decoratePageControl()
+        configureBarItems()
     }
     
     fileprivate func populateItems() {
         let backgroundColor:[UIColor] = [.white, .red, .green]
         backgroundColor.forEach { element in
-            let page = PageViewConroller(color: element)
+            let vm = PageViewModel()
+            let page = PageViewConroller(vm: vm, color: element)
             items.append(page)
         }
         
     }
-
+    
     
     func decoratePageControl() {
         let pageControl = UIPageControl.appearance(whenContainedInInstancesOf: [CarouselViewController.self])
@@ -50,16 +63,23 @@ class CarouselViewController: UIPageViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         for subView in view.subviews {
-                    if  subView is  UIPageControl {
-                        subView.frame.origin.y = self.view.safeAreaLayoutGuide.layoutFrame.minY
-                    }
+            if  subView is  UIPageControl {
+                subView.frame.origin.y = self.view.safeAreaLayoutGuide.layoutFrame.minY
+            }
         }
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = false
     }
- 
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
