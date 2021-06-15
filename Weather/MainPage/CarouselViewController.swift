@@ -27,7 +27,7 @@ class CarouselViewController: UIPageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+        view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         dataSource = self
         if let firstViewController = items.first {
             setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)

@@ -107,15 +107,7 @@ class PageViewConroller: UIViewController {
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = color
     }
-    
-    var collectionHeight: CGFloat? {
-        didSet {
-            secondCollectionView.snp.remakeConstraints{ make in
-                make.height.equalTo(collectionHeight!)
-            }
-        }
-    }
-    
+
     func constraints() {
         
         let safeArea = view.safeAreaLayoutGuide
