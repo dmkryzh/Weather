@@ -11,19 +11,19 @@ import SnapKit
 
 class PageViewConroller: UIViewController {
     
-    let scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
     }()
     
-    let contentView: UIView = {
+    private let contentView: UIView = {
         let view = UIView()
         return view
     }()
     
     var viewModel: PageViewModel
     
-    let detailedForecastButton: UIButton = {
+    private let detailedForecastButton: UIButton = {
         let view = UIButton(type: .system)
         let title = NSAttributedString(string: "Подробнее на 24 часа", attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 16) as Any])
         view.setAttributedTitle(title, for: .normal)
@@ -33,7 +33,7 @@ class PageViewConroller: UIViewController {
         return view
     }()
     
-    let dailyForecastButton: UIButton = {
+    private let dailyForecastButton: UIButton = {
         let view = UIButton(type: .system)
         view.setTitle("Ежедневный прогноз", for: .normal)
         view.titleLabel?.font = UIFont(name: "Rubik-Regular", size: 18)
@@ -43,8 +43,7 @@ class PageViewConroller: UIViewController {
         return view
     }()
     
-    let severDaysButton: UIButton = {
-        
+    private let severDaysButton: UIButton = {
         let view = UIButton(type: .system)
         let title = NSAttributedString(string: "25 дней", attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 16) as Any])
         view.setAttributedTitle(title, for: .normal)
@@ -81,8 +80,7 @@ class PageViewConroller: UIViewController {
         return view
     }()
     
-    
-    lazy var secondCollectionView: UICollectionView = {
+    private lazy var secondCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: dailyLayoutForecast)
         view.dataSource = self
         view.delegate = self
@@ -91,7 +89,7 @@ class PageViewConroller: UIViewController {
         return view
     }()
     
-    let addCityButton: UIButton = {
+    private let addCityButton: UIButton = {
         let view = UIButton(type: .system)
         view.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         view.tintColor = .black
@@ -108,21 +106,18 @@ class PageViewConroller: UIViewController {
         view.backgroundColor = color
     }
 
-    func constraints() {
-        
-        let safeArea = view.safeAreaLayoutGuide
+    private func constraints() {
         
         scrollView.snp.makeConstraints() { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
         }
         
         contentView.snp.makeConstraints() { make in
-            make.edges.equalTo(scrollView)
-            make.width.equalTo(view.safeAreaLayoutGuide)
+            make.edges.width.equalTo(scrollView)
         }
         
         headerView.snp.makeConstraints{ make in
-            make.centerX.equalTo(safeArea.snp.centerX)
+            make.centerX.equalTo(contentView.snp.centerX)
             make.top.equalTo(contentView.snp.top).offset(20)
             make.width.equalTo(344)
             make.height.equalTo(212)
@@ -156,16 +151,15 @@ class PageViewConroller: UIViewController {
         }
         
         addCityButton.snp.makeConstraints { make in
-            make.center.equalTo(safeArea.snp.center)
+            make.center.equalTo(contentView.snp.center)
         }
         
         secondCollectionView.snp.makeConstraints{ make in
-            make.centerX.equalTo(safeArea.snp.centerX)
+            make.centerX.equalTo(contentView.snp.centerX)
             make.top.equalTo(severDaysButton.snp.bottom).offset(10)
             make.width.equalTo(344)
-            make.height.equalTo(660)
-            make.bottom.equalTo(contentView.snp.bottom).inset(10)
-            
+            make.height.equalTo(200)
+            make.bottom.equalTo(contentView.snp.bottom)
         }
     }
     
@@ -180,10 +174,14 @@ class PageViewConroller: UIViewController {
         contentView.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
         constraints()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let height = secondCollectionView.collectionViewLayout.collectionViewContentSize.height
+        secondCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
+        view.layoutIfNeeded()
     }
     
     func setFrames() {
@@ -260,12 +258,10 @@ extension PageViewConroller: UICollectionViewDataSource {
         return UICollectionViewCell(frame: .zero)
     }
     
-    
 }
 
 extension PageViewConroller: UICollectionViewDelegateFlowLayout {
-    
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == self.firstCollectionView {
             return CGSize(width: 42, height: 83)

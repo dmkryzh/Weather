@@ -11,10 +11,23 @@ import SnapKit
 
 class CarouselViewController: UIPageViewController {
     
+    var items: [UIViewController] = []
+    
+    func populateItems() {
+        let backgroundColor:[UIColor] = [.white, .red, .green, .brown]
+        backgroundColor.forEach { element in
+            let vm = PageViewModel()
+            let page = PageViewConroller(vm: vm, color: element)
+            items.append(page)
+        }
+        
+    }
+    
     func configureBarItems() {
+        
         let options = UIBarButtonItem(image: UIImage(named: "burger"), style: .done, target: self, action: nil)
         navigationItem.setLeftBarButton(options, animated: true)
-        let location = UIBarButtonItem(image: UIImage(named: "location"), style: .done, target: self, action: nil)
+        let location = UIBarButtonItem(image: UIImage(named: "location"), style: .done, target: self, action: #selector(navigateToOnboarding))
         navigationItem.setRightBarButton(location, animated: true)
         navigationController?.navigationBar.backgroundColor = .clear
         navigationController?.navigationBar.isTranslucent = true
@@ -23,7 +36,32 @@ class CarouselViewController: UIPageViewController {
         navigationController?.navigationBar.tintColor = .black
     }
     
-    var items: [UIViewController] = []
+    func decoratePageControl() {
+        let pageControl = UIPageControl.appearance(whenContainedInInstancesOf: [CarouselViewController.self])
+        pageControl.backgroundStyle = .minimal
+        pageControl.numberOfPages = items.count
+        pageControl.currentPageIndicatorTintColor = .black
+        pageControl.pageIndicatorTintColor = .blue
+        
+        let dotImage = UIImage(systemName: "circle.fill")
+        pageControl.preferredIndicatorImage = dotImage
+    }
+    
+    @objc func navigateToOnboarding() {
+        navigationController?.popToRootViewController(animated: true)
+    }
+    
+    //MARK: Init
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
+        populateItems()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,35 +74,22 @@ class CarouselViewController: UIPageViewController {
         configureBarItems()
     }
     
-    fileprivate func populateItems() {
-        let backgroundColor:[UIColor] = [.white, .red, .green]
-        backgroundColor.forEach { element in
-            let vm = PageViewModel()
-            let page = PageViewConroller(vm: vm, color: element)
-            items.append(page)
-        }
-        
-    }
-    
-    
-    func decoratePageControl() {
-        let pageControl = UIPageControl.appearance(whenContainedInInstancesOf: [CarouselViewController.self])
-        pageControl.backgroundStyle = .minimal
-        pageControl.currentPageIndicatorTintColor = .black
-        pageControl.pageIndicatorTintColor = .white
-        pageControl.preferredIndicatorImage = UIImage.init(systemName: "circle.fill")
-    }
-    
-    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
-        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
-        populateItems()
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         for subView in view.subviews {
-            if  subView is  UIPageControl {
-                subView.frame.origin.y = self.view.safeAreaLayoutGuide.layoutFrame.minY
+            if  subView is UIPageControl {
+                
+                subView.isHidden = true
+                subView.frame.origin.y = view.safeAreaLayoutGuide.layoutFrame.minY
+                guard subView.subviews[0].subviews[0].subviews.count == items.count else { return }
+                subView.isHidden = false
+                
+                guard let dots = subView.subviews.first?.subviews.first?.subviews else { return }
+                dots.forEach { view in
+                    view.layer.borderWidth = 1
+                    view.layer.borderColor = UIColor.black.cgColor
+                    view.layer.cornerRadius = 6
+                }
             }
         }
     }
@@ -80,12 +105,9 @@ class CarouselViewController: UIPageViewController {
         navigationController?.isNavigationBarHidden = true
     }
     
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
 }
+
+//MARK: Extentions
 
 extension CarouselViewController: UIPageViewControllerDataSource {
     
@@ -136,4 +158,6 @@ extension CarouselViewController: UIPageViewControllerDataSource {
         
         return items[nextIndex]
     }
+
 }
+

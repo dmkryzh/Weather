@@ -215,6 +215,10 @@ class HeaderView: UIView {
         return label
     }()
     
+    func setConstraints() {
+        
+    }
+    
     func setFrames() {
         dawnTime.frame.origin.x = self.frame.origin.x + 17
         dawnTime.frame.origin.y = self.frame.origin.y + 167
