@@ -12,6 +12,8 @@ import MapKit
 
 class OnboardingViewController: UIViewController {
     
+    var coordinator: MainCoordinator?
+    
     let location: CLLocationManager = {
         let locationManager = CLLocationManager()
         return locationManager
@@ -111,8 +113,10 @@ class OnboardingViewController: UIViewController {
         location.requestAlwaysAuthorization()
         location.requestWhenInUseAuthorization()
         startLocationManager()
-        let main = CarouselViewController()
-        navigationController?.pushViewController(main, animated: true)
+        coordinator?.startCarousel()
+        
+//        let main = CarouselViewController()
+//        navigationController?.pushViewController(main, animated: true)
     }
     
     func startLocationManager() {
@@ -183,7 +187,7 @@ class OnboardingViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        navigationController?.isNavigationBarHidden = true
+        //navigationController?.isNavigationBarHidden = true
     }
     
 }

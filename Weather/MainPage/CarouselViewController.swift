@@ -11,6 +11,8 @@ import SnapKit
 
 class CarouselViewController: UIPageViewController {
     
+    weak var coordinator: CarouselCoordinator?
+    
     var items: [UIViewController] = []
     
     func populateItems() {
@@ -25,7 +27,7 @@ class CarouselViewController: UIPageViewController {
     
     func configureBarItems() {
         
-        let options = UIBarButtonItem(image: UIImage(named: "burger"), style: .done, target: self, action: nil)
+        let options = UIBarButtonItem(image: UIImage(named: "burger"), style: .done, target: self, action: #selector(navigateToSettings))
         navigationItem.setLeftBarButton(options, animated: true)
         let location = UIBarButtonItem(image: UIImage(named: "location"), style: .done, target: self, action: #selector(navigateToOnboarding))
         navigationItem.setRightBarButton(location, animated: true)
@@ -49,6 +51,11 @@ class CarouselViewController: UIPageViewController {
     
     @objc func navigateToOnboarding() {
         navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @objc func navigateToSettings() {
+        let vc = SettingsViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     //MARK: Init
@@ -160,4 +167,6 @@ extension CarouselViewController: UIPageViewControllerDataSource {
     }
 
 }
+
+
 

@@ -30,8 +30,16 @@ class PageViewConroller: UIViewController {
         let color = UIColor(red: 0.154, green: 0.152, blue: 0.135, alpha: 1)
         view.setTitleColor(color, for: .normal)
         view.titleLabel?.textAlignment = .right
+        view.addTarget(self, action: #selector(navigateToDetailedController), for: .touchUpInside)
         return view
     }()
+    
+    @objc func navigateToDetailedController() {
+        let vc = DetailedForecastViewController()
+        navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
     
     private let dailyForecastButton: UIButton = {
         let view = UIButton(type: .system)
@@ -183,6 +191,7 @@ class PageViewConroller: UIViewController {
         }
         view.layoutIfNeeded()
     }
+
     
     func setFrames() {
         //        let safeBorders = view.safeAreaLayoutGuide

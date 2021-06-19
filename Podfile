@@ -9,5 +9,6 @@ target 'Weather' do
   pod 'RealmSwift'
   pod 'Alamofire', '~> 5.4'
   pod 'CHIPageControl', '~> 0.1.3'
+  pod 'TOSegmentedControl'
 
 end

@@ -23,12 +23,14 @@ PODS:
   - RealmSwift (10.7.6):
     - Realm (= 10.7.6)
   - SnapKit (5.0.1)
+  - TOSegmentedControl (1.1.0)
 
 DEPENDENCIES:
   - Alamofire (~> 5.4)
   - CHIPageControl (~> 0.1.3)
   - RealmSwift
   - SnapKit (~> 5.0.0)
+  - TOSegmentedControl
 
 SPEC REPOS:
   trunk:
@@ -37,6 +39,7 @@ SPEC REPOS:
     - Realm
     - RealmSwift
     - SnapKit
+    - TOSegmentedControl
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
@@ -44,7 +47,8 @@ SPEC CHECKSUMS:
   Realm: ed860452717c8db8f4bf832b6807f7f2ce708839
   RealmSwift: e31c4ddbcc42ac879313d656b86f9ca539f6f4f4
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  TOSegmentedControl: 89b6585bf0404a28ac1eca5f1249facb943e90f1
 
-PODFILE CHECKSUM: 92a6e80814beaec113ddd2a2850ef19d5edc764a
+PODFILE CHECKSUM: d0172af8bb10c5ba5a8e1a3016bc909fd72eb95d
 
 COCOAPODS: 1.10.1
