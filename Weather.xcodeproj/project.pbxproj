@@ -79,6 +79,18 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		50430744267FBAE90016F421 /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				5072065D26714F190009DBEF /* PageViewModel.swift */,
+				507206672673F3430009DBEF /* HeaderView.swift */,
+				5072066B267680640009DBEF /* HourlyForecastCollectionCell.swift */,
+				508D4AA42677E3A0002F185F /* DailyForecastCollectionViewCell.swift */,
+				50720660267200FB0009DBEF /* PageViewController.swift */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
 		50720637266E9CED0009DBEF = {
 			isa = PBXGroup;
 			children = (
@@ -104,12 +116,13 @@
 				50720645266E9CED0009DBEF /* SceneDelegate.swift */,
 				50720647266E9CED0009DBEF /* OnboardingViewController.swift */,
 				5043073E267E3DB90016F421 /* MainCoordinator.swift */,
-				508D4AB0267D175C002F185F /* DetailedForecast */,
-				508D4AAD267BCC7D002F185F /* Settings */,
 				5072065926714D1F0009DBEF /* Coordinator.swift */,
 				507206572670EBA30009DBEF /* GenericExtentions.swift */,
+				508D4AB0267D175C002F185F /* DetailedForecast */,
+				508D4AAD267BCC7D002F185F /* Settings */,
+				50430744267FBAE90016F421 /* Pages */,
 				50720662267378780009DBEF /* Resources */,
-				5072065F2671542F0009DBEF /* MainPage */,
+				5072065F2671542F0009DBEF /* Carousel */,
 				5072064C266E9CEE0009DBEF /* Assets.xcassets */,
 				5072064E266E9CEE0009DBEF /* LaunchScreen.storyboard */,
 				50720651266E9CEE0009DBEF /* Info.plist */,
@@ -117,18 +130,13 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
-		5072065F2671542F0009DBEF /* MainPage */ = {
+		5072065F2671542F0009DBEF /* Carousel */ = {
 			isa = PBXGroup;
 			children = (
 				5072065B26714DC80009DBEF /* CarouselViewController.swift */,
 				5043073C267E38900016F421 /* CarouselCoordinator.swift */,
-				50720660267200FB0009DBEF /* PageViewController.swift */,
-				5072065D26714F190009DBEF /* PageViewModel.swift */,
-				5072066B267680640009DBEF /* HourlyForecastCollectionCell.swift */,
-				507206672673F3430009DBEF /* HeaderView.swift */,
-				508D4AA42677E3A0002F185F /* DailyForecastCollectionViewCell.swift */,
 			);
-			path = MainPage;
+			path = Carousel;
 			sourceTree = "<group>";
 		};
 		50720662267378780009DBEF /* Resources */ = {

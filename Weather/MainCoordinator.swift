@@ -12,12 +12,14 @@ class MainCoordinator: Coordinator {
     
     var navController: UINavigationController?
     
-    init(root: UIViewController) {
-        navController = UINavigationController(rootViewController: root)
+    init(nav: UINavigationController = UINavigationController()) {
+        navController = nav
     }
     
     func start() {
-        navController?.isNavigationBarHidden = true
+        let vc = OnboardingViewController(coordinator: self)
+        navController?.pushViewController(vc, animated: true)
+       // navController?.isNavigationBarHidden = true
     }
     
     func startCarousel() {

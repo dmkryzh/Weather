@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 
 class DetailedForecastViewController: UIViewController {
+    
    
     private lazy var detailedTable: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
@@ -28,15 +29,12 @@ class DetailedForecastViewController: UIViewController {
     
     override func viewDidLoad() {
         view.backgroundColor = .yellow
-       // view.addSubview(detailedTable)
+   
+        view.addSubview(detailedTable)
       
-       // setConstraints()
+        setConstraints()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
-    }
+
 
    
 }

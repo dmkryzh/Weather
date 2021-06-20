@@ -114,9 +114,6 @@ class OnboardingViewController: UIViewController {
         location.requestWhenInUseAuthorization()
         startLocationManager()
         coordinator?.startCarousel()
-        
-//        let main = CarouselViewController()
-//        navigationController?.pushViewController(main, animated: true)
     }
     
     func startLocationManager() {
@@ -187,7 +184,16 @@ class OnboardingViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        //navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
+    }
+    
+    init(coordinator: MainCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }

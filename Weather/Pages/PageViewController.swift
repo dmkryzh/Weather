@@ -11,6 +11,10 @@ import SnapKit
 
 class PageViewConroller: UIViewController {
     
+    var coordinator: CarouselCoordinator?
+    
+    var page: Pages
+    
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
@@ -22,6 +26,19 @@ class PageViewConroller: UIViewController {
     }()
     
     var viewModel: PageViewModel
+    
+//    func configureBarItems() {
+//        
+//        let options = UIBarButtonItem(image: UIImage(named: "burger"), style: .done, target: self, action: nil)
+//        navigationItem.setLeftBarButton(options, animated: true)
+//        let location = UIBarButtonItem(image: UIImage(named: "location"), style: .done, target: self, action: nil)
+//        navigationItem.setRightBarButton(location, animated: true)
+//        navigationController?.navigationBar.backgroundColor = .clear
+//        navigationController?.navigationBar.isTranslucent = true
+//        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+//        navigationController?.navigationBar.shadowImage = UIImage()
+//        navigationController?.navigationBar.tintColor = .black
+//    }
     
     private let detailedForecastButton: UIButton = {
         let view = UIButton(type: .system)
@@ -35,9 +52,7 @@ class PageViewConroller: UIViewController {
     }()
     
     @objc func navigateToDetailedController() {
-        let vc = DetailedForecastViewController()
-        navigationController?.pushViewController(vc, animated: true)
-        
+        coordinator?.startDetailedView()
     }
     
     
@@ -108,8 +123,9 @@ class PageViewConroller: UIViewController {
         return view
     }()
     
-    init(vm: PageViewModel, color: UIColor) {
+    init(vm: PageViewModel, color: UIColor, page: Pages) {
         viewModel = vm
+        self.page = page
         super.init(nibName: nil, bundle: nil)
         view.backgroundColor = color
     }
