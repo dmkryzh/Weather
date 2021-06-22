@@ -137,15 +137,19 @@ class SettingsView: UIView {
         let font = UIFont(name: "Rubik-Regular", size: 16)
         let title = NSAttributedString(string: "Установить", attributes: [NSAttributedString.Key.foregroundColor: color, NSAttributedString.Key.font: font as Any])
         view.setAttributedTitle(title, for: .normal)
+        view.addTarget(self, action: #selector(applySettings), for: .touchUpInside)
+        view.isUserInteractionEnabled = true
         return view
     }()
     
+    var didTap: (() -> Void)?
+    
+    @objc func applySettings() { 
+        guard let didTap = didTap else { return }
+        didTap()
+    }
+    
     func setConstrains() {
-        
-//        self.snp.makeConstraints { make in
-//            make.width.equalTo(320)
-//            make.height.equalTo(330)
-//        }
 
         settingsLabel.snp.makeConstraints{ make in
             make.top.equalTo(self.snp.top).offset(27)

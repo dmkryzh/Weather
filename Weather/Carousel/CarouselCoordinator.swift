@@ -11,15 +11,18 @@ import UIKit
 class CarouselCoordinator: Coordinator {
     
     var navController: UINavigationController?
+    var rootController: CarouselViewController?
     
     func start() {
         
         let vc = CarouselViewController(coordinator: self)
+        rootController = vc
         navController?.navigationBar.backgroundColor = .clear
         navController?.navigationBar.isTranslucent = true
         navController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navController?.navigationBar.shadowImage = UIImage()
         navController?.navigationBar.tintColor = .black
+        
         navController?.pushViewController(vc, animated: true)
         
     }

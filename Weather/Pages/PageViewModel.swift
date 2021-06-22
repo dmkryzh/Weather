@@ -9,5 +9,10 @@ import Foundation
 
 
 class PageViewModel {
+   
+    var pageIndex: Int
     
+    init(index: Int) {
+        pageIndex = index
+    }
 }

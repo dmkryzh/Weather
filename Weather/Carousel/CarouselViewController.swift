@@ -9,48 +9,23 @@ import Foundation
 import UIKit
 import SnapKit
 
-enum Pages: CaseIterable {
-    case pageZero
-    case pageOne
-    case pageTwo
-    case pageThree
-    
-    var name: String {
-        switch self {
-        case .pageZero:
-            return "This is page zero"
-        case .pageOne:
-            return "This is page one"
-        case .pageTwo:
-            return "This is page two"
-        case .pageThree:
-            return "This is page three"
-        }
-    }
-    
-    var index: Int {
-        switch self {
-        case .pageZero:
-            return 0
-        case .pageOne:
-            return 1
-        case .pageTwo:
-            return 2
-        case .pageThree:
-            return 3
-        }
-    }
-}
-
 class CarouselViewController: UIViewController {
     
-    private var pageController: UIPageViewController?
+    var pageController: UIPageViewController?
     
-    private var currentIndex: Int = 0
-    
-    private var pages: [Pages] = Pages.allCases
+    var pages: [PageViewConroller] = []
 
     var coordinator: CarouselCoordinator
+    
+    private let scrollView: UIScrollView = {
+        let view = UIScrollView()
+        return view
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
 
     private func setupPageController() {
         
@@ -58,19 +33,13 @@ class CarouselViewController: UIViewController {
         pageController?.dataSource = self
         pageController?.delegate = self
         pageController?.view.backgroundColor = .clear
-        pageController?.view.frame = CGRect(x: 0,y: 0,width: view.frame.width,height: view.frame.height)
-        
-        addChild(pageController!)
-        view.addSubview(self.pageController!.view)
-        
-        let vm = PageViewModel()
-        let initialVC = PageViewConroller(vm: vm, color: .green, page: pages[0])
+//        addChild(pageController!)
+        let vm = PageViewModel(index: 0)
+        let initialVC = PageViewConroller(vm: vm)
         initialVC.coordinator = coordinator
-        
-        guard let _ = pages.first else { return }
-        
-        self.pageController?.setViewControllers([initialVC], direction: .forward, animated: true, completion: nil)
-        self.pageController?.didMove(toParent: self)
+        initialVC.makeAllContentHidden()
+        self.pageController?.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
+        //self.pageController?.didMove(toParent: self)
     }
   
     func configureBarItems() {
@@ -112,39 +81,78 @@ class CarouselViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setConstraints() {
+        
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.edges.width.equalTo(scrollView)
+        }
+   
+        pageController?.view.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top)
+            make.width.equalTo(contentView.snp.width)
+            make.height.equalTo(view.safeAreaLayoutGuide.snp.height)
+            make.bottom.equalTo(contentView.snp.bottom)
+
+        }
+    }
+    
+    
     //MARK: Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(pageController!.view)
         decoratePageControl()
         configureBarItems()
+        setConstraints()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-                for subView in view.subviews {
-                    if  subView is UIPageControl {
+//                for subView in view.subviews {
+//                    if  subView is UIPageControl {
+//
+//                        subView.isHidden = true
+//                        subView.frame.origin.y = view.safeAreaLayoutGuide.layoutFrame.minY
+//                        guard subView.subviews[0].subviews[0].subviews.count == pages.count else { return }
+//                        subView.isHidden = false
+//
+//                        guard let dots = subView.subviews.first?.subviews.first?.subviews else { return }
+//                        dots.forEach { view in
+//                            view.layer.borderWidth = 1
+//                            view.layer.borderColor = UIColor.black.cgColor
+//                            view.layer.cornerRadius = 6
+//                        }
+//                    }
+//                }
+//        
+//        let height: CGFloat = pageController!.view.frame.height
+//        print(height)
+//        pageController!.view.snp.updateConstraints { make in
+//            make.height.equalTo(height)
+//        }
+//        view.layoutIfNeeded()
+
+//        pageController?.view.layoutIfNeeded()
+//        guard let height = pageController?.view.frame.height else { return }
+//        pageController!.view.snp.updateConstraints { make in
+//            make.height.equalTo(height)
+//        }
         
-                        subView.isHidden = true
-                        subView.frame.origin.y = view.safeAreaLayoutGuide.layoutFrame.minY
-                        guard subView.subviews[0].subviews[0].subviews.count == pages.count else { return }
-                        subView.isHidden = false
-        
-                        guard let dots = subView.subviews.first?.subviews.first?.subviews else { return }
-                        dots.forEach { view in
-                            view.layer.borderWidth = 1
-                            view.layer.borderColor = UIColor.black.cgColor
-                            view.layer.cornerRadius = 6
-                        }
-                    }
-                }
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = false
+        //setConstraints()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -211,13 +219,14 @@ class CarouselViewController: UIViewController {
 
 extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         guard let currentVC = viewController as? PageViewConroller else {
             return nil
         }
         
-        var index = currentVC.page.index
+        var index = currentVC.viewModel.pageIndex
         
         if index == 0 {
             return nil
@@ -225,8 +234,9 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         
         index -= 1
         
-        let vm = PageViewModel()
-        let vc: PageViewConroller = PageViewConroller(vm: vm, color: .green, page: pages[index])
+        let vm = PageViewModel(index: index)
+        let vc: PageViewConroller = PageViewConroller(vm: vm)
+        vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
         
         return vc
@@ -238,27 +248,44 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
             return nil
         }
         
-        var index = currentVC.page.index
+        var index = currentVC.viewModel.pageIndex
+
+        if index == self.pages.indices.endIndex - 1 {
+            
+            index += 1
+            
+            let vm = PageViewModel(index: index)
+            let vc: PageViewConroller = PageViewConroller(vm: vm)
+            vc.coordinator = self.coordinator
+            vc.makeAllContentHidden()
         
+            return vc
+        }
+      
         if index >= self.pages.count - 1 {
             return nil
         }
-        
+
         index += 1
         
-        let vm = PageViewModel()
-        let vc: PageViewConroller = PageViewConroller(vm: vm, color: .green, page: pages[index])
+        let vm = PageViewModel(index: index)
+        let vc: PageViewConroller = PageViewConroller(vm: vm)
+        vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
-        
+
         return vc
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return self.pages.count
+        return self.pages.count + 1
     }
-    
+
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return self.currentIndex
-    }
+        guard let firstViewController = self.pageController?.viewControllers?.first,
+              let firstViewControllerIndex = pages.firstIndex(of: firstViewController as! PageViewConroller) else {
+            return 0
+            }
     
+            return firstViewControllerIndex
+        }
 }

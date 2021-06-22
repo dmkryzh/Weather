@@ -30,7 +30,15 @@ class SettingsViewController: UIViewController {
         return view
     }()
     
-    let settings = SettingsView()
+    lazy var settings: SettingsView = {
+        let view = SettingsView()
+        view.didTap = { [unowned self] in
+            self.navigationController?.popViewController(animated: true)
+        }
+        return view
+    }()
+    
+    
     
     func setConstrains() {
       
@@ -62,5 +70,10 @@ class SettingsViewController: UIViewController {
         view.backgroundColor = .systemBlue
         view.addSubviews(settings, skyImageViewOne, skyImageViewTwo, skyImageViewThree)
         setConstrains()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
 }

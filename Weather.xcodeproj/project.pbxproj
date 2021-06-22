@@ -82,11 +82,11 @@
 		50430744267FBAE90016F421 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				50720660267200FB0009DBEF /* PageViewController.swift */,
 				5072065D26714F190009DBEF /* PageViewModel.swift */,
 				507206672673F3430009DBEF /* HeaderView.swift */,
 				5072066B267680640009DBEF /* HourlyForecastCollectionCell.swift */,
 				508D4AA42677E3A0002F185F /* DailyForecastCollectionViewCell.swift */,
-				50720660267200FB0009DBEF /* PageViewController.swift */,
 			);
 			path = Pages;
 			sourceTree = "<group>";

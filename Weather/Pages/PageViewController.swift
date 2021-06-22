@@ -13,8 +13,8 @@ class PageViewConroller: UIViewController {
     
     var coordinator: CarouselCoordinator?
     
-    var page: Pages
-    
+    //var page: Pages
+
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
@@ -114,35 +114,50 @@ class PageViewConroller: UIViewController {
     
     private let addCityButton: UIButton = {
         let view = UIButton(type: .system)
-        view.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         view.tintColor = .black
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 100, weight: .heavy)
-        let image = UIImage(systemName: "plus", withConfiguration: imageConfig)
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 100, weight: .ultraLight)
+        let image = UIImage(systemName: "cross.fill", withConfiguration: imageConfig)
         view.setImage(image, for: .normal)
         view.isHidden = true
+        view.addTarget(self, action: #selector(addCity), for: .touchUpInside)
         return view
     }()
     
-    init(vm: PageViewModel, color: UIColor, page: Pages) {
+    @objc func addCity() {
+        guard let index = coordinator?.rootController?.pages.count else { return }
+        let vm = PageViewModel(index: index)
+        let vc = PageViewConroller(vm: vm)
+        vc.view.backgroundColor = .white
+        coordinator?.rootController?.pages.append(vc)
+        let parent = self.parent as! UIPageViewController
+        parent.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
+    }
+    
+    init(vm: PageViewModel) {
         viewModel = vm
-        self.page = page
         super.init(nibName: nil, bundle: nil)
-        view.backgroundColor = color
     }
 
     private func constraints() {
         
-        scrollView.snp.makeConstraints() { make in
-            make.edges.equalToSuperview()
-        }
+//        scrollView.snp.makeConstraints() { make in
+//            make.edges.equalTo(view.snp.edges)
+//        }
+//
+//        contentView.snp.makeConstraints() { make in
+//            make.edges.width.equalTo(scrollView)
+//        }
+    
         
-        contentView.snp.makeConstraints() { make in
-            make.edges.width.equalTo(scrollView)
+        addCityButton.snp.makeConstraints{ make in
+            make.center.equalTo(view.snp.center)
+            make.width.equalTo(100)
+            make.height.equalTo(100)
         }
         
         headerView.snp.makeConstraints{ make in
-            make.centerX.equalTo(contentView.snp.centerX)
-            make.top.equalTo(contentView.snp.top).offset(20)
+            make.centerX.equalTo(view.snp.centerX)
+            make.top.equalTo(view.snp.top).offset(20)
             make.width.equalTo(344)
             make.height.equalTo(212)
         }
@@ -156,7 +171,7 @@ class PageViewConroller: UIViewController {
         
         firstCollectionView.snp.makeConstraints{ make in
             make.top.equalTo(detailedForecastButton.snp.bottom)
-            make.width.equalTo(contentView.snp.width)
+            make.width.equalTo(view.snp.width)
             make.height.equalTo(108)
         }
         
@@ -175,16 +190,26 @@ class PageViewConroller: UIViewController {
         }
         
         addCityButton.snp.makeConstraints { make in
-            make.center.equalTo(contentView.snp.center)
+            make.center.equalTo(view.snp.center)
         }
         
         secondCollectionView.snp.makeConstraints{ make in
-            make.centerX.equalTo(contentView.snp.centerX)
+            make.centerX.equalTo(view.snp.centerX)
             make.top.equalTo(severDaysButton.snp.bottom).offset(10)
             make.width.equalTo(344)
-            make.height.equalTo(200)
-            make.bottom.equalTo(contentView.snp.bottom)
+//            make.height.equalTo(660)
+            make.bottom.equalTo(view.snp.bottom).inset(20)
         }
+    }
+    
+    func makeAllContentHidden() {
+        headerView.isHidden = true
+        firstCollectionView.isHidden = true
+        detailedForecastButton.isHidden = true
+        dailyForecastButton.isHidden = true
+        severDaysButton.isHidden = true
+        secondCollectionView.isHidden = true
+        addCityButton.isHidden = false
     }
     
     required init?(coder: NSCoder) {
@@ -193,19 +218,17 @@ class PageViewConroller: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
+        view.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
         constraints()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let height = secondCollectionView.collectionViewLayout.collectionViewContentSize.height
-        secondCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(height)
-        }
-        view.layoutIfNeeded()
+//        let height = secondCollectionView.collectionViewLayout.collectionViewContentSize.height
+//        secondCollectionView.snp.updateConstraints { make in
+//            make.height.equalTo(height)
+//        }
+//        view.layoutIfNeeded()
     }
 
     
