@@ -12,6 +12,7 @@ class CarouselCoordinator: Coordinator {
     
     var navController: UINavigationController?
     var rootController: CarouselViewController?
+    var parentCoordinator: MainCoordinator?
     
     func start() {
         
@@ -22,13 +23,15 @@ class CarouselCoordinator: Coordinator {
         navController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navController?.navigationBar.shadowImage = UIImage()
         navController?.navigationBar.tintColor = .black
-        
         navController?.pushViewController(vc, animated: true)
         
     }
     
     func navigateBackToOnboarding() {
-        navController?.popToRootViewController(animated: true)
+        guard let parent = parentCoordinator else { return }
+        let vc = OnboardingViewController(coordinator: parent)
+        vc.carouselIsAlreadyShown = true
+        navController?.pushViewController(vc, animated: true)
     }
     
     func startSettings() {
@@ -36,9 +39,15 @@ class CarouselCoordinator: Coordinator {
         navController?.pushViewController(vc, animated: true)
     }
     
+    func backToPreviousView() {
+        navController?.popViewController(animated: true)
+    }
+    
     func startDetailedView() {
-        let vc = DetailedForecastViewController()
+   
+        let vc = DetailedForecastViewController(coordinator: self)
         navController?.pushViewController(vc, animated: true)
+
     }
     
     func startDaylyView() {

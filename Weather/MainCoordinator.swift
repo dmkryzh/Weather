@@ -19,12 +19,17 @@ class MainCoordinator: Coordinator {
     func start() {
         let vc = OnboardingViewController(coordinator: self)
         navController?.pushViewController(vc, animated: true)
-       // navController?.isNavigationBarHidden = true
     }
     
     func startCarousel() {
         let coordinator = CarouselCoordinator(nav: navController!)
+        coordinator.parentCoordinator = self
         coordinator.start()
+        
+    }
+    
+    func showCarousel() {
+        navController?.popViewController(animated: true)
     }
     
 }

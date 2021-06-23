@@ -109,11 +109,19 @@ class OnboardingViewController: UIViewController {
         return label
     }()
     
+    var carouselIsAlreadyShown: Bool = false
+    
     @objc func requestLocation() {
         location.requestAlwaysAuthorization()
         location.requestWhenInUseAuthorization()
         startLocationManager()
-        coordinator?.startCarousel()
+        if carouselIsAlreadyShown {
+            coordinator?.showCarousel()
+        } else {
+            coordinator?.startCarousel()
+        }
+
+        
     }
     
     func startLocationManager() {
