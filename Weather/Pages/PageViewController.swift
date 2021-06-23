@@ -11,10 +11,8 @@ import SnapKit
 
 class PageViewConroller: UIViewController {
     
-    var coordinator: CarouselCoordinator?
-    
-    //var page: Pages
-
+    var coordinator: CarouselCoordinator
+ 
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
@@ -52,7 +50,7 @@ class PageViewConroller: UIViewController {
     }()
     
     @objc func navigateToDetailedController() {
-        coordinator?.startDetailedView()
+        coordinator.startDetailedView()
     }
     
     
@@ -124,17 +122,18 @@ class PageViewConroller: UIViewController {
     }()
     
     @objc func addCity() {
-        guard let index = coordinator?.rootController?.pages.count else { return }
+        guard let index = coordinator.rootController?.pages.count else { return }
         let vm = PageViewModel(index: index)
-        let vc = PageViewConroller(vm: vm)
+        let vc = PageViewConroller(vm: vm, coordinator: coordinator)
         vc.view.backgroundColor = .white
-        coordinator?.rootController?.pages.append(vc)
+        coordinator.rootController?.pages.append(vc)
         let parent = self.parent as! UIPageViewController
         parent.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
     }
     
-    init(vm: PageViewModel) {
+    init(vm: PageViewModel, coordinator: CarouselCoordinator) {
         viewModel = vm
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -227,21 +226,6 @@ class PageViewConroller: UIViewController {
         contentView.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
         constraints()
        
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-//        let height = secondCollectionView.collectionViewLayout.collectionViewContentSize.height
-//        print(height)
-//        secondCollectionView.snp.remakeConstraints { make in
-//            make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
-//            make.top.equalTo(severDaysButton.snp.bottom).offset(10)
-//            make.width.equalTo(344)
-//                make.height.equalTo(height)
-//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-//        }
-//        view.layoutIfNeeded()
-  
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -347,10 +331,6 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
         
         return UIEdgeInsets()
     }
-    
-}
-
-extension PageViewConroller: UICollectionViewDelegate {
     
 }
 
