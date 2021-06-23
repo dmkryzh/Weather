@@ -147,59 +147,62 @@ class PageViewConroller: UIViewController {
 //        contentView.snp.makeConstraints() { make in
 //            make.edges.width.equalTo(scrollView)
 //        }
-    
         
-        addCityButton.snp.makeConstraints{ make in
-            make.center.equalTo(view.snp.center)
-            make.width.equalTo(100)
-            make.height.equalTo(100)
+        if addCityButton.isHidden {
+         
+            headerView.snp.makeConstraints{ make in
+                make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+                make.width.equalTo(344)
+                make.height.equalTo(212)
+            }
+            
+            detailedForecastButton.snp.makeConstraints{ make in
+                make.trailing.equalTo(headerView.snp.trailing)
+                make.top.equalTo(headerView.snp.bottom).offset(33)
+                make.width.equalTo(174)
+                make.height.equalTo(20)
+            }
+            
+            firstCollectionView.snp.makeConstraints{ make in
+                make.top.equalTo(detailedForecastButton.snp.bottom)
+                make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
+                make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
+                make.height.equalTo(108)
+            }
+            
+            dailyForecastButton.snp.makeConstraints{ make in
+                make.leading.equalTo(headerView.snp.leading)
+                make.top.equalTo(firstCollectionView.snp.bottom).offset(28)
+                make.width.equalTo(200)
+                make.height.equalTo(22)
+            }
+            
+            severDaysButton.snp.makeConstraints{ make in
+                make.trailing.equalTo(headerView.snp.trailing)
+                make.top.equalTo(firstCollectionView.snp.bottom).offset(28)
+                make.width.equalTo(83)
+                make.height.equalTo(20)
+            }
+         
+            secondCollectionView.snp.makeConstraints{ make in
+                make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+                make.top.equalTo(severDaysButton.snp.bottom).offset(10)
+                make.width.equalTo(344)
+//                make.height.lessThanOrEqualTo(660)
+                make.bottom.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom)
+            }
+
+        } else {
+            
+            addCityButton.snp.makeConstraints{ make in
+                make.center.equalTo(view.safeAreaLayoutGuide.snp.center)
+                make.width.equalTo(100)
+                make.height.equalTo(100)
+            }
+           
         }
-        
-        headerView.snp.makeConstraints{ make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.top.equalTo(view.snp.top).offset(20)
-            make.width.equalTo(344)
-            make.height.equalTo(212)
-        }
-        
-        detailedForecastButton.snp.makeConstraints{ make in
-            make.trailing.equalTo(headerView.snp.trailing)
-            make.top.equalTo(headerView.snp.bottom).offset(33)
-            make.width.equalTo(174)
-            make.height.equalTo(20)
-        }
-        
-        firstCollectionView.snp.makeConstraints{ make in
-            make.top.equalTo(detailedForecastButton.snp.bottom)
-            make.width.equalTo(view.snp.width)
-            make.height.equalTo(108)
-        }
-        
-        dailyForecastButton.snp.makeConstraints{ make in
-            make.leading.equalTo(headerView.snp.leading)
-            make.top.equalTo(firstCollectionView.snp.bottom).offset(28)
-            make.width.equalTo(200)
-            make.height.equalTo(22)
-        }
-        
-        severDaysButton.snp.makeConstraints{ make in
-            make.trailing.equalTo(headerView.snp.trailing)
-            make.top.equalTo(firstCollectionView.snp.bottom).offset(28)
-            make.width.equalTo(83)
-            make.height.equalTo(20)
-        }
-        
-        addCityButton.snp.makeConstraints { make in
-            make.center.equalTo(view.snp.center)
-        }
-        
-        secondCollectionView.snp.makeConstraints{ make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.top.equalTo(severDaysButton.snp.bottom).offset(10)
-            make.width.equalTo(344)
-//            make.height.equalTo(660)
-            make.bottom.equalTo(view.snp.bottom).inset(20)
-        }
+         
     }
     
     func makeAllContentHidden() {
@@ -220,15 +223,26 @@ class PageViewConroller: UIViewController {
         super.viewDidLoad()
         view.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
         constraints()
+       
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 //        let height = secondCollectionView.collectionViewLayout.collectionViewContentSize.height
-//        secondCollectionView.snp.updateConstraints { make in
-//            make.height.equalTo(height)
+//        print(height)
+//        secondCollectionView.snp.remakeConstraints { make in
+//            make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+//            make.top.equalTo(severDaysButton.snp.bottom).offset(10)
+//            make.width.equalTo(344)
+//                make.height.equalTo(height)
+//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
 //        }
 //        view.layoutIfNeeded()
+  
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
 
     

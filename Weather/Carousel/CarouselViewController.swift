@@ -17,6 +17,8 @@ class CarouselViewController: UIViewController {
 
     var coordinator: CarouselCoordinator
     
+    var height: CGFloat = 0
+    
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
@@ -90,12 +92,12 @@ class CarouselViewController: UIViewController {
         contentView.snp.makeConstraints { make in
             make.edges.width.equalTo(scrollView)
         }
-   
+     
         pageController?.view.snp.makeConstraints { make in
             make.top.equalTo(contentView.snp.top)
             make.width.equalTo(contentView.snp.width)
-            make.height.equalTo(view.safeAreaLayoutGuide.snp.height)
-            make.bottom.equalTo(contentView.snp.bottom)
+            make.height.equalTo(1126)
+            make.bottom.lessThanOrEqualTo(contentView.snp.bottom)
 
         }
     }
@@ -114,8 +116,13 @@ class CarouselViewController: UIViewController {
         setConstraints()
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
 //                for subView in view.subviews {
 //                    if  subView is UIPageControl {
 //
@@ -140,11 +147,13 @@ class CarouselViewController: UIViewController {
 //        }
 //        view.layoutIfNeeded()
 
-//        pageController?.view.layoutIfNeeded()
-//        guard let height = pageController?.view.frame.height else { return }
+        
+//        height = pageController!.view.
 //        pageController!.view.snp.updateConstraints { make in
 //            make.height.equalTo(height)
 //        }
+//        pageController?.view.layoutIfNeeded()
+//        view.layoutIfNeeded()
         
     }
     
@@ -152,6 +161,14 @@ class CarouselViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = false
+        
+//        pageController?.view.snp.makeConstraints { make in
+//            make.top.equalTo(contentView.snp.top)
+//            make.width.equalTo(contentView.snp.width)
+//            make.height.equalTo(pageController!.view.frame.height)
+//            make.bottom.equalTo(contentView.snp.bottom)
+//
+//        }
         //setConstraints()
     }
     
@@ -258,6 +275,14 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
             let vc: PageViewConroller = PageViewConroller(vm: vm)
             vc.coordinator = self.coordinator
             vc.makeAllContentHidden()
+            
+//            pageController?.view.snp.remakeConstraints { make in
+//                make.top.equalTo(contentView.snp.top)
+//                make.width.equalTo(contentView.snp.width)
+//                make.height.equalTo(pageController!.view.frame.height)
+//                make.bottom.equalTo(contentView.snp.bottom)
+//
+//            }
         
             return vc
         }
@@ -272,6 +297,7 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         let vc: PageViewConroller = PageViewConroller(vm: vm)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
+
 
         return vc
     }
