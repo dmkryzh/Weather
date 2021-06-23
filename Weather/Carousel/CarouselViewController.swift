@@ -84,21 +84,17 @@ class CarouselViewController: UIViewController {
     }
     
     func setConstraints() {
-        
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
-        }
-        
-        contentView.snp.makeConstraints { make in
-            make.edges.width.equalTo(scrollView)
-        }
-     
+//
+//        scrollView.snp.makeConstraints { make in
+//            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
+//        }
+//
+//        contentView.snp.makeConstraints { make in
+//            make.edges.width.equalTo(scrollView)
+//        }
+//
         pageController?.view.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
-            make.width.equalTo(contentView.snp.width)
-            make.height.equalTo(1126)
-            make.bottom.lessThanOrEqualTo(contentView.snp.bottom)
-
+            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
         }
     }
     
@@ -108,9 +104,7 @@ class CarouselViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        contentView.addSubview(pageController!.view)
+        view.addSubview(pageController!.view)
         decoratePageControl()
         configureBarItems()
         setConstraints()

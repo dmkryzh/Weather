@@ -140,19 +140,19 @@ class PageViewConroller: UIViewController {
 
     private func constraints() {
         
-//        scrollView.snp.makeConstraints() { make in
-//            make.edges.equalTo(view.snp.edges)
-//        }
-//
-//        contentView.snp.makeConstraints() { make in
-//            make.edges.width.equalTo(scrollView)
-//        }
+        scrollView.snp.makeConstraints() { make in
+            make.edges.equalTo(view.snp.edges)
+        }
+
+        contentView.snp.makeConstraints() { make in
+            make.edges.width.equalTo(scrollView)
+        }
         
         if addCityButton.isHidden {
          
             headerView.snp.makeConstraints{ make in
-                make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+                make.centerX.equalTo(contentView.snp.centerX)
+                make.top.equalTo(contentView.snp.top).offset(20)
                 make.width.equalTo(344)
                 make.height.equalTo(212)
             }
@@ -166,8 +166,8 @@ class PageViewConroller: UIViewController {
             
             firstCollectionView.snp.makeConstraints{ make in
                 make.top.equalTo(detailedForecastButton.snp.bottom)
-                make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading)
-                make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
+                make.leading.equalTo(contentView.snp.leading)
+                make.width.equalTo(contentView.snp.width)
                 make.height.equalTo(108)
             }
             
@@ -186,11 +186,11 @@ class PageViewConroller: UIViewController {
             }
          
             secondCollectionView.snp.makeConstraints{ make in
-                make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+                make.centerX.equalTo(contentView.snp.centerX)
                 make.top.equalTo(severDaysButton.snp.bottom).offset(10)
                 make.width.equalTo(344)
-//                make.height.lessThanOrEqualTo(660)
-                make.bottom.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom)
+                make.height.equalTo(660)
+                make.bottom.equalTo(contentView.snp.bottom)
             }
 
         } else {
@@ -199,6 +199,7 @@ class PageViewConroller: UIViewController {
                 make.center.equalTo(view.safeAreaLayoutGuide.snp.center)
                 make.width.equalTo(100)
                 make.height.equalTo(100)
+                make.bottom.equalTo(contentView.snp.bottom)
             }
            
         }
@@ -221,7 +222,9 @@ class PageViewConroller: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
         constraints()
        
     }
