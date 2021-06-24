@@ -11,7 +11,7 @@ import SnapKit
 
 class DailyForecastHeaderCell: UITableViewHeaderFooterView {
     
-    private let header: UILabel = {
+    var header: UILabel = {
         let view = UILabel()
         view.text = "День"
         view.font = UIFont(name: "Rubik-Medium", size: 18)
@@ -22,22 +22,18 @@ class DailyForecastHeaderCell: UITableViewHeaderFooterView {
     let centralTemperatureImage: NSTextAttachment = {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(named: "Frame-2")
-        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 22, height: 18)
+        imageAttachment.bounds = CGRect(x: 0, y: -6, width: 16, height: 19)
         return imageAttachment
     }()
     
     lazy var centralTemperature: UILabel = {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 72, height: 37))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 75, height: 37))
         label.textColor = .black
         label.font = UIFont(name: "Rubik-Regular", size: 14)
         
-//        let imageAttachment = NSTextAttachment()
-//        imageAttachment.image = UIImage(named: "Frame-2")
-//        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 22, height: 18)
-        
         let secondImageAttachment = NSTextAttachment()
         secondImageAttachment.image = UIImage(systemName: "circle")
-        secondImageAttachment.bounds = CGRect(x: 2, y: 14, width: 4, height: 4)
+        secondImageAttachment.bounds = CGRect(x: 0, y: 12, width: 3, height: 3)
         
         let secondAttachmentString = NSAttributedString(attachment: secondImageAttachment)
         

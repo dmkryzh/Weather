@@ -11,38 +11,55 @@ import SnapKit
 
 class DailyForecastCell: UITableViewCell {
     
-    private let status: UILabel = {
+    lazy var statusCircle: NSAttributedString = {
+        let secondImageAttachment = NSTextAttachment()
+        secondImageAttachment.image = UIImage(systemName: "circle")
+        secondImageAttachment.bounds = CGRect(x: 0, y: 12, width: 3, height: 3)
+        
+        let secondAttachmentString = NSAttributedString(attachment: secondImageAttachment)
+    
+        return secondAttachmentString
+    }()
+    
+    lazy var status: UILabel = {
         let view = UILabel()
-        view.text = "5 m\\s ЗЮЗ"
         view.font = UIFont(name: "Rubik-Regular", size: 18)
-        view.textAlignment = .left
+        view.textAlignment = .right
         return view
     }()
     
-    let leftLabelImage: NSTextAttachment = {
+    lazy var leftLabelImage: NSTextAttachment = {
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(named: "wind-1")
-        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
         return imageAttachment
+    }()
+    
+    func iconTextAndBounds(icon: UIImage, iconText: String, statusText: String, isWithCircle: Bool = false, bounds: CGRect) {
+        leftLabelImage.image = icon
+        leftLabelImage.bounds = bounds
+        leftLabelText.append(NSAttributedString(string: iconText))
+        leftLabel.attributedText = leftLabelText
+        status.text = statusText
+        if isWithCircle {
+            let text = NSMutableAttributedString(string: statusText)
+            text.append(statusCircle)
+            status.attributedText = text
+        }
+        
+    }
+    
+    lazy var leftLabelText: NSMutableAttributedString = {
+
+        let attachmentString = NSAttributedString(attachment: leftLabelImage)
+        
+        let completeText = NSMutableAttributedString(string: "")
+        completeText.append(attachmentString)
+        return completeText
     }()
     
     lazy var leftLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 14)
-  
-        
-        
-        let attachmentString = NSAttributedString(attachment: leftLabelImage)
-        
-        let completeText = NSMutableAttributedString(string: "")
-        completeText.append(attachmentString)
-        
-        let textAfterIcon = NSAttributedString(string: " Ветер")
-        completeText.append(textAfterIcon)
-        
         view.textAlignment = .left
-        view.attributedText = completeText
-        
         return view
     }()
     

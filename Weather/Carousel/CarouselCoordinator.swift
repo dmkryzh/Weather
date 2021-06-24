@@ -50,8 +50,10 @@ class CarouselCoordinator: Coordinator {
         
     }
     
-    func startDaylyView() {
-        
+    func startDailyView() {
+        let vm = DailyForecastViewModel()
+        let vc = DailyForecastViewController(vm: vm, coordinator: self)
+        navController?.pushViewController(vc, animated: true)
     }
     
     init(nav: UINavigationController) {
