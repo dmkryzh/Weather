@@ -19,14 +19,21 @@ class DailyForecastHeaderCell: UITableViewHeaderFooterView {
         return view
     }()
     
-    let centralTemperature: UILabel = {
+    let centralTemperatureImage: NSTextAttachment = {
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(named: "Frame-2")
+        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 22, height: 18)
+        return imageAttachment
+    }()
+    
+    lazy var centralTemperature: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 72, height: 37))
         label.textColor = .black
         label.font = UIFont(name: "Rubik-Regular", size: 14)
         
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(named: "Frame-2")
-        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 22, height: 18)
+//        let imageAttachment = NSTextAttachment()
+//        imageAttachment.image = UIImage(named: "Frame-2")
+//        imageAttachment.bounds = CGRect(x: 0, y: -2, width: 22, height: 18)
         
         let secondImageAttachment = NSTextAttachment()
         secondImageAttachment.image = UIImage(systemName: "circle")
@@ -34,7 +41,7 @@ class DailyForecastHeaderCell: UITableViewHeaderFooterView {
         
         let secondAttachmentString = NSAttributedString(attachment: secondImageAttachment)
         
-        let attachmentString = NSAttributedString(attachment: imageAttachment)
+        let attachmentString = NSAttributedString(attachment: centralTemperatureImage)
         
         let completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)

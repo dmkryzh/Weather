@@ -19,15 +19,20 @@ class DailyForecastCell: UITableViewCell {
         return view
     }()
     
-    private let windLabel: UILabel = {
-        let view = UILabel()
-        view.font = UIFont(name: "Rubik-Regular", size: 14)
-  
+    let leftLabelImage: NSTextAttachment = {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(named: "wind-1")
         imageAttachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
+        return imageAttachment
+    }()
+    
+    lazy var leftLabel: UILabel = {
+        let view = UILabel()
+        view.font = UIFont(name: "Rubik-Regular", size: 14)
+  
         
-        let attachmentString = NSAttributedString(attachment: imageAttachment)
+        
+        let attachmentString = NSAttributedString(attachment: leftLabelImage)
         
         let completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)
@@ -43,7 +48,7 @@ class DailyForecastCell: UITableViewCell {
     
     func setConstraints() {
         
-        windLabel.snp.makeConstraints { make in
+        leftLabel.snp.makeConstraints { make in
             make.centerY.equalTo(self.snp.centerY)
             make.leading.equalTo(self.snp.leading).offset(15)
         }
@@ -56,7 +61,7 @@ class DailyForecastCell: UITableViewCell {
  
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubviews(status, windLabel)
+        addSubviews(status, leftLabel)
         setConstraints()
         backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
     }

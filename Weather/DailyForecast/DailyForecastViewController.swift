@@ -11,6 +11,8 @@ import SnapKit
 
 class DailyForecastViewController: UIViewController {
     
+    var viewModel: DailyForecastViewModel
+    
     private lazy var dayTable: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
         view.delegate = self
@@ -60,6 +62,15 @@ class DailyForecastViewController: UIViewController {
         setConstraints()
     }
     
+    init(vm: DailyForecastViewModel) {
+        viewModel = vm
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }
 
 extension DailyForecastViewController: UITableViewDelegate {
@@ -91,8 +102,33 @@ extension DailyForecastViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
-        return cell
+        
+        
+        switch indexPath.item {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
+            cell.leftLabelImage.image = WeatherIcons.temperature.getIcon()
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
+            cell.leftLabelImage.image = WeatherIcons.wind.getIcon()
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
+            cell.leftLabelImage.image = WeatherIcons.ultravioletLevel.getIcon()
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
+            cell.leftLabelImage.image = WeatherIcons.rain.getIcon()
+            return cell
+        case 4:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
+            cell.leftLabelImage.image = WeatherIcons.cloud.getIcon()
+            return cell
+        default:
+            return UITableViewCell()
+        }
+      
     }
     
     
