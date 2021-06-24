@@ -44,10 +44,10 @@ class CarouselCoordinator: Coordinator {
     }
     
     func startDetailedView() {
-   
+      
         let vc = DetailedForecastViewController(coordinator: self)
         navController?.pushViewController(vc, animated: true)
-
+        
     }
     
     func startDaylyView() {

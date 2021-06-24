@@ -48,23 +48,39 @@ class DetailedForecastViewController: UIViewController {
         return view
     }()
     
+    private let cityName: UILabel = {
+        let view = UILabel()
+        view.text = "Чита"
+        view.font = UIFont(name: "Rubik-Medium", size: 18)
+        view.textAlignment = .left
+        return view
+    }()
+    
+    
     @objc func backToPreviousController() {
         coordinator.backToPreviousView()
     }
     
     func setConstraints() {
+        
+        cityName.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(48)
+        }
     
         detailedTable.snp.makeConstraints{ make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(cityName.snp.bottom).offset(15)
+            make.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
     override func viewDidLoad() {
         view.backgroundColor = .white
-        view.addSubview(detailedTable)
+        view.addSubviews(cityName, detailedTable)
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
         setConstraints()
+
     }
 
     init(coordinator: CarouselCoordinator) {

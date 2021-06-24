@@ -307,6 +307,13 @@ extension PageViewConroller: UICollectionViewDataSource {
         return UICollectionViewCell(frame: .zero)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == self.secondCollectionView {
+            let vc = DailyForecastViewController()
+            coordinator.navController?.pushViewController(vc, animated: true)
+        }
+    }
+    
 }
 
 extension PageViewConroller: UICollectionViewDelegateFlowLayout {
