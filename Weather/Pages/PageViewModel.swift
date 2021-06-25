@@ -12,6 +12,8 @@ class PageViewModel {
    
     var pageIndex: Int
     
+    var selectedCell = [IndexPath]()
+    
     init(index: Int) {
         pageIndex = index
     }

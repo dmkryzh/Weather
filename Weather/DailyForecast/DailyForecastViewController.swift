@@ -13,8 +13,6 @@ class DailyForecastViewController: UIViewController {
     
     var viewModel: DailyForecastViewModel
     
-    var selectedCell = [IndexPath]()
-    
     var coordinator: CarouselCoordinator
     
     private let scrollView: UIScrollView = {
@@ -115,7 +113,7 @@ class DailyForecastViewController: UIViewController {
         scrollView.snp.makeConstraints() { make in
             make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
         }
-
+        
         contentView.snp.makeConstraints() { make in
             make.edges.width.equalTo(scrollView)
         }
@@ -173,7 +171,7 @@ class DailyForecastViewController: UIViewController {
 extension DailyForecastViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if tableView == dayTable {
-        let day = DailyForecastHeaderCell()
+            let day = DailyForecastHeaderCell()
             day.header.text = "День"
             return day
         } else if tableView == nightTable {
@@ -234,9 +232,9 @@ extension DailyForecastViewController: UITableViewDataSource {
         default:
             return UITableViewCell()
         }
-      
+        
     }
-
+    
     
 }
 
@@ -250,16 +248,16 @@ extension DailyForecastViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard !selectedCell.contains(indexPath) else { return }
+        guard !viewModel.selectedCell.contains(indexPath) else { return }
         let cell = collectionView.cellForItem(at: indexPath) as! DailyForecastCollectionCell
-        selectedCell = [indexPath]
+        viewModel.selectedCell = [indexPath]
         cell.backgroundColor = .blue
         cell.date.textColor = .white
         collectionView.reloadData()
     }
     
     
-
+    
 }
 
 extension DailyForecastViewController: UICollectionViewDataSource {
@@ -271,16 +269,16 @@ extension DailyForecastViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath) as! DailyForecastCollectionCell
         
-        if selectedCell.contains(indexPath) {
+        if viewModel.selectedCell.contains(indexPath) {
             cell.backgroundColor = .blue
             cell.date.textColor = .white
-            }
-            else {
-                cell.backgroundColor = .white
-                cell.date.textColor = .black
-            }
-            return cell
-
+        }
+        else {
+            cell.backgroundColor = .white
+            cell.date.textColor = .black
+        }
+        return cell
+        
     }
     
     

@@ -34,6 +34,6 @@ enum WeatherIcons {
 
 class DailyForecastViewModel {
     
-    
+    var selectedCell = [IndexPath]()
 
 }

@@ -231,39 +231,6 @@ class PageViewConroller: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
-
-    
-    func setFrames() {
-        //        let safeBorders = view.safeAreaLayoutGuide
-        //
-        //        headerView.frame.origin.y = safeBorders.layoutFrame.origin.y + 26
-        //        headerView.frame.origin.x = safeBorders.layoutFrame.origin.x + 16
-        //        headerView.frame.size = CGSize(width: safeBorders.layoutFrame.width - 32, height: 212)
-        //        headerView.subviews[0].center.x = view.safeAreaLayoutGuide.layoutFrame.midX
-        //
-        //        detailedForecastButton.frame.origin.x = safeBorders.layoutFrame.maxX - 189
-        //        detailedForecastButton.frame.origin.y = headerView.frame.maxY + 33
-        //        detailedForecastButton.frame.size = CGSize(width: 174, height: 20)
-        //
-        //        forecastSmallCollectionView.frame.origin.x = safeBorders.layoutFrame.origin.x + 16
-        //        forecastSmallCollectionView.frame.origin.y = detailedForecastButton.frame.maxY + 10
-        //        forecastSmallCollectionView.frame.size = CGSize(width: safeBorders.layoutFrame.width - 16, height: 103)
-        //
-        //        secondCollectionView.center.x = view.center.x
-        //        secondCollectionView.frame.origin.y = forecastSmallCollectionView.frame.maxY + 72
-        //        secondCollectionView.frame.size = CGSize(width: safeBorders.layoutFrame.width - 32, height: secondCollectionView.contentSize.height)
-        //
-        //        dailyForecastButton.frame.origin.x = safeBorders.layoutFrame.origin.x + 16
-        //        dailyForecastButton.frame.origin.y = forecastSmallCollectionView.frame.maxY + 40
-        //        dailyForecastButton.frame.size = CGSize(width: 200, height: 20)
-        //
-        //        severDaysButton.frame.origin.x = safeBorders.layoutFrame.maxX - 99
-        //        severDaysButton.frame.origin.y = forecastSmallCollectionView.frame.maxY + 40
-        //        severDaysButton.frame.size = CGSize(width: 83, height: 20)
-        //
-        //        addCityButton.center = view.center
-    }
-    
 }
 
 extension PageViewConroller: UICollectionViewDataSource {
@@ -286,13 +253,25 @@ extension PageViewConroller: UICollectionViewDataSource {
         if collectionView == self.firstCollectionView {
             
             let cellForecast = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath) as! HourlyForecastCollectionCell
-            cellForecast.layer.cornerRadius = 22
-            cellForecast.layer.borderWidth = 0
-            cellForecast.layer.shadowColor = UIColor(red: 0.4, green: 0.546, blue: 0.942, alpha: 0.68).cgColor
-            cellForecast.layer.shadowOffset = CGSize(width: -5, height: 5)
-            cellForecast.layer.shadowRadius = 5
-            cellForecast.layer.shadowOpacity = 1
-            cellForecast.layer.masksToBounds = false
+
+
+            if viewModel.selectedCell.contains(indexPath) {
+                cellForecast.layer.sublayers?[0].isHidden = false
+                cellForecast.time.textColor = .white
+                cellForecast.temperatureLabel.textColor = .white
+                
+//                cellForecast.layer.shadowColor = UIColor(red: 0.4, green: 0.546, blue: 0.942, alpha: 0.68).cgColor
+//                cellForecast.layer.shadowOffset = CGSize(width: -5, height: 5)
+//                cellForecast.layer.shadowRadius = 5
+//                cellForecast.layer.shadowOpacity = 1
+//                cellForecast.layer.masksToBounds = false
+                
+            } else {
+                cellForecast.layer.sublayers?[0].isHidden = true
+                cellForecast.time.textColor = UIColor(red: 0.613, green: 0.592, blue: 0.592, alpha: 1)
+                cellForecast.temperatureLabel.textColor = .black
+            }
+            
             return cellForecast
             
         } else if collectionView == self.secondCollectionView {
@@ -306,13 +285,7 @@ extension PageViewConroller: UICollectionViewDataSource {
         
         return UICollectionViewCell(frame: .zero)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == self.secondCollectionView {
-            coordinator.startDailyView()
-        }
-    }
-    
+
 }
 
 extension PageViewConroller: UICollectionViewDelegateFlowLayout {
@@ -336,6 +309,41 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
         }
         
         return UIEdgeInsets()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+//        let backgroundLayer: CAGradientLayer = {
+//            let layer = CAGradientLayer()
+//            layer.frame = CGRect(x: 0, y: 0, width: 42, height: 83)
+//            let firstColor = UIColor(red: 0.246, green: 0.398, blue: 0.808, alpha: 0.58).cgColor
+//            let secondColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor
+//            layer.colors = [firstColor, secondColor]
+//            return layer
+//        }()
+//
+        if collectionView == self.secondCollectionView {
+            coordinator.startDailyView()
+            
+        } else if collectionView == self.firstCollectionView {
+            guard !viewModel.selectedCell.contains(indexPath) else { return }
+            let cellForecast = collectionView.cellForItem(at: indexPath) as! HourlyForecastCollectionCell
+            let oldIndex = viewModel.selectedCell
+            viewModel.selectedCell = [indexPath]
+            cellForecast.layer.sublayers?[0].isHidden = false
+            cellForecast.time.textColor = .white
+            cellForecast.temperatureLabel.textColor = .white
+            
+//            cellForecast.layer.shadowColor = UIColor(red: 0.4, green: 0.546, blue: 0.942, alpha: 0.68).cgColor
+//            cellForecast.layer.shadowOffset = CGSize(width: -5, height: 5)
+//            cellForecast.layer.shadowRadius = 5
+//            cellForecast.layer.shadowOpacity = 1
+//            cellForecast.layer.masksToBounds = false
+            
+            collectionView.reloadItems(at: oldIndex)
+        }
+        
+        
     }
     
 }
