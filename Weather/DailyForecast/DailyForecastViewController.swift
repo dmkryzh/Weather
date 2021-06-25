@@ -13,7 +13,19 @@ class DailyForecastViewController: UIViewController {
     
     var viewModel: DailyForecastViewModel
     
+    var selectedCell = [IndexPath]()
+    
     var coordinator: CarouselCoordinator
+    
+    private let scrollView: UIScrollView = {
+        let view = UIScrollView()
+        return view
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
     
     lazy var backButton: UIButton = {
         
@@ -80,30 +92,66 @@ class DailyForecastViewController: UIViewController {
         return view
     }()
     
+    private let dailyLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        return layout
+    }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: dailyLayout)
+        view.dataSource = self
+        view.delegate = self
+        view.register(DailyForecastCollectionCell.self, forCellWithReuseIdentifier: "collection")
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .white
+        view.allowsSelection = true
+        view.allowsMultipleSelection = false
+        return view
+    }()
+    
     func setConstraints() {
         
+        scrollView.snp.makeConstraints() { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
+        }
+
+        contentView.snp.makeConstraints() { make in
+            make.edges.width.equalTo(scrollView)
+        }
+        
         cityName.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(48)
+            make.top.equalTo(contentView.snp.top).offset(10)
+            make.leading.equalTo(contentView.snp.leading).offset(48)
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(cityName.snp.bottom).offset(40)
+            make.leading.equalTo(contentView.snp.leading)
+            make.width.equalTo(contentView.snp.width)
+            make.height.equalTo(40)
         }
         
         dayTable.snp.makeConstraints { make in
-            make.top.equalTo(cityName.snp.top).offset(40)
+            make.top.equalTo(collectionView.snp.bottom).offset(40)
             make.width.equalTo(344)
             make.height.equalTo(335)
-            make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+            make.centerX.equalTo(contentView.snp.centerX)
         }
         
         nightTable.snp.makeConstraints { make in
             make.top.equalTo(dayTable.snp.bottom).offset(12)
             make.width.equalTo(344)
             make.height.equalTo(335)
-            make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
+            make.centerX.equalTo(contentView.snp.centerX)
+            make.bottom.equalTo(contentView.snp.bottom).inset(10)
         }
     }
     
     override func viewDidLoad() {
-        view.addSubviews(cityName, dayTable, nightTable)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(cityName, dayTable, nightTable, collectionView)
         view.backgroundColor = .white
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
@@ -188,8 +236,52 @@ extension DailyForecastViewController: UITableViewDataSource {
         }
       
     }
+
+    
+}
+
+extension DailyForecastViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 90, height: 36)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 0, left: 9, bottom: 0, right: 9)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard !selectedCell.contains(indexPath) else { return }
+        let cell = collectionView.cellForItem(at: indexPath) as! DailyForecastCollectionCell
+        selectedCell = [indexPath]
+        cell.backgroundColor = .blue
+        cell.date.textColor = .white
+        collectionView.reloadData()
+    }
     
     
+
+}
+
+extension DailyForecastViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        20
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath) as! DailyForecastCollectionCell
+        
+        if selectedCell.contains(indexPath) {
+            cell.backgroundColor = .blue
+            cell.date.textColor = .white
+            }
+            else {
+                cell.backgroundColor = .white
+                cell.date.textColor = .black
+            }
+            return cell
+
+    }
     
     
 }
