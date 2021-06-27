@@ -15,6 +15,10 @@ class DailyForecastViewController: UIViewController {
     
     var coordinator: CarouselCoordinator
     
+    let sunAndMoonView = SunAndMoonView()
+    
+    let airQuality = AirQualityView()
+    
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
@@ -142,6 +146,20 @@ class DailyForecastViewController: UIViewController {
             make.width.equalTo(344)
             make.height.equalTo(335)
             make.centerX.equalTo(contentView.snp.centerX)
+        }
+        
+        sunAndMoonView.snp.makeConstraints { make in
+            make.top.equalTo(nightTable.snp.bottom).offset(20)
+            make.width.equalTo(344)
+            make.height.equalTo(145)
+            make.centerX.equalTo(contentView.snp.centerX)
+        }
+        
+        airQuality.snp.makeConstraints { make in
+            make.top.equalTo(sunAndMoonView.snp.bottom).offset(25)
+            make.width.equalTo(344)
+            make.height.equalTo(160)
+            make.centerX.equalTo(contentView.snp.centerX)
             make.bottom.equalTo(contentView.snp.bottom).inset(10)
         }
     }
@@ -149,7 +167,7 @@ class DailyForecastViewController: UIViewController {
     override func viewDidLoad() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubviews(cityName, dayTable, nightTable, collectionView)
+        contentView.addSubviews(cityName, dayTable, nightTable, collectionView, sunAndMoonView, airQuality)
         view.backgroundColor = .white
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)

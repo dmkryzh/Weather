@@ -81,17 +81,40 @@ extension Date {
 }
 
 extension UIPageViewController {
-
+    
     func goToNextPage(animated: Bool = true) {
         guard let currentViewController = self.viewControllers?.first else { return }
         guard let nextViewController = dataSource?.pageViewController(self, viewControllerAfter: currentViewController) else { return }
         setViewControllers([nextViewController], direction: .forward, animated: animated, completion: nil)
     }
-
+    
     func goToPreviousPage(animated: Bool = true) {
         guard let currentViewController = self.viewControllers?.first else { return }
         guard let previousViewController = dataSource?.pageViewController(self, viewControllerBefore: currentViewController) else { return }
         setViewControllers([previousViewController], direction: .reverse, animated: animated, completion: nil)
+    }
+}
+
+extension UITableViewCell {
+    
+    func addDashedBottomBorder() {
+        
+        let color = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor
+        
+        let shapeLayer: CAShapeLayer = CAShapeLayer()
+        let frameSize = self.frame.size
+        let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: 0)
+        
+        shapeLayer.bounds = shapeRect
+        shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height)
+        shapeLayer.fillColor = UIColor.white.cgColor
+        shapeLayer.strokeColor = color
+        shapeLayer.lineWidth = 0.3
+        shapeLayer.lineJoin = CAShapeLayerLineJoin.round
+        shapeLayer.lineDashPattern = [6,6]
+        shapeLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: shapeRect.height, width: shapeRect.width, height: 0), cornerRadius: 0).cgPath
+        
+        self.layer.addSublayer(shapeLayer)
     }
 }
 

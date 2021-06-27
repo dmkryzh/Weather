@@ -16,6 +16,9 @@
 		5043074F2684C8840016F421 /* DailyForecastHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043074E2684C8840016F421 /* DailyForecastHeaderCell.swift */; };
 		504307512684CCAD0016F421 /* DailyForecastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504307502684CCAD0016F421 /* DailyForecastCell.swift */; };
 		504307532685EB110016F421 /* DailyForecastCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504307522685EB110016F421 /* DailyForecastCollectionCell.swift */; };
+		50430755268799390016F421 /* SunAndMoonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50430754268799390016F421 /* SunAndMoonView.swift */; };
+		5043075726879D6E0016F421 /* SunAndMoonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043075626879D6E0016F421 /* SunAndMoonCell.swift */; };
+		5043075926885E0D0016F421 /* AirQualityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043075826885E0D0016F421 /* AirQualityView.swift */; };
 		50720644266E9CED0009DBEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50720643266E9CED0009DBEF /* AppDelegate.swift */; };
 		50720646266E9CED0009DBEF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50720645266E9CED0009DBEF /* SceneDelegate.swift */; };
 		50720648266E9CED0009DBEF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50720647266E9CED0009DBEF /* OnboardingViewController.swift */; };
@@ -46,6 +49,9 @@
 		5043074E2684C8840016F421 /* DailyForecastHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastHeaderCell.swift; sourceTree = "<group>"; };
 		504307502684CCAD0016F421 /* DailyForecastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastCell.swift; sourceTree = "<group>"; };
 		504307522685EB110016F421 /* DailyForecastCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastCollectionCell.swift; sourceTree = "<group>"; };
+		50430754268799390016F421 /* SunAndMoonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunAndMoonView.swift; sourceTree = "<group>"; };
+		5043075626879D6E0016F421 /* SunAndMoonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunAndMoonCell.swift; sourceTree = "<group>"; };
+		5043075826885E0D0016F421 /* AirQualityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirQualityView.swift; sourceTree = "<group>"; };
 		50720640266E9CED0009DBEF /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50720643266E9CED0009DBEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50720645266E9CED0009DBEF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -111,6 +117,9 @@
 				5043074E2684C8840016F421 /* DailyForecastHeaderCell.swift */,
 				504307502684CCAD0016F421 /* DailyForecastCell.swift */,
 				504307522685EB110016F421 /* DailyForecastCollectionCell.swift */,
+				50430754268799390016F421 /* SunAndMoonView.swift */,
+				5043075626879D6E0016F421 /* SunAndMoonCell.swift */,
+				5043075826885E0D0016F421 /* AirQualityView.swift */,
 			);
 			path = DailyForecast;
 			sourceTree = "<group>";
@@ -317,10 +326,12 @@
 				5043073F267E3DB90016F421 /* MainCoordinator.swift in Sources */,
 				507206582670EBA30009DBEF /* GenericExtentions.swift in Sources */,
 				507206682673F3430009DBEF /* HeaderView.swift in Sources */,
+				5043075926885E0D0016F421 /* AirQualityView.swift in Sources */,
 				50720661267200FB0009DBEF /* PageViewController.swift in Sources */,
 				508D4AB2267D17A0002F185F /* DetailedForecastViewController.swift in Sources */,
 				504307492684C7DC0016F421 /* DailyForecastViewController.swift in Sources */,
 				504307512684CCAD0016F421 /* DailyForecastCell.swift in Sources */,
+				50430755268799390016F421 /* SunAndMoonView.swift in Sources */,
 				50720648266E9CED0009DBEF /* OnboardingViewController.swift in Sources */,
 				5072065A26714D1F0009DBEF /* Coordinator.swift in Sources */,
 				5043073D267E38900016F421 /* CarouselCoordinator.swift in Sources */,
@@ -330,6 +341,7 @@
 				508D4AB4267D17C8002F185F /* DetailedForecastTableViewCell.swift in Sources */,
 				508D4AA52677E3A0002F185F /* DailyForecastCollectionViewCell.swift in Sources */,
 				5043074B2684C7F80016F421 /* DailyForecastViewModel.swift in Sources */,
+				5043075726879D6E0016F421 /* SunAndMoonCell.swift in Sources */,
 				50720646266E9CED0009DBEF /* SceneDelegate.swift in Sources */,
 				504307532685EB110016F421 /* DailyForecastCollectionCell.swift in Sources */,
 				5072065C26714DC80009DBEF /* CarouselViewController.swift in Sources */,
