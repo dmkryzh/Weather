@@ -14,6 +14,33 @@ class DetailedForecastTableViewCell: UITableViewCell {
         return view
     }()
     
+    private let windStatus: UILabel = {
+        let view = UILabel()
+        view.text = "2 m/s CCЗ"
+        view.textAlignment = .right
+        view.font = UIFont(name: "Rubik-Regular", size: 14)
+        view.textColor = UIColor(red: 0.604, green: 0.587, blue: 0.587, alpha: 1)
+        return view
+    }()
+    
+    private let rainFallStatus: UILabel = {
+        let view = UILabel()
+        view.text = "0%"
+        view.textAlignment = .right
+        view.font = UIFont(name: "Rubik-Regular", size: 14)
+        view.textColor = UIColor(red: 0.604, green: 0.587, blue: 0.587, alpha: 1)
+        return view
+    }()
+    
+    private let cloudyStatus: UILabel = {
+        let view = UILabel()
+        view.text = "29%"
+        view.textAlignment = .right
+        view.font = UIFont(name: "Rubik-Regular", size: 14)
+        view.textColor = UIColor(red: 0.604, green: 0.587, blue: 0.587, alpha: 1)
+        return view
+    }()
+    
     
     private let dateLabel: UILabel = {
         let date = Date()
@@ -163,7 +190,6 @@ class DetailedForecastTableViewCell: UITableViewCell {
             make.width.equalTo(25)
             make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(22)
-            
         }
         
         byFillingLabel.snp.makeConstraints { make in
@@ -171,7 +197,6 @@ class DetailedForecastTableViewCell: UITableViewCell {
             make.width.equalTo(286)
             make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(74)
-            
         }
         
         windLabel.snp.makeConstraints { make in
@@ -196,7 +221,28 @@ class DetailedForecastTableViewCell: UITableViewCell {
             make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(74)
             make.bottom.equalTo(internalView.snp.bottom).inset(8)
-            
+        }
+        
+        windStatus.snp.makeConstraints { make in
+            make.centerY.equalTo(windLabel.snp.centerY)
+            make.width.equalTo(76)
+            make.height.equalTo(20)
+            make.trailing.equalTo(internalView.snp.trailing).inset(15)
+        }
+        
+        rainFallStatus.snp.makeConstraints { make in
+            make.centerY.equalTo(rainLabel.snp.centerY)
+            make.width.equalTo(76)
+            make.height.equalTo(20)
+            make.trailing.equalTo(internalView.snp.trailing).inset(15)
+        }
+        
+        cloudyStatus.snp.makeConstraints { make in
+            make.centerY.equalTo(cloudsLabel.snp.centerY)
+            make.width.equalTo(76)
+            make.height.equalTo(20)
+            make.trailing.equalTo(internalView.snp.trailing).inset(15)
+            make.bottom.equalTo(internalView.snp.bottom).inset(8)
         }
     }
     
@@ -204,7 +250,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         contentView.addSubview(internalView)
-        internalView.addSubviews(dateLabel, timeLabel, degreesLabel, byFillingLabel, windLabel, rainLabel, cloudsLabel)
+        internalView.addSubviews(dateLabel, timeLabel, degreesLabel, byFillingLabel, windLabel, rainLabel, cloudsLabel, rainFallStatus, windStatus, cloudyStatus)
         setConstraints()
     }
     

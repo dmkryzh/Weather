@@ -17,11 +17,11 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let rain: UILabel = {
+    let icon: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 12)
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(named: "Group")
+        imageAttachment.image = WeatherIcons.rain.getIcon()
         imageAttachment.bounds = CGRect(x: 0, y: -4, width: 15, height: 17)
         
         let attachmentString = NSAttributedString(attachment: imageAttachment)
@@ -43,7 +43,13 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         view.font = UIFont(name: "Rubik-Regular", size: 18)
         view.text = "Местами дождь"
         view.textAlignment = .center
-        
+        return view
+    }()
+    
+    let chevron: UIImageView = {
+        let image = UIImage(systemName: "chevron.right")
+        let view = UIImageView(image: image)
+        view.tintColor = .black
         return view
     }()
     
@@ -70,33 +76,48 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    func setConstraints() {
+        date.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top).offset(10)
+            make.leading.equalTo(contentView.snp.leading).offset(10)
+            make.width.equalTo(53)
+            make.height.equalTo(19)
+        }
         
-        date.frame.origin.x = contentView.frame.minX + 10
-        date.frame.origin.y = contentView.frame.minY + 6
-        date.frame.size = CGSize(width: 53, height: 19)
+        icon.snp.makeConstraints { make in
+            make.top.equalTo(date.snp.bottom).offset(5)
+            make.leading.equalTo(contentView.snp.leading).offset(10)
+            make.width.equalTo(45)
+            make.height.equalTo(18)
+        }
         
-        rain.frame.origin.x = contentView.frame.minX + 10
-        rain.frame.origin.y = contentView.frame.minY + 30
-        rain.frame.size = CGSize(width: 45, height: 18)
+        title.snp.makeConstraints { make in
+            make.centerX.centerY.equalTo(contentView)
+            make.width.equalTo(206)
+            make.height.equalTo(22)
+        }
         
-        title.frame.origin.x = contentView.frame.minX + 66
-        title.frame.origin.y = contentView.frame.minY + 19
-        title.frame.size = CGSize(width: 206, height: 19)
+        temperature.snp.makeConstraints { make in
+            make.centerY.equalTo(contentView.snp.centerY)
+            make.trailing.equalTo(contentView.snp.trailing).inset(16)
+            make.width.equalTo(50)
+            make.height.equalTo(22)
+        }
         
-        temperature.frame.origin.x = contentView.frame.minX + 275
-        temperature.frame.origin.y = contentView.frame.minY + 17
-        temperature.frame.size = CGSize(width: 50, height: 22)
+        chevron.snp.makeConstraints { make in
+            make.centerY.equalTo(contentView.snp.centerY)
+            make.trailing.equalTo(contentView.snp.trailing).inset(10)
+            make.width.equalTo(6)
+            make.height.equalTo(10)
+        }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.cornerRadius = 5
         backgroundColor = .lightGray
-        contentView.addSubviews(date, rain, title, temperature)
-        let margins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
-        contentView.frame = contentView.frame.inset(by: margins)
+        contentView.addSubviews(date, icon, title, temperature, chevron)
+        setConstraints()
     }
     
     

@@ -13,6 +13,10 @@ class PageViewConroller: UIViewController {
     
     var coordinator: CarouselCoordinator
     
+    var viewModel: PageViewModel
+    
+    private var height: CGFloat = 0
+    
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
@@ -22,21 +26,6 @@ class PageViewConroller: UIViewController {
         let view = UIView()
         return view
     }()
-    
-    var viewModel: PageViewModel
-    
-    //    func configureBarItems() {
-    //
-    //        let options = UIBarButtonItem(image: UIImage(named: "burger"), style: .done, target: self, action: nil)
-    //        navigationItem.setLeftBarButton(options, animated: true)
-    //        let location = UIBarButtonItem(image: UIImage(named: "location"), style: .done, target: self, action: nil)
-    //        navigationItem.setRightBarButton(location, animated: true)
-    //        navigationController?.navigationBar.backgroundColor = .clear
-    //        navigationController?.navigationBar.isTranslucent = true
-    //        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-    //        navigationController?.navigationBar.shadowImage = UIImage()
-    //        navigationController?.navigationBar.tintColor = .black
-    //    }
     
     private let detailedForecastButton: UIButton = {
         let view = UIButton(type: .system)
@@ -48,12 +37,7 @@ class PageViewConroller: UIViewController {
         view.addTarget(self, action: #selector(navigateToDetailedController), for: .touchUpInside)
         return view
     }()
-    
-    @objc func navigateToDetailedController() {
-        coordinator.startDetailedView()
-    }
-    
-    
+
     private let dailyForecastButton: UIButton = {
         let view = UIButton(type: .system)
         view.setTitle("Ежедневный прогноз", for: .normal)
@@ -74,7 +58,7 @@ class PageViewConroller: UIViewController {
         return view
     }()
     
-    lazy var headerView: UIView = {
+    private lazy var headerView: UIView = {
         let view = HeaderView()
         return view
     }()
@@ -91,7 +75,7 @@ class PageViewConroller: UIViewController {
         return layout
     }()
     
-    lazy var firstCollectionView: UICollectionView = {
+    private lazy var firstCollectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: hourlyLayoutForecast)
         view.dataSource = self
         view.delegate = self
@@ -121,21 +105,7 @@ class PageViewConroller: UIViewController {
         return view
     }()
     
-    @objc func addCity() {
-        guard let index = coordinator.rootController?.pages.count else { return }
-        let vm = PageViewModel(index: index)
-        let vc = PageViewConroller(vm: vm, coordinator: coordinator)
-        vc.view.backgroundColor = .white
-        coordinator.rootController?.pages.append(vc)
-        let parent = self.parent as! UIPageViewController
-        parent.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
-    }
-    
-    init(vm: PageViewModel, coordinator: CarouselCoordinator) {
-        viewModel = vm
-        self.coordinator = coordinator
-        super.init(nibName: nil, bundle: nil)
-    }
+    //MARK: Constraints
     
     private func constraints() {
         
@@ -188,7 +158,7 @@ class PageViewConroller: UIViewController {
                 make.centerX.equalTo(contentView.snp.centerX)
                 make.top.equalTo(severDaysButton.snp.bottom).offset(10)
                 make.width.equalTo(344)
-                make.height.equalTo(660)
+                make.height.equalTo(0)
                 make.bottom.equalTo(contentView.snp.bottom)
             }
             
@@ -200,11 +170,11 @@ class PageViewConroller: UIViewController {
                 make.height.equalTo(100)
                 make.bottom.equalTo(contentView.snp.bottom)
             }
-            
         }
-        
     }
     
+    //MARK: Functions
+
     func makeAllContentHidden() {
         headerView.isHidden = true
         firstCollectionView.isHidden = true
@@ -213,6 +183,29 @@ class PageViewConroller: UIViewController {
         severDaysButton.isHidden = true
         secondCollectionView.isHidden = true
         addCityButton.isHidden = false
+    }
+    
+    @objc private func addCity() {
+        guard let index = coordinator.rootController?.pages.count else { return }
+        let vm = PageViewModel(index: index)
+        let vc = PageViewConroller(vm: vm, coordinator: coordinator)
+        vc.view.backgroundColor = .white
+        coordinator.rootController?.pages.append(vc)
+        let parent = self.parent as! UIPageViewController
+        parent.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
+    }
+    
+    
+    @objc private func navigateToDetailedController() {
+        coordinator.startDetailedView()
+    }
+    
+    //MARK: Lifecycle
+    
+    init(vm: PageViewModel, coordinator: CarouselCoordinator) {
+        viewModel = vm
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -231,7 +224,19 @@ class PageViewConroller: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        height = secondCollectionView.contentSize.height
+        secondCollectionView.layoutIfNeeded()
+        secondCollectionView.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
+    }
+    
 }
+
+//MARK: Extentions
 
 extension PageViewConroller: UICollectionViewDataSource {
     
@@ -260,12 +265,6 @@ extension PageViewConroller: UICollectionViewDataSource {
                 cellForecast.time.textColor = .white
                 cellForecast.temperatureLabel.textColor = .white
                 
-                //                cellForecast.layer.shadowColor = UIColor(red: 0.4, green: 0.546, blue: 0.942, alpha: 0.68).cgColor
-                //                cellForecast.layer.shadowOffset = CGSize(width: -5, height: 5)
-                //                cellForecast.layer.shadowRadius = 5
-                //                cellForecast.layer.shadowOpacity = 1
-                //                cellForecast.layer.masksToBounds = false
-                
             } else {
                 cellForecast.layer.sublayers?[0].isHidden = true
                 cellForecast.time.textColor = UIColor(red: 0.613, green: 0.592, blue: 0.592, alpha: 1)
@@ -280,12 +279,9 @@ extension PageViewConroller: UICollectionViewDataSource {
             secondCollection.layer.borderWidth = 0
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
             return secondCollection
-            
         }
-        
         return UICollectionViewCell(frame: .zero)
     }
-    
 }
 
 extension PageViewConroller: UICollectionViewDelegateFlowLayout {
@@ -305,7 +301,7 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
             return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
             
         } else if collectionView == self.secondCollectionView {
-            return UIEdgeInsets(top: 0, left: 8, bottom: 10, right: 8)
+            return UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
         }
         
         return UIEdgeInsets()
@@ -313,15 +309,6 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        //        let backgroundLayer: CAGradientLayer = {
-        //            let layer = CAGradientLayer()
-        //            layer.frame = CGRect(x: 0, y: 0, width: 42, height: 83)
-        //            let firstColor = UIColor(red: 0.246, green: 0.398, blue: 0.808, alpha: 0.58).cgColor
-        //            let secondColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor
-        //            layer.colors = [firstColor, secondColor]
-        //            return layer
-        //        }()
-        //
         if collectionView == self.secondCollectionView {
             coordinator.startDailyView()
             
@@ -333,19 +320,9 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
             cellForecast.layer.sublayers?[0].isHidden = false
             cellForecast.time.textColor = .white
             cellForecast.temperatureLabel.textColor = .white
-            
-            //            cellForecast.layer.shadowColor = UIColor(red: 0.4, green: 0.546, blue: 0.942, alpha: 0.68).cgColor
-            //            cellForecast.layer.shadowOffset = CGSize(width: -5, height: 5)
-            //            cellForecast.layer.shadowRadius = 5
-            //            cellForecast.layer.shadowOpacity = 1
-            //            cellForecast.layer.masksToBounds = false
-            
             collectionView.reloadItems(at: oldIndex)
         }
-        
-        
     }
-    
 }
 
 
