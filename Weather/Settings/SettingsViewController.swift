@@ -41,7 +41,7 @@ class SettingsViewController: UIViewController {
     
     
     func setConstrains() {
-      
+        
         settings.snp.makeConstraints{ make in
             make.centerX.equalTo(view.safeAreaLayoutGuide.snp.centerX)
             make.centerY.equalTo(view.safeAreaLayoutGuide.snp.centerY)

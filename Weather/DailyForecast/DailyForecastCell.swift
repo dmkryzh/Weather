@@ -17,7 +17,7 @@ class DailyForecastCell: UITableViewCell {
         secondImageAttachment.bounds = CGRect(x: 0, y: 12, width: 3, height: 3)
         
         let secondAttachmentString = NSAttributedString(attachment: secondImageAttachment)
-    
+        
         return secondAttachmentString
     }()
     
@@ -48,7 +48,7 @@ class DailyForecastCell: UITableViewCell {
     }
     
     lazy var leftLabelText: NSMutableAttributedString = {
-
+        
         let attachmentString = NSAttributedString(attachment: leftLabelImage)
         
         let completeText = NSMutableAttributedString(string: "")
@@ -75,7 +75,7 @@ class DailyForecastCell: UITableViewCell {
             make.centerY.equalTo(self.snp.centerY)
         }
     }
- 
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubviews(status, leftLabel)
@@ -87,5 +87,5 @@ class DailyForecastCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-
+    
 }

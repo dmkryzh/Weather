@@ -8,9 +8,9 @@
 import Foundation
 import UIKit
 import SnapKit
-import Charts
 
 class HourlyForecastChartCell: UICollectionViewCell {
+    
     
     var strideX: Double = 0
     
@@ -19,7 +19,7 @@ class HourlyForecastChartCell: UICollectionViewCell {
         strideX += 50
         return point
     }
-
+    
     var temperature = [29.2, 24.0, 25.0, 50.1, 27.8, 26.9, 24.2, 21.0]
     
     var timeLine = ["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"]
@@ -96,7 +96,7 @@ class HourlyForecastChartCell: UICollectionViewCell {
         drawChart(inContext: context)
         drawTimeLine(inContext: context)
         drawDashedLines(inContext: context)
-  
+        
     }
     
     func drawDashedLines(inContext context: CGContext) {
@@ -129,6 +129,7 @@ class HourlyForecastChartCell: UICollectionViewCell {
                 context.addLine(to: point)
             }
             context.strokePath()
+            
         }
     }
     
@@ -145,13 +146,14 @@ class HourlyForecastChartCell: UICollectionViewCell {
         context.move(to: startPoint)
         context.addLine(to: endPoint)
         context.strokePath()
-  
+        
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         addPointsTextAndImages()
+        
         
     }
     

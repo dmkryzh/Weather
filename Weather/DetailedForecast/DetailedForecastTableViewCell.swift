@@ -13,7 +13,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         let view = UIView()
         return view
     }()
-
+    
     
     private let dateLabel: UILabel = {
         let date = Date()
@@ -33,7 +33,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
     private let byFillingLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 14)
-  
+        
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(named: "crescent-moon_1")
         imageAttachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
@@ -55,7 +55,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
     private let windLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 14)
-  
+        
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(named: "wind-1")
         imageAttachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
@@ -77,7 +77,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
     private let rainLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 14)
-  
+        
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(named: "Frame-5")
         imageAttachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
@@ -99,7 +99,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
     private let cloudsLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 14)
-  
+        
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(named: "Frame-3")
         imageAttachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
@@ -135,7 +135,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         
         view.attributedText = completeText
         return view
-
+        
     }()
     
     func setConstraints() {

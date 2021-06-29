@@ -56,7 +56,7 @@ class SunAndMoonView: UIView {
         view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         return view
     }()
- 
+    
     func setConstraints() {
         
         titleLeft.snp.makeConstraints { make in
@@ -151,18 +151,18 @@ extension SunAndMoonView: UITableViewDataSource {
             case 0:
                 let image = UIImage(named: "Frame")
                 cell.updateCell(image: image, leftText: nil, rightText: "14ч 27 мин")
-
+                
                 return cell
             case 1:
                 cell.updateCell(image: nil, leftText: "Восход", rightText: "05:19")
-
+                
                 return cell
             case 2:
                 cell.updateCell(image: nil, leftText: "Заход", rightText: "19:46")
-
+                
                 return cell
             default:
-
+                
                 return cell
             }
             
@@ -171,18 +171,18 @@ extension SunAndMoonView: UITableViewDataSource {
             case 0:
                 let image = UIImage(named: "crescent-moon_1")
                 cell.updateCell(image: image, leftText: nil, rightText: "14ч 27 мин")
-
+                
                 return cell
             case 1:
                 cell.updateCell(image: nil, leftText: "Восход", rightText: "05:19")
-
+                
                 return cell
             case 2:
                 cell.updateCell(image: nil, leftText: "Заход", rightText: "19:46")
-
+                
                 return cell
             default:
-
+                
                 return cell
             }
         }

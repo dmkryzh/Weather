@@ -120,7 +120,7 @@ class OnboardingViewController: UIViewController {
         } else {
             coordinator?.startCarousel()
         }
-
+        
         
     }
     

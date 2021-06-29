@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 enum WeatherIcons {
-
+    
     case wind
     case cloud
     case temperature
@@ -35,5 +35,5 @@ enum WeatherIcons {
 class DailyForecastViewModel {
     
     var selectedCell = [IndexPath]()
-
+    
 }

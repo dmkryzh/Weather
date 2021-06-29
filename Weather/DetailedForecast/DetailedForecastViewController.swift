@@ -125,7 +125,7 @@ class DetailedForecastViewController: UIViewController {
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
         setConstraints()
-
+        
     }
     
     var height: CGFloat = 0
@@ -138,8 +138,8 @@ class DetailedForecastViewController: UIViewController {
             make.height.equalTo(height)
         }
     }
-
-
+    
+    
     init(coordinator: CarouselCoordinator) {
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
@@ -149,7 +149,7 @@ class DetailedForecastViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-   
+    
 }
 
 extension DetailedForecastViewController: UITableViewDelegate {
@@ -179,15 +179,15 @@ extension DetailedForecastViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailedForecastTableViewCell
         return cell
     }
-
+    
 }
 
 extension DetailedForecastViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-            return CGSize(width: 400, height: 150)
-
+        
+        return CGSize(width: 400, height: 150)
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

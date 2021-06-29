@@ -35,7 +35,7 @@ class DailyForecastCollectionCell: UICollectionViewCell {
         contentView.addSubview(date)
         self.layer.cornerRadius = 5
         backgroundColor = .white
-//            UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        //            UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         setConstrains()
         
     }

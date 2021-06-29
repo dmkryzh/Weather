@@ -56,7 +56,7 @@ class SettingsView: UIView {
     lazy var temperatureSlider: SegmentedControl = {
         let view = SegmentedControl(items: ["C", "F"])
         view.segmentTappedHandler = { segmentIndex, reversed in
-           print("Segment \(segmentIndex) was tapped!")
+            print("Segment \(segmentIndex) was tapped!")
         }
         view.cornerRadius = 5
         view.itemColor = .black
@@ -75,7 +75,7 @@ class SettingsView: UIView {
     let windSpeedSlider: SegmentedControl = {
         let view = SegmentedControl(items: ["Mi", "Km"])
         view.segmentTappedHandler = { segmentIndex, reversed in
-           print("Segment \(segmentIndex) was tapped!")
+            print("Segment \(segmentIndex) was tapped!")
         }
         view.cornerRadius = 5
         view.itemColor = .black
@@ -94,7 +94,7 @@ class SettingsView: UIView {
     let timeFormatSlider: SegmentedControl = {
         let view = SegmentedControl(items: ["12", "24"])
         view.segmentTappedHandler = { segmentIndex, reversed in
-           print("Segment \(segmentIndex) was tapped!")
+            print("Segment \(segmentIndex) was tapped!")
         }
         view.cornerRadius = 5
         view.itemColor = .black
@@ -113,7 +113,7 @@ class SettingsView: UIView {
     let notificationSlider: SegmentedControl = {
         let view = SegmentedControl(items: ["On", "Off"])
         view.segmentTappedHandler = { segmentIndex, reversed in
-           print("Segment \(segmentIndex) was tapped!")
+            print("Segment \(segmentIndex) was tapped!")
         }
         view.cornerRadius = 5
         view.itemColor = .black
@@ -128,7 +128,7 @@ class SettingsView: UIView {
         }
         return view
     }()
-
+    
     let setButton: UIButton = {
         let view = UIButton(type: .system)
         view.backgroundColor = UIColor(red: 0.949, green: 0.431, blue: 0.067, alpha: 1)
@@ -150,7 +150,7 @@ class SettingsView: UIView {
     }
     
     func setConstrains() {
-
+        
         settingsLabel.snp.makeConstraints{ make in
             make.top.equalTo(self.snp.top).offset(27)
             make.width.equalTo(140)
@@ -229,7 +229,7 @@ class SettingsView: UIView {
         setConstrains()
         layer.cornerRadius = 10
         
-       
+        
     }
     
     required init?(coder: NSCoder) {

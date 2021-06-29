@@ -12,7 +12,7 @@ import SnapKit
 class AirQualityView: UIView {
     
     enum StatusQuality {
-
+        
         case good
         case medium
         case bad
@@ -20,7 +20,7 @@ class AirQualityView: UIView {
         func getStatusColor() -> UIColor {
             switch self {
             case .good:
-               return UIColor(red: 0.507, green: 0.792, blue: 0.501, alpha: 1)
+                return UIColor(red: 0.507, green: 0.792, blue: 0.501, alpha: 1)
             case .medium:
                 return UIColor(red: 0.507, green: 0.792, blue: 0.501, alpha: 1)
             case .bad:
@@ -31,7 +31,7 @@ class AirQualityView: UIView {
         func getStatusText() -> String {
             switch self {
             case .good:
-               return "Хорошо"
+                return "Хорошо"
             case .medium:
                 return "Средне"
             case .bad:
