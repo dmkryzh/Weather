@@ -142,24 +142,26 @@ class DetailedForecastTableViewCell: UITableViewCell {
         
         internalView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
-        
         }
         
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(internalView.snp.top).offset(15)
             make.width.equalTo(80)
+            make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(16)
         }
         
         timeLabel.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom).offset(8)
             make.width.equalTo(47)
+            make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(16)
         }
         
         degreesLabel.snp.makeConstraints { make in
             make.top.equalTo(timeLabel.snp.bottom).offset(10)
             make.width.equalTo(25)
+            make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(22)
             
         }
@@ -167,6 +169,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         byFillingLabel.snp.makeConstraints { make in
             make.top.equalTo(internalView.snp.top).offset(45)
             make.width.equalTo(286)
+            make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(74)
             
         }
@@ -174,6 +177,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         windLabel.snp.makeConstraints { make in
             make.top.equalTo(byFillingLabel.snp.bottom).offset(8)
             make.width.equalTo(100)
+            make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(74)
             
         }
@@ -181,6 +185,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         rainLabel.snp.makeConstraints { make in
             make.top.equalTo(windLabel.snp.bottom).offset(8)
             make.width.equalTo(170)
+            make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(74)
             
         }
@@ -188,6 +193,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         cloudsLabel.snp.makeConstraints { make in
             make.top.equalTo(rainLabel.snp.bottom).offset(8)
             make.width.equalTo(128)
+            make.height.equalTo(22)
             make.leading.equalTo(internalView.snp.leading).offset(74)
             make.bottom.equalTo(internalView.snp.bottom).inset(8)
             

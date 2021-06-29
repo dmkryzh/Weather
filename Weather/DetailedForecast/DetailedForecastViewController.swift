@@ -13,7 +13,34 @@ class DetailedForecastViewController: UIViewController {
     
     var coordinator: CarouselCoordinator
     
-   
+    private let scrollView: UIScrollView = {
+        let view = UIScrollView()
+        return view
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
+    private let chartsCollectionLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        return layout
+    }()
+    
+    private lazy var chartsCollectionView: UICollectionView = {
+        let view = UICollectionView(frame: .zero, collectionViewLayout: chartsCollectionLayout)
+        view.dataSource = self
+        view.delegate = self
+        view.register(HourlyForecastChartCell.self, forCellWithReuseIdentifier: "collection")
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
+        view.allowsSelection = true
+        view.allowsMultipleSelection = false
+        return view
+    }()
+    
     private lazy var detailedTable: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.delegate = self
@@ -63,25 +90,55 @@ class DetailedForecastViewController: UIViewController {
     
     func setConstraints() {
         
-        cityName.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(48)
+        scrollView.snp.makeConstraints() { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
         }
-    
+        
+        contentView.snp.makeConstraints() { make in
+            make.edges.width.equalTo(scrollView)
+        }
+        
+        cityName.snp.makeConstraints { make in
+            make.top.equalTo(contentView.snp.top).offset(10)
+            make.leading.equalTo(contentView.snp.leading).offset(48)
+        }
+        
+        chartsCollectionView.snp.makeConstraints() { make in
+            make.top.equalTo(cityName.snp.bottom).offset(10)
+            make.leading.equalTo(contentView.snp.leading)
+            make.width.equalTo(contentView.snp.width)
+            make.height.equalTo(180)
+        }
+        
         detailedTable.snp.makeConstraints{ make in
-            make.top.equalTo(cityName.snp.bottom).offset(15)
-            make.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(chartsCollectionView.snp.bottom).offset(15)
+            make.height.equalTo(0)
+            make.leading.bottom.trailing.equalTo(contentView)
         }
     }
     
     override func viewDidLoad() {
         view.backgroundColor = .white
-        view.addSubviews(cityName, detailedTable)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubviews(cityName, chartsCollectionView, detailedTable)
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
         setConstraints()
 
     }
+    
+    var height: CGFloat = 0
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        height = detailedTable.contentSize.height
+        detailedTable.layoutIfNeeded()
+        detailedTable.snp.updateConstraints { make in
+            make.height.equalTo(height)
+        }
+    }
+
 
     init(coordinator: CarouselCoordinator) {
         self.coordinator = coordinator
@@ -122,8 +179,32 @@ extension DetailedForecastViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailedForecastTableViewCell
         return cell
     }
+
+}
+
+extension DetailedForecastViewController: UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+            return CGSize(width: 400, height: 150)
+
+    }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    }
+}
+
+extension DetailedForecastViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath) as! HourlyForecastChartCell
+        return cell
+        
+    }
     
     
 }
