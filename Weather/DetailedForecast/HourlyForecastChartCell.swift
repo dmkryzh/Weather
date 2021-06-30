@@ -10,20 +10,25 @@ import UIKit
 import SnapKit
 
 class HourlyForecastChartCell: UICollectionViewCell {
-    
-    
+
     var strideX: Double = 0
-    
-    lazy var tempPoints = temperature.map { element -> CGPoint in
-        let point  = CGPoint(x: strideX, y: element)
-        strideX += 50
-        return point
-    }
-    
-    var temperature = [29.2, 24.0, 25.0, 50.1, 27.8, 26.9, 24.2, 21.0]
     
     var timeLine = ["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"]
     
+    var temperature = [20, 1, 55, 10, 12, 15, 30.0, 40.0]
+ 
+    lazy var tempPoints = temperature.map { element -> CGPoint in
+        let y = -element * scaledStride + tempMin
+        let point  = CGPoint(x: strideX, y: y + 68)
+        print(y)
+        strideX += 50
+        return point
+    }
+
+    lazy var tempMin = temperature.min()!
+    lazy var tempMax = temperature.max()!
+    lazy var scaledStride = 50 / (tempMax - tempMin)
+
     func addPointsTextAndImages() {
         
         tempPoints.forEach { element in
@@ -37,13 +42,15 @@ class HourlyForecastChartCell: UICollectionViewCell {
             self.addSubview(image)
         }
         
-        tempPoints.forEach { element in
+        for (index, element) in tempPoints.enumerated() {
+            let value = temperature[index]
             let image = UILabel()
             image.font = UIFont(name: "Rubik-Regular", size: 14)
             image.textColor = .black
-            image.text = String(describing: element.y)
-            image.frame = CGRect(x: element.x, y: element.y - 22, width: 30, height: 20)
+            image.text = String(format: "%.1f", value)
+            image.frame = CGRect(x: element.x, y: element.y - 18, width: 30, height: 14)
             self.addSubview(image)
+            
         }
         
         var strideForTimeLine: Double = 0
@@ -53,7 +60,7 @@ class HourlyForecastChartCell: UICollectionViewCell {
             image.font = UIFont(name: "Rubik-Regular", size: 14)
             image.textColor = .black
             image.text = element
-            image.frame = CGRect(x: strideForTimeLine, y: 128, width: 40, height: 20)
+            image.frame = CGRect(x: strideForTimeLine, y: 133, width: 40, height: 20)
             self.addSubview(image)
             strideForTimeLine += 50.0
         }
@@ -63,7 +70,7 @@ class HourlyForecastChartCell: UICollectionViewCell {
         timeLine.forEach { element in
             let image = UIView()
             image.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
-            image.frame = CGRect(x: strideForTimeLineRects, y: 108, width: 4, height: 8)
+            image.frame = CGRect(x: strideForTimeLineRects, y: 118, width: 4, height: 8)
             self.addSubview(image)
             strideForTimeLineRects += 50.0
         }
@@ -75,7 +82,7 @@ class HourlyForecastChartCell: UICollectionViewCell {
             image.font = UIFont(name: "Rubik-Regular", size: 12)
             image.textColor = .black
             image.text = "47%"
-            image.frame = CGRect(x: strideForTimeLinePercents, y: 88, width: 25, height: 15)
+            image.frame = CGRect(x: strideForTimeLinePercents, y: 98, width: 25, height: 15)
             self.addSubview(image)
             strideForTimeLinePercents += 50.0
         }
@@ -85,7 +92,7 @@ class HourlyForecastChartCell: UICollectionViewCell {
         timeLine.forEach { element in
             let image = WeatherIcons.rain.getIcon()
             let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: strideForTimeLineRain, y: 68, width: 17, height: 20)
+            imageView.frame = CGRect(x: strideForTimeLineRain, y: 78, width: 17, height: 20)
             self.addSubview(imageView)
             strideForTimeLineRain += 50.0
         }
@@ -106,11 +113,16 @@ class HourlyForecastChartCell: UICollectionViewCell {
         context.setLineCap(.round)
         context.beginPath()
         
-        let maxY = temperature.max()
-        let minY = temperature.min()
-        context.move(to: CGPoint(x: 0, y: minY!))
-        context.addLine(to: CGPoint(x: 0, y: maxY!))
-        context.addLine(to: CGPoint(x: 400, y: maxY!))
+        let maxY = tempPoints.max { a, b in a.y < b.y }
+        
+        let minY = tempPoints.min { a, b in a.y < b.y }
+     
+        if tempPoints.first!.y >= minY!.y {
+            context.move(to: CGPoint(x: 0, y: tempPoints.first!.y))
+            context.addLine(to: CGPoint(x: 0, y: maxY!.y))
+        }
+        context.move(to: CGPoint(x: 0, y: maxY!.y))
+        context.addLine(to: CGPoint(x: 400, y: maxY!.y))
         context.strokePath()
     }
     
@@ -129,14 +141,13 @@ class HourlyForecastChartCell: UICollectionViewCell {
                 context.addLine(to: point)
             }
             context.strokePath()
-            
         }
     }
     
     func drawTimeLine(inContext context: CGContext) {
         
-        let startPoint = CGPoint(x: 0, y: 112)
-        let endPoint = CGPoint(x: 400, y: 112)
+        let startPoint = CGPoint(x: 0, y: 122)
+        let endPoint = CGPoint(x: 400, y: 122)
         
         context.setLineWidth(0.3)
         context.setStrokeColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor)
@@ -153,8 +164,6 @@ class HourlyForecastChartCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         addPointsTextAndImages()
-        
-        
     }
     
     required init?(coder: NSCoder) {

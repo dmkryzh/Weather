@@ -166,44 +166,40 @@ class DetailedForecastTableViewCell: UITableViewCell {
     }()
     
     func setConstraints() {
-        
-        internalView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
-        }
-        
+       
         dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(internalView.snp.top).offset(15)
+            make.top.equalTo(contentView.snp.top).offset(15)
             make.width.equalTo(80)
             make.height.equalTo(22)
-            make.leading.equalTo(internalView.snp.leading).offset(16)
+            make.leading.equalTo(contentView.snp.leading).offset(16)
         }
         
         timeLabel.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom).offset(8)
             make.width.equalTo(47)
             make.height.equalTo(22)
-            make.leading.equalTo(internalView.snp.leading).offset(16)
+            make.leading.equalTo(contentView.snp.leading).offset(16)
         }
         
         degreesLabel.snp.makeConstraints { make in
             make.top.equalTo(timeLabel.snp.bottom).offset(10)
             make.width.equalTo(25)
             make.height.equalTo(22)
-            make.leading.equalTo(internalView.snp.leading).offset(22)
+            make.leading.equalTo(contentView.snp.leading).offset(22)
         }
         
         byFillingLabel.snp.makeConstraints { make in
-            make.top.equalTo(internalView.snp.top).offset(45)
+            make.top.equalTo(contentView.snp.top).offset(45)
             make.width.equalTo(286)
             make.height.equalTo(22)
-            make.leading.equalTo(internalView.snp.leading).offset(74)
+            make.leading.equalTo(contentView.snp.leading).offset(74)
         }
         
         windLabel.snp.makeConstraints { make in
             make.top.equalTo(byFillingLabel.snp.bottom).offset(8)
             make.width.equalTo(100)
             make.height.equalTo(22)
-            make.leading.equalTo(internalView.snp.leading).offset(74)
+            make.leading.equalTo(contentView.snp.leading).offset(74)
             
         }
         
@@ -211,7 +207,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
             make.top.equalTo(windLabel.snp.bottom).offset(8)
             make.width.equalTo(170)
             make.height.equalTo(22)
-            make.leading.equalTo(internalView.snp.leading).offset(74)
+            make.leading.equalTo(contentView.snp.leading).offset(74)
             
         }
         
@@ -219,38 +215,37 @@ class DetailedForecastTableViewCell: UITableViewCell {
             make.top.equalTo(rainLabel.snp.bottom).offset(8)
             make.width.equalTo(128)
             make.height.equalTo(22)
-            make.leading.equalTo(internalView.snp.leading).offset(74)
-            make.bottom.equalTo(internalView.snp.bottom).inset(8)
+            make.leading.equalTo(contentView.snp.leading).offset(74)
+            make.bottom.equalTo(contentView.snp.bottom).inset(8)
         }
         
         windStatus.snp.makeConstraints { make in
             make.centerY.equalTo(windLabel.snp.centerY)
             make.width.equalTo(76)
             make.height.equalTo(20)
-            make.trailing.equalTo(internalView.snp.trailing).inset(15)
+            make.trailing.equalTo(contentView.snp.trailing).inset(15)
         }
         
         rainFallStatus.snp.makeConstraints { make in
             make.centerY.equalTo(rainLabel.snp.centerY)
             make.width.equalTo(76)
             make.height.equalTo(20)
-            make.trailing.equalTo(internalView.snp.trailing).inset(15)
+            make.trailing.equalTo(contentView.snp.trailing).inset(15)
         }
         
         cloudyStatus.snp.makeConstraints { make in
             make.centerY.equalTo(cloudsLabel.snp.centerY)
             make.width.equalTo(76)
             make.height.equalTo(20)
-            make.trailing.equalTo(internalView.snp.trailing).inset(15)
-            make.bottom.equalTo(internalView.snp.bottom).inset(8)
+            make.trailing.equalTo(contentView.snp.trailing).inset(15)
+//            make.bottom.equalTo(internalView.snp.bottom).inset(8)
         }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
-        contentView.addSubview(internalView)
-        internalView.addSubviews(dateLabel, timeLabel, degreesLabel, byFillingLabel, windLabel, rainLabel, cloudsLabel, rainFallStatus, windStatus, cloudyStatus)
+        contentView.addSubviews(dateLabel, timeLabel, degreesLabel, byFillingLabel, windLabel, rainLabel, cloudsLabel, rainFallStatus, windStatus, cloudyStatus)
         setConstraints()
     }
     

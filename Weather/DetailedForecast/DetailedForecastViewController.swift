@@ -12,7 +12,7 @@ import SnapKit
 class DetailedForecastViewController: UIViewController {
     
     var coordinator: CarouselCoordinator
-    
+   
     private let scrollView: UIScrollView = {
         let view = UIScrollView()
         return view
@@ -172,7 +172,7 @@ extension DetailedForecastViewController: UITableViewDelegate {
 
 extension DetailedForecastViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        20
+        1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
