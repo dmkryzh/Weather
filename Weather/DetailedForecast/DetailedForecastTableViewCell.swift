@@ -170,35 +170,30 @@ class DetailedForecastTableViewCell: UITableViewCell {
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.snp.top).offset(15)
             make.width.equalTo(80)
-            make.height.equalTo(22)
             make.leading.equalTo(contentView.snp.leading).offset(16)
         }
         
         timeLabel.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom).offset(8)
             make.width.equalTo(47)
-            make.height.equalTo(22)
             make.leading.equalTo(contentView.snp.leading).offset(16)
         }
         
         degreesLabel.snp.makeConstraints { make in
             make.top.equalTo(timeLabel.snp.bottom).offset(10)
             make.width.equalTo(25)
-            make.height.equalTo(22)
             make.leading.equalTo(contentView.snp.leading).offset(22)
         }
         
         byFillingLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView.snp.top).offset(45)
             make.width.equalTo(286)
-            make.height.equalTo(22)
             make.leading.equalTo(contentView.snp.leading).offset(74)
         }
         
         windLabel.snp.makeConstraints { make in
             make.top.equalTo(byFillingLabel.snp.bottom).offset(8)
             make.width.equalTo(100)
-            make.height.equalTo(22)
             make.leading.equalTo(contentView.snp.leading).offset(74)
             
         }
@@ -206,7 +201,6 @@ class DetailedForecastTableViewCell: UITableViewCell {
         rainLabel.snp.makeConstraints { make in
             make.top.equalTo(windLabel.snp.bottom).offset(8)
             make.width.equalTo(170)
-            make.height.equalTo(22)
             make.leading.equalTo(contentView.snp.leading).offset(74)
             
         }
@@ -214,31 +208,26 @@ class DetailedForecastTableViewCell: UITableViewCell {
         cloudsLabel.snp.makeConstraints { make in
             make.top.equalTo(rainLabel.snp.bottom).offset(8)
             make.width.equalTo(128)
-            make.height.equalTo(22)
             make.leading.equalTo(contentView.snp.leading).offset(74)
-            make.bottom.equalTo(contentView.snp.bottom).inset(8)
         }
         
         windStatus.snp.makeConstraints { make in
             make.centerY.equalTo(windLabel.snp.centerY)
             make.width.equalTo(76)
-            make.height.equalTo(20)
             make.trailing.equalTo(contentView.snp.trailing).inset(15)
         }
         
         rainFallStatus.snp.makeConstraints { make in
             make.centerY.equalTo(rainLabel.snp.centerY)
             make.width.equalTo(76)
-            make.height.equalTo(20)
             make.trailing.equalTo(contentView.snp.trailing).inset(15)
         }
         
         cloudyStatus.snp.makeConstraints { make in
             make.centerY.equalTo(cloudsLabel.snp.centerY)
             make.width.equalTo(76)
-            make.height.equalTo(20)
             make.trailing.equalTo(contentView.snp.trailing).inset(15)
-//            make.bottom.equalTo(internalView.snp.bottom).inset(8)
+            make.bottom.equalTo(contentView.snp.bottom).inset(8)
         }
     }
     

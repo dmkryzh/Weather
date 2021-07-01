@@ -45,6 +45,7 @@ class DetailedForecastViewController: UIViewController {
         let view = UITableView(frame: .zero, style: .plain)
         view.delegate = self
         view.dataSource = self
+        view.separatorColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         view.register(DetailedForecastTableViewCell.self, forCellReuseIdentifier: "cell")
         return view
     }()
@@ -172,7 +173,7 @@ extension DetailedForecastViewController: UITableViewDelegate {
 
 extension DetailedForecastViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -191,7 +192,7 @@ extension DetailedForecastViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
 }
 
