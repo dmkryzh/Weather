@@ -10,13 +10,17 @@ import UIKit
 import SnapKit
 
 class HourlyForecastChartCell: UICollectionViewCell {
-
+    
     var strideX: Double = 0
     
     var timeLine = ["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"]
     
-    var temperature = [20, 1, 55, 10, 12, 15, 30.0, 40.0]
- 
+    var temperature = [20, 23, -20, 10, 12, 15, 30.0, -5.0]
+    
+    lazy var maxY = tempPoints.max { a, b in a.y < b.y }
+    
+    lazy var minY = tempPoints.min { a, b in a.y < b.y }
+    
     lazy var tempPoints = temperature.map { element -> CGPoint in
         let y = -element * scaledStride + tempMin
         let point  = CGPoint(x: strideX, y: y + 68)
@@ -24,11 +28,11 @@ class HourlyForecastChartCell: UICollectionViewCell {
         strideX += 50
         return point
     }
-
+    
     lazy var tempMin = temperature.min()!
     lazy var tempMax = temperature.max()!
     lazy var scaledStride = 50 / (tempMax - tempMin)
-
+    
     func addPointsTextAndImages() {
         
         tempPoints.forEach { element in
@@ -103,71 +107,102 @@ class HourlyForecastChartCell: UICollectionViewCell {
         drawChart(inContext: context)
         drawTimeLine(inContext: context)
         drawDashedLines(inContext: context)
+        drawFilledShape(inContext: context)
         
     }
     
-    func drawDashedLines(inContext context: CGContext) {
-        context.setLineWidth(0.3)
-        context.setStrokeColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor)
-        context.setLineDash(phase: 5, lengths: [5,5])
-        context.setLineCap(.round)
+
+
+func drawDashedLines(inContext context: CGContext) {
+    context.setLineWidth(0.3)
+    context.setStrokeColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor)
+    context.setLineDash(phase: 5, lengths: [5,5])
+    context.setLineCap(.round)
+    
+    context.beginPath()
+    
+    if tempPoints.first!.y >= minY!.y {
+        context.move(to: CGPoint(x: 0, y: tempPoints.first!.y))
+        context.addLine(to: CGPoint(x: 0, y: maxY!.y))
+    }
+    context.move(to: CGPoint(x: 0, y: maxY!.y))
+    context.addLine(to: CGPoint(x: 400, y: maxY!.y))
+    context.strokePath()
+}
+
+func drawChart(inContext context: CGContext) {
+    
+    context.setLineWidth(0.3)
+    context.setStrokeColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor)
+    context.setLineCap(.round)
+    
+    
+    for _ in tempPoints {
+        guard let gradus = tempPoints.first else { continue }
         context.beginPath()
+        context.move(to: gradus)
         
-        let maxY = tempPoints.max { a, b in a.y < b.y }
-        
-        let minY = tempPoints.min { a, b in a.y < b.y }
-     
-        if tempPoints.first!.y >= minY!.y {
-            context.move(to: CGPoint(x: 0, y: tempPoints.first!.y))
-            context.addLine(to: CGPoint(x: 0, y: maxY!.y))
+        for point in tempPoints.dropFirst() {
+            context.addLine(to: point)
         }
-        context.move(to: CGPoint(x: 0, y: maxY!.y))
-        context.addLine(to: CGPoint(x: 400, y: maxY!.y))
+        
         context.strokePath()
     }
     
-    func drawChart(inContext context: CGContext) {
-        
-        context.setLineWidth(0.3)
-        context.setStrokeColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor)
-        context.setLineCap(.round)
-        
-        for _ in tempPoints {
-            guard let gradus = tempPoints.first else { continue }
-            context.beginPath()
-            context.move(to: gradus)
-            
-            for point in tempPoints.dropFirst() {
-                context.addLine(to: point)
-            }
-            context.strokePath()
-        }
-    }
+}
     
-    func drawTimeLine(inContext context: CGContext) {
-        
-        let startPoint = CGPoint(x: 0, y: 122)
-        let endPoint = CGPoint(x: 400, y: 122)
-        
-        context.setLineWidth(0.3)
-        context.setStrokeColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor)
-        context.setLineCap(.round)
-        
+func drawFilledShape(inContext context: CGContext) {
+    
+    context.setLineCap(.round)
+    
+    for _ in tempPoints {
+        guard let gradus = tempPoints.first else { continue }
         context.beginPath()
-        context.move(to: startPoint)
-        context.addLine(to: endPoint)
+        context.move(to: gradus)
+        
+        for point in tempPoints.dropFirst() {
+            context.addLine(to: point)
+        }
+        
+        context.addLine(to: CGPoint(x: 350, y: maxY!.y))
+        context.addLine(to: CGPoint(x: 0, y: maxY!.y))
+        context.addLine(to: CGPoint(x: 0, y: tempPoints.first!.y))
+        context.setFillColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 0.025).cgColor)
+        context.fillPath()
+        context.setAlpha(0.5)
         context.strokePath()
+    }
+}
+
+func drawTimeLine(inContext context: CGContext) {
+    
+    let startPoint = CGPoint(x: 0, y: 122)
+    let endPoint = CGPoint(x: 400, y: 122)
+    
+    context.setLineWidth(0.3)
+    context.setStrokeColor(UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1).cgColor)
+    context.setLineCap(.round)
+    
+    context.beginPath()
+    context.move(to: startPoint)
+    context.addLine(to: endPoint)
+    context.strokePath()
+    
+}
+
+override init(frame: CGRect) {
+    super.init(frame: frame)
+    backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
+    addPointsTextAndImages()
+}
+
+required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+}
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
         
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
-        addPointsTextAndImages()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
 }
