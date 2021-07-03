@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 class PageViewConroller: UIViewController {
-    
+
     var coordinator: CarouselCoordinator
     
     var viewModel: PageViewModel
@@ -37,7 +37,7 @@ class PageViewConroller: UIViewController {
         view.addTarget(self, action: #selector(navigateToDetailedController), for: .touchUpInside)
         return view
     }()
-
+    
     private let dailyForecastButton: UIButton = {
         let view = UIButton(type: .system)
         view.setTitle("Ежедневный прогноз", for: .normal)
@@ -174,7 +174,7 @@ class PageViewConroller: UIViewController {
     }
     
     //MARK: Functions
-
+    
     func makeAllContentHidden() {
         headerView.isHidden = true
         firstCollectionView.isHidden = true
@@ -186,15 +186,8 @@ class PageViewConroller: UIViewController {
     }
     
     @objc private func addCity() {
-        guard let index = coordinator.rootController?.pages.count else { return }
-        let vm = PageViewModel(index: index)
-        let vc = PageViewConroller(vm: vm, coordinator: coordinator)
-        vc.view.backgroundColor = .white
-        coordinator.rootController?.pages.append(vc)
-        let parent = self.parent as! UIPageViewController
-        parent.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
+        coordinator.startCityAlert()
     }
-    
     
     @objc private func navigateToDetailedController() {
         coordinator.startDetailedView()
@@ -218,7 +211,6 @@ class PageViewConroller: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubviews(headerView, firstCollectionView, addCityButton, detailedForecastButton, dailyForecastButton, severDaysButton, secondCollectionView)
         constraints()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

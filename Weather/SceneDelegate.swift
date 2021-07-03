@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import RealmSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var startCoordinator: MainCoordinator?
+    let x = NetworkService()
+    
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -21,6 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = startCoordinator?.navController
         window?.makeKeyAndVisible()
         startCoordinator?.start()
+        x.getCityPoint()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

@@ -8,8 +8,7 @@ target 'Weather' do
   pod 'SnapKit', '~> 5.0.0'
   pod 'RealmSwift'
   pod 'Alamofire', '~> 5.4'
-  pod 'CHIPageControl', '~> 0.1.3'
+  pod 'SwiftyJSON', '~> 4.0'
   pod 'TOSegmentedControl'
-  pod 'Charts'
 
 end

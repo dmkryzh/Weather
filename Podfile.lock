@@ -1,60 +1,38 @@
 PODS:
   - Alamofire (5.4.3)
-  - Charts (3.6.0):
-    - Charts/Core (= 3.6.0)
-  - Charts/Core (3.6.0)
-  - CHIPageControl (0.1.8):
-    - CHIPageControl/Aji (= 0.1.8)
-    - CHIPageControl/Aleppo (= 0.1.8)
-    - CHIPageControl/Chimayo (= 0.1.8)
-    - CHIPageControl/Fresno (= 0.1.8)
-    - CHIPageControl/Jalapeno (= 0.1.8)
-    - CHIPageControl/Jaloro (= 0.1.8)
-    - CHIPageControl/Paprika (= 0.1.8)
-    - CHIPageControl/Puya (= 0.1.8)
-  - CHIPageControl/Aji (0.1.8)
-  - CHIPageControl/Aleppo (0.1.8)
-  - CHIPageControl/Chimayo (0.1.8)
-  - CHIPageControl/Fresno (0.1.8)
-  - CHIPageControl/Jalapeno (0.1.8)
-  - CHIPageControl/Jaloro (0.1.8)
-  - CHIPageControl/Paprika (0.1.8)
-  - CHIPageControl/Puya (0.1.8)
   - Realm (10.7.6):
     - Realm/Headers (= 10.7.6)
   - Realm/Headers (10.7.6)
   - RealmSwift (10.7.6):
     - Realm (= 10.7.6)
   - SnapKit (5.0.1)
+  - SwiftyJSON (4.3.0)
   - TOSegmentedControl (1.1.0)
 
 DEPENDENCIES:
   - Alamofire (~> 5.4)
-  - Charts
-  - CHIPageControl (~> 0.1.3)
   - RealmSwift
   - SnapKit (~> 5.0.0)
+  - SwiftyJSON (~> 4.0)
   - TOSegmentedControl
 
 SPEC REPOS:
   trunk:
     - Alamofire
-    - Charts
-    - CHIPageControl
     - Realm
     - RealmSwift
     - SnapKit
+    - SwiftyJSON
     - TOSegmentedControl
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
-  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
-  CHIPageControl: 76b35c8309d8dd155e869c109cc6ffc0aaa465ff
   Realm: ed860452717c8db8f4bf832b6807f7f2ce708839
   RealmSwift: e31c4ddbcc42ac879313d656b86f9ca539f6f4f4
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   TOSegmentedControl: 89b6585bf0404a28ac1eca5f1249facb943e90f1
 
-PODFILE CHECKSUM: e0ebc59727ed24c4a42cc292b9bac439cfc4e90d
+PODFILE CHECKSUM: 2322820c3df18db34d4814cf5ac06d9ef0da345a
 
 COCOAPODS: 1.10.1
