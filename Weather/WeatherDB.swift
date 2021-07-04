@@ -29,7 +29,7 @@ import RealmSwift
 class WeatherForecast: Object {
     @objc dynamic var city = ""
     @objc dynamic var forecastType = ""
-    @objc dynamic var dt = 0
+    @objc dynamic var dt = Date()
     @objc dynamic var sunrise = 0
     @objc dynamic var sunset = 0
     @objc dynamic var moonrise = 0
@@ -58,6 +58,9 @@ class WeatherForecast: Object {
     @objc dynamic var clouds = 0
     @objc dynamic var pop = 0
     @objc dynamic var uvi = 0.0
+    @objc dynamic var temp = 0.0
+    @objc dynamic var feelsLike = 0.0
+    @objc dynamic var visibility = 0
 }
 
 //class Properties: Object {
