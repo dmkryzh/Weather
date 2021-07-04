@@ -10,7 +10,7 @@ import UIKit
 
 class AddCityAlert {
     
-    let net = NetworkService()
+    let data = DataFromNetwork()
 
     lazy var addCityAlert: UIAlertController = {
 
@@ -37,8 +37,8 @@ class AddCityAlert {
     }
 
     func getCityPoint(_ completion: (() -> Void)? = nil) {
-        guard let add = addCityAlert.textFields?[0].text else { return }
-        self.net.getCityPoint(add)
+        guard let city = addCityAlert.textFields?[0].text else { return }
+        self.data.getWeatherForecast(city)
         guard let completion = completion else { return }
         completion()
     }

@@ -12,7 +12,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var startCoordinator: MainCoordinator?
-    let x = NetworkService()
     
 
 
@@ -24,7 +23,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = startCoordinator?.navController
         window?.makeKeyAndVisible()
         startCoordinator?.start()
-        x.getCityPoint()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

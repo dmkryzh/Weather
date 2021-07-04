@@ -56,10 +56,10 @@ class CarouselCoordinator: Coordinator {
         navController?.pushViewController(vc, animated: true)
     }
     
-    let alert = AddCityAlert()
+    
     
     func startCityAlert() {
-        
+        let alert = AddCityAlert()
         alert.configureAddAction { [self] in
             navController?.dismiss(animated: true, completion: self.createPageForCarousel)
         }
@@ -75,7 +75,6 @@ class CarouselCoordinator: Coordinator {
         rootController?.pages.append(vc)
         let parent = rootController?.pageController
         parent?.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
-        alert.net.testGet()
     }
     
     init(nav: UINavigationController) {

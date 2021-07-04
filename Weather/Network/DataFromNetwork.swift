@@ -1,5 +1,5 @@
 //
-//  NetworkService.swift
+//  DataFromNetwork.swift
 //  Weather
 //
 //  Created by Dmitrii KRY on 01.07.2021.
@@ -10,34 +10,44 @@ import Alamofire
 import SwiftyJSON
 import RealmSwift
 
-class NetworkService {
+enum ForecastPeriod: String {
+    case mixed = "mixed"
+    case hourly = "hourly"
+    case daily = "daily"
+}
+
+class DataFromNetwork {
     
-    let config = Realm.Configuration(
+    private(set) var city = ""
+    private(set) var period = ""
+    private(set) var lon = ""
+    private(set) var lat = ""
+    
+    private let config = Realm.Configuration(
         schemaVersion: 1,
         migrationBlock: { migration, oldSchemaVersion in
             if (oldSchemaVersion < 1) {
             }
         })
     
-    lazy var realm: Realm = {
+    private lazy var realm: Realm = {
         try? FileManager().removeItem(at: config.fileURL!)
         return try! Realm(configuration: config)
     }()
     
-    var city = "Москва"
-    var period = ""
     
-    lazy var parametersForCoordinates: [String: Any] = [
+    
+    private lazy var parametersForCoordinates: [String: Any] = [
         "apikey": "63f2307a-7e04-4070-a049-6ba223752433",
         "format": "json",
         "geocode": city
     ]
     
-    var headersForForecast: HTTPHeaders = [
+    private var headersForForecast: HTTPHeaders = [
         "User-Agent": "WeatherForecast 0.2 https://github.com/dmkryzh/Weather"
     ]
     
-    var cityPoint: [String: Any] = [
+    private var cityPoint: [String: Any] = [
         "lat": "37.622513",
         "lon": "55.75322",
         "appid": "c1ec333963b5e6cb184dd81488128a84",
@@ -46,18 +56,17 @@ class NetworkService {
         "lang": "ru"
     ]
     
-    var cityPoint2: [String: Any] = [
-        "lat": "37.622513",
-        "lon": "55.75322",
+    private var parametersForGetForecast: [String: Any] = [
+        "lat": "",
+        "lon": "",
         "appid": "c1ec333963b5e6cb184dd81488128a84",
         "exclude": "current,minutely,alerts",
         "units": "metric",
         "lang": "ru"
     ]
     
-    func getCityPoint(_ city: String = "Москва", _ period: String = "hourly") {
+    func getWeatherForecast(_ city: String) {
         self.city = city
-        self.period = period
         AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -65,12 +74,17 @@ class NetworkService {
                 let pos = json["response"]["GeoObjectCollection"]["featureMember"].arrayValue.map {
                     $0["GeoObject"]["Point"]["pos"].string!
                 }
-                let x = pos.first!.components(separatedBy: " ")
-                self.cityPoint["lon"] = x.first!
-                self.cityPoint["lat"] = x.last!
+                if let point = pos.first?.components(separatedBy: " ") {
+                    self.parametersForGetForecast["lon"] = point.first
+                    self.parametersForGetForecast["lat"] = point.last
+                    self.lon = point.first ?? ""
+                    self.lat = point.last ?? ""
+                }
                 
-                debugPrint(self.cityPoint)
-                self.getWeatherForecast(city)
+                self.getDataForForecast(self.parametersForGetForecast, .daily)
+                self.getDataForForecast(self.parametersForGetForecast, .hourly)
+                
+                print(self.parametersForGetForecast)
                 
             case .failure(let error):
                 print(error)
@@ -78,21 +92,29 @@ class NetworkService {
         }
     }
     
-   
     
-    func getWeatherForecast(_ city: String) {
-        AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: cityPoint2, headers: headersForForecast).responseJSON { response in
+    private func getDataForForecast(_ params: [String: Any], _ period: ForecastPeriod) {
+        
+        AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: params, headers: headersForForecast).responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
                 try! self.realm.write() {
-                    let hourlyAndDaily = json["hourly"].arrayValue + json["daily"].arrayValue
-//
-                    for day in hourlyAndDaily {
+                    var forecastArray = [JSON]()
+                    switch period {
+                    case .mixed:
+                        forecastArray = json["hourly"].arrayValue + json["daily"].arrayValue
+                    case .daily:
+                        forecastArray = json["daily"].arrayValue
+                    case .hourly:
+                        forecastArray = json["hourly"].arrayValue
+                    }
+                    
+                    for day in forecastArray {
                         let newCity = WeatherForecast()
                         
-                        newCity.city = city
-                        newCity.forecastType = "mixed"
+                        newCity.city = self.city
+                        newCity.forecastType = period.rawValue
                         newCity.clouds = day["clouds"].intValue
                         newCity.dewPoint = day["dew_point"].doubleValue
                         
@@ -141,7 +163,7 @@ class NetworkService {
     }
     
     func testGet() {
-        let object = realm.objects(WeatherForecast.self).filter("city = 'Москва'")
+        let object = realm.objects(WeatherForecast.self).filter("forecastType = 'daily'")
         print(object)
     }
     
