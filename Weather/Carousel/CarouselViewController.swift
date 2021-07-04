@@ -33,7 +33,7 @@ class CarouselViewController: UIViewController {
         pageController?.dataSource = self
         pageController?.delegate = self
         pageController?.view.backgroundColor = .clear
-        let vm = PageViewModel(index: 0)
+        let vm = PageViewModel(index: 0, data: coordinator.data)
         let initialVC = PageViewConroller(vm: vm, coordinator: coordinator)
         initialVC.coordinator = coordinator
         initialVC.makeAllContentHidden()
@@ -184,7 +184,7 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         
         index -= 1
         
-        let vm = PageViewModel(index: index)
+        let vm = PageViewModel(index: index, data: coordinator.data)
         let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
@@ -204,7 +204,7 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
             
             index += 1
             
-            let vm = PageViewModel(index: index)
+            let vm = PageViewModel(index: index, data: coordinator.data)
             let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
             vc.coordinator = self.coordinator
             vc.makeAllContentHidden()
@@ -218,7 +218,7 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         
         index += 1
         
-        let vm = PageViewModel(index: index)
+        let vm = PageViewModel(index: index, data: coordinator.data)
         let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator

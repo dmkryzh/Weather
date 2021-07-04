@@ -14,6 +14,8 @@ class CarouselCoordinator: Coordinator {
     var rootController: CarouselViewController?
     var parentCoordinator: MainCoordinator?
     
+    let data = DataFromNetwork()
+    
     func start() {
         
         let vc = CarouselViewController(coordinator: self)
@@ -59,7 +61,7 @@ class CarouselCoordinator: Coordinator {
     
     
     func startCityAlert() {
-        let alert = AddCityAlert()
+        let alert = AddCityAlert(coordinator: self)
         alert.configureAddAction { [self] in
             navController?.dismiss(animated: true, completion: self.createPageForCarousel)
         }
@@ -69,7 +71,7 @@ class CarouselCoordinator: Coordinator {
     
     func createPageForCarousel() {
         guard let index = rootController?.pages.count else { return }
-        let vm = PageViewModel(index: index)
+        let vm = PageViewModel(index: index, data: data)
         let vc = PageViewConroller(vm: vm, coordinator: self)
         vc.view.backgroundColor = .white
         rootController?.pages.append(vc)

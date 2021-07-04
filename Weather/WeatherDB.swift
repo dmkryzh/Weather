@@ -27,6 +27,7 @@ import RealmSwift
 
 
 class WeatherForecast: Object {
+    @objc dynamic var index = 0
     @objc dynamic var city = ""
     @objc dynamic var forecastType = ""
     @objc dynamic var dt = Date()

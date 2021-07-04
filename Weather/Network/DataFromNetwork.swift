@@ -65,7 +65,7 @@ class DataFromNetwork {
         "lang": "ru"
     ]
     
-    func getWeatherForecast(_ city: String) {
+    func getWeatherForecast(_ city: String, completion: (()->Void)? = nil) {
         self.city = city
         AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
             switch response.result {
@@ -84,22 +84,23 @@ class DataFromNetwork {
                 self.getDataForForecast(self.parametersForGetForecast, .daily)
                 self.getDataForForecast(self.parametersForGetForecast, .hourly)
                 
-                print(self.parametersForGetForecast)
-                
             case .failure(let error):
                 print(error)
             }
         }
+        
     }
     
     
-    private func getDataForForecast(_ params: [String: Any], _ period: ForecastPeriod) {
+    private func getDataForForecast(_ params: [String: Any], _ period: ForecastPeriod, completion: (()->Void)? = nil) {
         
         AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: params, headers: headersForForecast).responseJSON { response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
                 try! self.realm.write() {
+                    
+                    
                     var forecastArray = [JSON]()
                     switch period {
                     case .mixed:
@@ -109,10 +110,14 @@ class DataFromNetwork {
                     case .hourly:
                         forecastArray = json["hourly"].arrayValue
                     }
-                    
+//
+                    var index = 0
+//
                     for day in forecastArray {
                         let newCity = WeatherForecast()
                         
+                        newCity.index = index
+                        index += 1
                         newCity.city = self.city
                         newCity.forecastType = period.rawValue
                         newCity.clouds = day["clouds"].intValue
@@ -155,6 +160,7 @@ class DataFromNetwork {
                         
                         self.realm.add(newCity)
                     }
+                    self.testGet()
                 }
             case .failure(let error):
                 print(error)
@@ -165,6 +171,11 @@ class DataFromNetwork {
     func testGet() {
         let object = realm.objects(WeatherForecast.self).filter("forecastType = 'daily'")
         print(object)
+    }
+    
+    func getData(_ predicate: String) -> Any {
+        let object = realm.objects(WeatherForecast.self).filter(predicate)
+        return object
     }
     
 }

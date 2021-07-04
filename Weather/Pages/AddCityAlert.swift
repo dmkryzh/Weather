@@ -10,7 +10,7 @@ import UIKit
 
 class AddCityAlert {
     
-    let data = DataFromNetwork()
+    var coordinator: CarouselCoordinator
 
     lazy var addCityAlert: UIAlertController = {
 
@@ -38,9 +38,13 @@ class AddCityAlert {
 
     func getCityPoint(_ completion: (() -> Void)? = nil) {
         guard let city = addCityAlert.textFields?[0].text else { return }
-        self.data.getWeatherForecast(city)
+        self.coordinator.data.getWeatherForecast(city)
         guard let completion = completion else { return }
         completion()
+    }
+    
+    init(coordinator: CarouselCoordinator) {
+        self.coordinator = coordinator
     }
 
 }
