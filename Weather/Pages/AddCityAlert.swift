@@ -11,9 +11,9 @@ import UIKit
 class AddCityAlert {
     
     var coordinator: CarouselCoordinator
-
+    
     lazy var addCityAlert: UIAlertController = {
-
+        
         let alertCont = UIAlertController(title: "Введите город", message: "Введите ваше текущее местоположение", preferredStyle: .alert)
         alertCont.addTextField() { login in
             login.textColor = .black
@@ -26,25 +26,17 @@ class AddCityAlert {
         }
         return alertCont
     }()
-
+    
     func configureAddAction(completion: (()-> Void)? = nil) {
         let action = UIAlertAction(title: "Принять", style: .default) { _ in
-            self.getCityPoint()
             guard let completion = completion else { return }
             completion()
         }
         self.addCityAlert.addAction(action)
     }
-
-    func getCityPoint(_ completion: (() -> Void)? = nil) {
-        guard let city = addCityAlert.textFields?[0].text else { return }
-        self.coordinator.data.getWeatherForecast(city)
-        guard let completion = completion else { return }
-        completion()
-    }
     
     init(coordinator: CarouselCoordinator) {
         self.coordinator = coordinator
     }
-
+    
 }

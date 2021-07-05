@@ -30,7 +30,7 @@ class DataFromNetwork {
             }
         })
     
-    private lazy var realm: Realm = {
+    lazy var realm: Realm = {
         try? FileManager().removeItem(at: config.fileURL!)
         return try! Realm(configuration: config)
     }()
@@ -65,7 +65,7 @@ class DataFromNetwork {
         "lang": "ru"
     ]
     
-    func getWeatherForecast(_ city: String, completion: (()->Void)? = nil) {
+    func getWeatherForecast(_ city: String, _ period: ForecastPeriod, completion: (()->Void)? = nil) {
         self.city = city
         AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
             switch response.result {
@@ -81,8 +81,7 @@ class DataFromNetwork {
                     self.lat = point.last ?? ""
                 }
                 
-                self.getDataForForecast(self.parametersForGetForecast, .daily)
-                self.getDataForForecast(self.parametersForGetForecast, .hourly)
+                self.getDataForForecast(self.parametersForGetForecast, period, completion: completion)
                 
             case .failure(let error):
                 print(error)
@@ -95,73 +94,76 @@ class DataFromNetwork {
     private func getDataForForecast(_ params: [String: Any], _ period: ForecastPeriod, completion: (()->Void)? = nil) {
         
         AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: params, headers: headersForForecast).responseJSON { response in
+            
             switch response.result {
+            
             case .success(let value):
+                
                 let json = JSON(value)
-                try! self.realm.write() {
+                var forecastArray = [JSON]()
+                var index = 0
+                
+                switch period {
+                case .mixed:
+                    forecastArray = json["hourly"].arrayValue + json["daily"].arrayValue
+                case .daily:
+                    forecastArray = json["daily"].arrayValue
+                case .hourly:
+                    forecastArray = json["hourly"].arrayValue
+                }
+
+                for day in forecastArray {
+                    let newCity = WeatherForecast()
                     
+                    newCity.index = index
+                    index += 1
+                    newCity.city = self.city
+                    newCity.forecastType = period.rawValue
+                    newCity.clouds = day["clouds"].intValue
+                    newCity.dewPoint = day["dew_point"].doubleValue
                     
-                    var forecastArray = [JSON]()
-                    switch period {
-                    case .mixed:
-                        forecastArray = json["hourly"].arrayValue + json["daily"].arrayValue
-                    case .daily:
-                        forecastArray = json["daily"].arrayValue
-                    case .hourly:
-                        forecastArray = json["hourly"].arrayValue
-                    }
-//
-                    var index = 0
-//
-                    for day in forecastArray {
-                        let newCity = WeatherForecast()
-                        
-                        newCity.index = index
-                        index += 1
-                        newCity.city = self.city
-                        newCity.forecastType = period.rawValue
-                        newCity.clouds = day["clouds"].intValue
-                        newCity.dewPoint = day["dew_point"].doubleValue
-                        
-                        let date = Date(timeIntervalSince1970: day["dt"].doubleValue)
-                        newCity.dt = date
-                        
-                        newCity.feelsLikeDay = day["feels_like"]["day"].doubleValue
-                        newCity.feelsLikeEve = day["feels_like"]["eve"].doubleValue
-                        newCity.feelsLikeMorn = day["feels_like"]["morn"].doubleValue
-                        newCity.feelsLikeNight = day["feels_like"]["night"].doubleValue
-                        
-                        newCity.humidity = day["humidity"].intValue
-                        newCity.moonPhase = day["moon_phase"].doubleValue
-                        newCity.moonrise = day["moonrise"].intValue
-                        newCity.moonset = day["moonset"].intValue
-                        newCity.pop = day["pop"].intValue
-                        newCity.pressure = day["pressure"].intValue
-                        newCity.sunrise = day["sunrise"].intValue
-                        newCity.sunset = day["sunset"].intValue
-                        
-                        newCity.tempDay = day["temp"]["day"].doubleValue
-                        newCity.tempEve = day["temp"]["eve"].doubleValue
-                        newCity.tempMax = day["temp"]["max"].doubleValue
-                        newCity.tempMin = day["temp"]["min"].doubleValue
-                        newCity.tempMorn = day["temp"]["morn"].doubleValue
-                        newCity.tempNight = day["temp"]["night"].doubleValue
-                        
-                        newCity.uvi = day["uvi"].doubleValue
-                        
-                        newCity.weatherId = day["weather"].arrayValue.map {$0["id"].intValue }.first ?? 0
-                        newCity.weatherMain = day["weather"].arrayValue.map {$0["main"].stringValue }.first ?? ""
-                        newCity.weatherIcon = day["weather"].arrayValue.map {$0["icon"].stringValue }.first ?? ""
-                        newCity.weatherDescription = day["weather"].arrayValue.map {$0["description"].stringValue }.first ?? ""
-                        
-                        newCity.windDeg = day["wind_deg"].doubleValue
-                        newCity.windGust = day["wind_gust"].doubleValue
-                        newCity.windSpeed = day["wind_speed"].doubleValue
-                        
+                    let date = Date(timeIntervalSince1970: day["dt"].doubleValue)
+                    newCity.dt = date
+                    
+                    newCity.feelsLikeDay = day["feels_like"]["day"].doubleValue
+                    newCity.feelsLikeEve = day["feels_like"]["eve"].doubleValue
+                    newCity.feelsLikeMorn = day["feels_like"]["morn"].doubleValue
+                    newCity.feelsLikeNight = day["feels_like"]["night"].doubleValue
+                    
+                    newCity.humidity = day["humidity"].intValue
+                    newCity.moonPhase = day["moon_phase"].doubleValue
+                    newCity.moonrise = day["moonrise"].intValue
+                    newCity.moonset = day["moonset"].intValue
+                    newCity.pop = day["pop"].intValue
+                    newCity.pressure = day["pressure"].intValue
+                    newCity.sunrise = day["sunrise"].intValue
+                    newCity.sunset = day["sunset"].intValue
+                    
+                    newCity.tempDay = day["temp"]["day"].doubleValue
+                    newCity.tempEve = day["temp"]["eve"].doubleValue
+                    newCity.tempMax = day["temp"]["max"].doubleValue
+                    newCity.tempMin = day["temp"]["min"].doubleValue
+                    newCity.tempMorn = day["temp"]["morn"].doubleValue
+                    newCity.tempNight = day["temp"]["night"].doubleValue
+                    
+                    newCity.uvi = day["uvi"].doubleValue
+                    
+                    newCity.weatherId = day["weather"].arrayValue.map {$0["id"].intValue }.first ?? 0
+                    newCity.weatherMain = day["weather"].arrayValue.map {$0["main"].stringValue }.first ?? ""
+                    newCity.weatherIcon = day["weather"].arrayValue.map {$0["icon"].stringValue }.first ?? ""
+                    newCity.weatherDescription = day["weather"].arrayValue.map {$0["description"].stringValue }.first ?? ""
+                    
+                    newCity.windDeg = day["wind_deg"].doubleValue
+                    newCity.windGust = day["wind_gust"].doubleValue
+                    newCity.windSpeed = day["wind_speed"].doubleValue
+                
+                    try! self.realm.write() {
                         self.realm.add(newCity)
                     }
-                    self.testGet()
                 }
+                guard let completion = completion else { return }
+                completion()
+                
             case .failure(let error):
                 print(error)
             }
@@ -173,7 +175,7 @@ class DataFromNetwork {
         print(object)
     }
     
-    func getData(_ predicate: String) -> Any {
+    func getData(_ predicate: String) -> Results<WeatherForecast> {
         let object = realm.objects(WeatherForecast.self).filter(predicate)
         return object
     }

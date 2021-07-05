@@ -58,20 +58,23 @@ class CarouselCoordinator: Coordinator {
         navController?.pushViewController(vc, animated: true)
     }
     
-    
-    
     func startCityAlert() {
         let alert = AddCityAlert(coordinator: self)
+        
+        
         alert.configureAddAction { [self] in
-            navController?.dismiss(animated: true, completion: self.createPageForCarousel)
+            navController?.dismiss(animated: true) {
+                let cityName = alert.addCityAlert.textFields?[0].text ?? ""
+                createPageForCarousel(cityName)
+            }
         }
         navController?.present(alert.addCityAlert, animated: true)
     }
     
     
-    func createPageForCarousel() {
+    func createPageForCarousel(_ city: String) {
         guard let index = rootController?.pages.count else { return }
-        let vm = PageViewModel(index: index, data: data)
+        let vm = PageViewModel(index: index, city: city, data: data)
         let vc = PageViewConroller(vm: vm, coordinator: self)
         vc.view.backgroundColor = .white
         rootController?.pages.append(vc)
