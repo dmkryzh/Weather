@@ -53,7 +53,10 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let temperature: UILabel = {
+    var tempMin = 0
+    var tempMax = 0
+    
+    lazy var temperature: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 18)
         
@@ -63,10 +66,10 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         
         let attachmentString = NSAttributedString(attachment: imageAttachment)
         
-        let completeText = NSMutableAttributedString(string: "4")
+        let completeText = NSMutableAttributedString(string: "\(tempMin)" )
         completeText.append(attachmentString)
         
-        let textAfterIcon = NSAttributedString(string: " -11")
+        let textAfterIcon = NSAttributedString(string: " -\(tempMax)" )
         completeText.append(textAfterIcon)
         completeText.append(attachmentString)
         

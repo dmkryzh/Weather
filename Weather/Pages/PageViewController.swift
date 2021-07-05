@@ -239,7 +239,7 @@ extension PageViewConroller: UICollectionViewDataSource {
             return 10
             
         } else if collectionView == self.secondCollectionView {
-            return 10
+            return 8
         }
         
         return .zero
@@ -270,6 +270,15 @@ extension PageViewConroller: UICollectionViewDataSource {
             secondCollection.layer.cornerRadius = 5
             secondCollection.layer.borderWidth = 0
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
+            
+            viewModel.dayIndex = indexPath.item
+            
+            viewModel.dataDidLoad = { [self] in
+                secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
+                secondCollection.title.text = viewModel.title
+                secondCollection.tempMin = Int(viewModel.tempMin ?? 0)
+                secondCollection.tempMax = Int(viewModel.tempMax ?? 0)
+            }
             return secondCollection
         }
         return UICollectionViewCell(frame: .zero)
