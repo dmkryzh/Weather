@@ -8,24 +8,25 @@
 import Foundation
 import RealmSwift
 
+protocol PageViewUpdate {
+    func dataDidLoad()
+}
+
 
 class PageViewModel {
     
-    var dataDidLoad: (() -> Void)?
+    var dataDidLoad: PageViewUpdate?
     
-    var dayIndex: Int? {
-        didSet {
-            guard let city = cityName else { return }
-            data.getWeatherForecast(city, .daily) { [weak self] in
-                guard let self = self else { return }
-                guard let index = self.dayIndex else { return }
-                self.dailyForecast = self.data.realm.objects(WeatherForecast.self)
-                self.getDailyForecast(index: index)
-            }
-        }
-    }
+    var forecastsCount: Int?
     
     var cityName: String?
+    
+    func get(_ city: String) {
+        self.data.getWeatherForecast(city, .daily) {
+                        self.dailyForecast = self.data.realm.objects(WeatherForecast.self)
+                        self.forecastsCount = self.dailyForecast?.count
+                    }
+    }
     
     var data: DataFromNetwork
     
@@ -45,7 +46,11 @@ class PageViewModel {
     
     var tempMax: Double?
     
-    var dailyForecast: Results<WeatherForecast>?
+    var dailyForecast: Results<WeatherForecast>? {
+        didSet {
+            dataDidLoad?.dataDidLoad()
+        }
+    }
     
     func getDailyForecast(index: Int) {
         guard let dailyForecast = self.dailyForecast?.filter("index = \(index)") else { return }
@@ -53,14 +58,13 @@ class PageViewModel {
         self.title = dailyForecast[0].weatherDescription
         self.tempMin = dailyForecast[0].tempMin
         self.tempMax = dailyForecast[0].tempMax
-        guard let updateData = self.dataDidLoad else { return }
-        updateData()
     }
     
-    init(index: Int, city: String? = nil, dayIndex: Int? = nil, data: DataFromNetwork) {
+    init(index: Int, city: String? = nil, data: DataFromNetwork) {
         pageIndex = index
         self.data = data
+        guard let city = city else { return }
         self.cityName = city
-        self.dayIndex = dayIndex
+        get(city)
     }
 }

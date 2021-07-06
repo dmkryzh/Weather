@@ -42,7 +42,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 18)
         view.text = "Местами дождь"
-        view.textAlignment = .center
+        view.textAlignment = .left
         return view
     }()
     
@@ -53,29 +53,27 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    var tempMin = 0
-    var tempMax = 0
+    let imageAttachment: NSAttributedString = {
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(systemName: "circle")
+        imageAttachment.bounds = CGRect(x: 1, y: 12, width: 5, height: 5)
+        let attachment = NSAttributedString(attachment: imageAttachment)
+        return attachment
+    }()
+    
+    lazy var tempMin: NSMutableAttributedString = {
+        let minText = NSMutableAttributedString()
+        return minText
+    }()
+    
+    lazy var tempMax: NSMutableAttributedString = {
+        let maxText = NSMutableAttributedString()
+        return maxText
+    }()
     
     lazy var temperature: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 18)
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(systemName: "circle")
-        imageAttachment.bounds = CGRect(x: 1, y: 12, width: 5, height: 5)
-        
-        let attachmentString = NSAttributedString(attachment: imageAttachment)
-        
-        let completeText = NSMutableAttributedString(string: "\(tempMin)" )
-        completeText.append(attachmentString)
-        
-        let textAfterIcon = NSAttributedString(string: " -\(tempMax)" )
-        completeText.append(textAfterIcon)
-        completeText.append(attachmentString)
-        
-        
-        view.attributedText = completeText
-        
         return view
     }()
     
@@ -96,14 +94,14 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         
         title.snp.makeConstraints { make in
             make.centerX.centerY.equalTo(contentView)
-            make.width.equalTo(206)
+            make.width.equalTo(170)
             make.height.equalTo(22)
         }
         
         temperature.snp.makeConstraints { make in
             make.centerY.equalTo(contentView.snp.centerY)
             make.trailing.equalTo(contentView.snp.trailing).inset(16)
-            make.width.equalTo(50)
+            make.width.equalTo(70)
             make.height.equalTo(22)
         }
         

@@ -199,6 +199,8 @@ class PageViewConroller: UIViewController {
         viewModel = vm
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
+        vm.dataDidLoad = self
+        title = vm.cityName
     }
     
     required init?(coder: NSCoder) {
@@ -229,6 +231,12 @@ class PageViewConroller: UIViewController {
 }
 
 //MARK: Extentions
+
+extension PageViewConroller: PageViewUpdate {
+    func dataDidLoad() {
+        secondCollectionView.reloadData()
+    }
+}
 
 extension PageViewConroller: UICollectionViewDataSource {
     
@@ -266,19 +274,26 @@ extension PageViewConroller: UICollectionViewDataSource {
             return cellForecast
             
         } else if collectionView == self.secondCollectionView {
+            
             let secondCollection = collectionView.dequeueReusableCell(withReuseIdentifier: "secondCollection", for: indexPath) as! DailyForecastCollectionViewCell
             secondCollection.layer.cornerRadius = 5
             secondCollection.layer.borderWidth = 0
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
             
-            viewModel.dayIndex = indexPath.item
+            print("зашел в коллекцию")
             
-            viewModel.dataDidLoad = { [self] in
-                secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
-                secondCollection.title.text = viewModel.title
-                secondCollection.tempMin = Int(viewModel.tempMin ?? 0)
-                secondCollection.tempMax = Int(viewModel.tempMax ?? 0)
-            }
+            viewModel.getDailyForecast(index: indexPath.item)
+            
+            secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
+            secondCollection.title.text = viewModel.title
+            secondCollection.tempMin = NSMutableAttributedString(string: "\(Int(viewModel.tempMin ?? 0))")
+            secondCollection.tempMax = NSMutableAttributedString(string: " -\(Int(viewModel.tempMax ?? 0))")
+            let completedText = NSMutableAttributedString(string: "")
+            completedText.append(secondCollection.tempMin)
+            completedText.append(secondCollection.imageAttachment)
+            completedText.append(secondCollection.tempMax)
+            completedText.append(secondCollection.imageAttachment)
+            secondCollection.temperature.attributedText = completedText
             return secondCollection
         }
         return UICollectionViewCell(frame: .zero)

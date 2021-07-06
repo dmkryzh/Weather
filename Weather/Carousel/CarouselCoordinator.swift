@@ -80,6 +80,8 @@ class CarouselCoordinator: Coordinator {
         rootController?.pages.append(vc)
         let parent = rootController?.pageController
         parent?.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
+        
+        print("добавлен в парент")
     }
     
     init(nav: UINavigationController) {
