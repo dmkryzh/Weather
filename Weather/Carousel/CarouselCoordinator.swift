@@ -78,9 +78,7 @@ class CarouselCoordinator: Coordinator {
         let vc = PageViewConroller(vm: vm, coordinator: self)
         vc.view.backgroundColor = .white
         rootController?.pages.append(vc)
-        let parent = rootController?.pageController
-        parent?.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
-        
+        rootController?.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
         print("добавлен в парент")
     }
     

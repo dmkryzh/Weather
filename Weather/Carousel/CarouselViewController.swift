@@ -9,40 +9,24 @@ import Foundation
 import UIKit
 import SnapKit
 
-class CarouselViewController: UIViewController {
-    
-    var pageController: UIPageViewController?
+class CarouselViewController: UIPageViewController {
     
     var pages: [PageViewConroller] = []
     
     var coordinator: CarouselCoordinator
-    
-    private let scrollView: UIScrollView = {
-        let view = UIScrollView()
-        return view
-    }()
-    
-    private let contentView: UIView = {
-        let view = UIView()
-        return view
-    }()
-    
-    private func setupPageController() {
-        
-        pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageController?.dataSource = self
-        pageController?.delegate = self
-        pageController?.view.backgroundColor = .clear
+
+    private func definePageViewController() {
+        self.dataSource = self
+        self.delegate = self
+        self.view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         let vm = PageViewModel(index: 0, data: coordinator.data)
         let initialVC = PageViewConroller(vm: vm, coordinator: coordinator)
         initialVC.coordinator = coordinator
         initialVC.makeAllContentHidden()
-        self.pageController?.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
-        
+        self.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
     }
     
     func configureBarItems() {
-        
         let options = UIBarButtonItem(image: UIImage(named: "burger"), style: .done, target: self, action: #selector(navigateToSettings))
         navigationItem.setLeftBarButton(options, animated: true)
         let location = UIBarButtonItem(image: UIImage(named: "location"), style: .done, target: self, action: #selector(navigateToOnboarding))
@@ -72,37 +56,34 @@ class CarouselViewController: UIViewController {
     
     init(coordinator: CarouselCoordinator) {
         self.coordinator = coordinator
-        super.init(nibName: nil, bundle: nil)
-        setupPageController()
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func setConstraints() {
-        
-        pageController?.view.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide.snp.edges)
-        }
-    }
-    
-    
+
     //MARK: Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
-        view.backgroundColor = .white
-        view.addSubview(pageController!.view)
-        
-        decoratePageControl()
         configureBarItems()
-        setConstraints()
+        definePageViewController()
+        decoratePageControl()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        for view in self.view.subviews {
+            if view is UIPageControl {
+                view.frame = CGRect(x: 0, y: self.view.safeAreaLayoutGuide.layoutFrame.minY + 10, width: self.view.safeAreaLayoutGuide.layoutFrame.width, height: 30)
+                view.center.x = self.view.center.x
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -114,61 +95,7 @@ class CarouselViewController: UIViewController {
 
 //MARK: Extentions
 
-//extension CarouselViewController: UIPageViewControllerDataSource {
-//
-//    func presentationCount(for _: UIPageViewController) -> Int {
-//        return items.count
-//    }
-//
-//    func presentationIndex(for _: UIPageViewController) -> Int {
-//        guard let firstViewController = viewControllers?.first,
-//              let firstViewControllerIndex = items.firstIndex(of: firstViewController) else {
-//            return 0
-//        }
-//
-//        return firstViewControllerIndex
-//    }
-//
-//    func pageViewController(_: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-//        guard let viewControllerIndex = items.firstIndex(of: viewController) else {
-//            return nil
-//        }
-//
-//        let previousIndex = viewControllerIndex - 1
-//
-//        guard previousIndex >= 0 else {
-//            return items.last
-//        }
-//
-//        guard items.count > previousIndex else {
-//            return nil
-//        }
-//
-//        return items[previousIndex]
-//    }
-//
-//    func pageViewController(_: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-//        guard let viewControllerIndex = items.firstIndex(of: viewController) else {
-//            return nil
-//        }
-//
-//        let nextIndex = viewControllerIndex + 1
-//        guard items.count != nextIndex else {
-//            return items.first
-//        }
-//
-//        guard items.count > nextIndex else {
-//            return nil
-//        }
-//
-//        return items[nextIndex]
-//    }
-//
-//}
-
-
 extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-    
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
@@ -231,11 +158,12 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        guard let firstViewController = self.pageController?.viewControllers?.first,
+        guard let firstViewController = self.viewControllers?.first,
               let firstViewControllerIndex = pages.firstIndex(of: firstViewController as! PageViewConroller) else {
             return 0
         }
         
         return firstViewControllerIndex
     }
+    
 }

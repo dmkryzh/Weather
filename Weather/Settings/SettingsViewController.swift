@@ -67,7 +67,7 @@ class SettingsViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        view.backgroundColor = .systemBlue
+        view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         view.addSubviews(settings, skyImageViewOne, skyImageViewTwo, skyImageViewThree)
         setConstrains()
     }
