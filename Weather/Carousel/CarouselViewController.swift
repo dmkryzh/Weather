@@ -13,6 +13,8 @@ class CarouselViewController: UIPageViewController {
     
     var pages: [PageViewConroller] = []
     
+    var cities = [String]()
+    
     var coordinator: CarouselCoordinator
 
     private func definePageViewController() {
@@ -105,13 +107,14 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         
         var index = currentVC.viewModel.pageIndex
         
+        
         if index == 0 {
             return nil
         }
         
         index -= 1
         
-        let vm = PageViewModel(index: index, data: coordinator.data)
+        let vm = PageViewModel(index: index, city: cities[index], data: coordinator.data)
         let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
@@ -145,7 +148,7 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         
         index += 1
         
-        let vm = PageViewModel(index: index, data: coordinator.data)
+        let vm = PageViewModel(index: index, city: cities[index], data: coordinator.data)
         let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
@@ -164,6 +167,11 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         }
         
         return firstViewControllerIndex
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        let vc = self.viewControllers?[0] as? PageViewConroller
+        self.navigationItem.title = vc?.viewModel.cityName
     }
     
 }

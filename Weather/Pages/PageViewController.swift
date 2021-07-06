@@ -280,8 +280,6 @@ extension PageViewConroller: UICollectionViewDataSource {
             secondCollection.layer.borderWidth = 0
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
             
-            print("зашел в коллекцию")
-            
             viewModel.getDailyForecast(index: indexPath.item)
             
             secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")

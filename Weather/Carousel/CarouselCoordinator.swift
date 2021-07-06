@@ -77,9 +77,10 @@ class CarouselCoordinator: Coordinator {
         let vm = PageViewModel(index: index, city: city, data: data)
         let vc = PageViewConroller(vm: vm, coordinator: self)
         vc.view.backgroundColor = .white
+        rootController?.navigationItem.title = city
         rootController?.pages.append(vc)
+        rootController?.cities.append(city)
         rootController?.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
-        print("добавлен в парент")
     }
     
     init(nav: UINavigationController) {
