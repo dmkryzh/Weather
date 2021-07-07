@@ -40,7 +40,7 @@ class PageViewModel {
     
     var date: Date?
     
-    var rain: Int?
+    var icon: String?
     
     var title: String?
     
@@ -60,7 +60,7 @@ class PageViewModel {
         self.title = dailyForecast[0].weatherDescription
         self.tempMin = dailyForecast[0].tempMin
         self.tempMax = dailyForecast[0].tempMax
-        print(dailyForecast)
+        self.icon = dailyForecast[0].weatherIcon
     }
     
     init(index: Int, city: String? = nil, data: DataFromNetwork) {

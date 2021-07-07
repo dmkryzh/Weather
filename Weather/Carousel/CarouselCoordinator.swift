@@ -21,6 +21,7 @@ class CarouselCoordinator: Coordinator {
         let vc = CarouselViewController(coordinator: self)
         rootController = vc
         navController?.navigationBar.backgroundColor = .clear
+        navController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Rubik-Medium", size: 18) as Any]
         navController?.navigationBar.isTranslucent = true
         navController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navController?.navigationBar.shadowImage = UIImage()

@@ -17,24 +17,18 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let icon: UILabel = {
-        let view = UILabel()
-        view.font = UIFont(name: "Rubik-Regular", size: 12)
+    let imageForIcon: NSTextAttachment = {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = WeatherIcons.rain.getIcon()
         imageAttachment.bounds = CGRect(x: 0, y: -4, width: 15, height: 17)
-        
-        let attachmentString = NSAttributedString(attachment: imageAttachment)
-        
-        let completeText = NSMutableAttributedString(string: "")
-        completeText.append(attachmentString)
-        
-        let textAfterIcon = NSAttributedString(string: " 57%")
-        completeText.append(textAfterIcon)
-        
-        view.textAlignment = .center
-        view.attributedText = completeText
-        
+        return imageAttachment
+    }()
+    
+    let icon: UILabel = {
+        let view = UILabel()
+        view.font = UIFont(name: "Rubik-Regular", size: 12)
+        view.textColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        view.textAlignment = .left
         return view
     }()
     
@@ -88,7 +82,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
         icon.snp.makeConstraints { make in
             make.top.equalTo(date.snp.bottom).offset(5)
             make.leading.equalTo(contentView.snp.leading).offset(10)
-            make.width.equalTo(45)
+            make.width.equalTo(50)
             make.height.equalTo(18)
         }
         

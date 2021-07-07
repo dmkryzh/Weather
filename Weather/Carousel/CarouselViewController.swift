@@ -40,7 +40,8 @@ class CarouselViewController: UIPageViewController {
         pageControl.backgroundStyle = .minimal
         pageControl.numberOfPages = pages.count
         pageControl.currentPageIndicatorTintColor = .black
-        pageControl.pageIndicatorTintColor = .blue
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.hidesForSinglePage = true
         
         let dotImage = UIImage(systemName: "circle.fill")
         pageControl.preferredIndicatorImage = dotImage
@@ -82,7 +83,7 @@ class CarouselViewController: UIPageViewController {
         super.viewDidLayoutSubviews()
         for view in self.view.subviews {
             if view is UIPageControl {
-                view.frame = CGRect(x: 0, y: self.view.safeAreaLayoutGuide.layoutFrame.minY + 10, width: self.view.safeAreaLayoutGuide.layoutFrame.width, height: 30)
+                view.frame = CGRect(x: 0, y: self.view.safeAreaLayoutGuide.layoutFrame.minY - 10, width: self.view.safeAreaLayoutGuide.layoutFrame.width, height: 30)
                 view.center.x = self.view.center.x
             }
         }

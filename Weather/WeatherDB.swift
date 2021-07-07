@@ -49,6 +49,7 @@ class WeatherForecast: Object {
     @objc dynamic var pressure = 0
     @objc dynamic var humidity = 0
     @objc dynamic var dewPoint = 0.0
+    @objc dynamic var rain = 0.0
     @objc dynamic var windSpeed = 0.0
     @objc dynamic var windDeg = 0.0
     @objc dynamic var windGust = 0.0

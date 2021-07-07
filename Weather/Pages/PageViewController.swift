@@ -235,6 +235,7 @@ class PageViewConroller: UIViewController {
 extension PageViewConroller: PageViewUpdate {
     func dataDidLoad() {
         secondCollectionView.reloadData()
+        print("EXECUTED")
     }
 }
 
@@ -286,13 +287,24 @@ extension PageViewConroller: UICollectionViewDataSource {
             secondCollection.title.text = viewModel.title
             secondCollection.tempMin = NSMutableAttributedString(string: "\(Int(viewModel.tempMin ?? 0))")
             secondCollection.tempMax = NSMutableAttributedString(string: " -\(Int(viewModel.tempMax ?? 0))")
+            
             let completedText = NSMutableAttributedString(string: "")
             completedText.append(secondCollection.tempMin)
             completedText.append(secondCollection.imageAttachment)
             completedText.append(secondCollection.tempMax)
             completedText.append(secondCollection.imageAttachment)
             secondCollection.temperature.attributedText = completedText
-            print(viewModel.cityName)
+            
+            if let icon = viewModel.icon {
+                secondCollection.imageForIcon.image = UIImage(named: WeatherIcon.getMappedIcon(icon))
+                let attachmentIcon = NSMutableAttributedString(attachment: secondCollection.imageForIcon)
+                let completedTextForIcon = NSMutableAttributedString(string: "")
+                let percentage = NSAttributedString(string: " 0%")
+                completedTextForIcon.append(attachmentIcon)
+                completedTextForIcon.append(percentage)
+                secondCollection.icon.attributedText = completedTextForIcon
+            }
+
             return secondCollection
         }
         return UICollectionViewCell(frame: .zero)
@@ -339,5 +351,4 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
         }
     }
 }
-
 
