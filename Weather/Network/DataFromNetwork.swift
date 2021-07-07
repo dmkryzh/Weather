@@ -40,7 +40,7 @@ class DataFromNetwork {
     private lazy var parametersForCoordinates: [String: Any] = [
         "apikey": "63f2307a-7e04-4070-a049-6ba223752433",
         "format": "json",
-        "geocode": city
+        "geocode": ""
     ]
     
     private var headersForForecast: HTTPHeaders = [
@@ -67,6 +67,7 @@ class DataFromNetwork {
     
     func getWeatherForecast(_ city: String, _ period: ForecastPeriod, completion: (()->Void)? = nil) {
         self.city = city
+        parametersForCoordinates["geocode"] = city
         AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
             switch response.result {
             case .success(let value):

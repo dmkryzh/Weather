@@ -17,15 +17,17 @@ class PageViewModel {
     
     var dataDidLoad: PageViewUpdate?
     
+    var cities = [String]()
+    
     var forecastsCount: Int?
     
     var cityName: String?
     
-    func get(_ city: String) {
+    func getDataForCity(_ city: String) {
         self.data.getWeatherForecast(city, .daily) {
-                        self.dailyForecast = self.data.realm.objects(WeatherForecast.self)
-                        self.forecastsCount = self.dailyForecast?.count
-                    }
+            self.dailyForecast = self.data.realm.objects(WeatherForecast.self)
+            self.forecastsCount = self.dailyForecast?.count
+        }
     }
     
     var data: DataFromNetwork
@@ -52,19 +54,25 @@ class PageViewModel {
         }
     }
     
-    func getDailyForecast(index: Int) {
-        guard let dailyForecast = self.dailyForecast?.filter("index = \(index)") else { return }
+    func getDailyForecast(index: Int, city: String) {
+        guard let dailyForecast = self.dailyForecast?.filter("index = \(index) AND city = '\(city)'") else { return }
         self.date = dailyForecast[0].dt
         self.title = dailyForecast[0].weatherDescription
         self.tempMin = dailyForecast[0].tempMin
         self.tempMax = dailyForecast[0].tempMax
+        print(dailyForecast)
     }
     
     init(index: Int, city: String? = nil, data: DataFromNetwork) {
         pageIndex = index
         self.data = data
         guard let city = city else { return }
-        self.cityName = city
-        get(city)
+        if !cities.contains(city) {
+            self.cityName = city
+            getDataForCity(city)
+        } else {
+            getDailyForecast(index: index, city: city)
+        }
+        
     }
 }

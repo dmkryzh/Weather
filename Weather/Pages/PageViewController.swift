@@ -280,7 +280,7 @@ extension PageViewConroller: UICollectionViewDataSource {
             secondCollection.layer.borderWidth = 0
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
             
-            viewModel.getDailyForecast(index: indexPath.item)
+            viewModel.getDailyForecast(index: indexPath.item, city: viewModel.cityName ?? "")
             
             secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
             secondCollection.title.text = viewModel.title
@@ -292,6 +292,7 @@ extension PageViewConroller: UICollectionViewDataSource {
             completedText.append(secondCollection.tempMax)
             completedText.append(secondCollection.imageAttachment)
             secondCollection.temperature.attributedText = completedText
+            print(viewModel.cityName)
             return secondCollection
         }
         return UICollectionViewCell(frame: .zero)

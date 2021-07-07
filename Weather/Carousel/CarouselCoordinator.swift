@@ -75,11 +75,12 @@ class CarouselCoordinator: Coordinator {
     func createPageForCarousel(_ city: String) {
         guard let index = rootController?.pages.count else { return }
         let vm = PageViewModel(index: index, city: city, data: data)
+        rootController?.cities.append(city)
+        vm.cities = rootController?.cities ?? [""]
         let vc = PageViewConroller(vm: vm, coordinator: self)
         vc.view.backgroundColor = .white
         rootController?.navigationItem.title = city
         rootController?.pages.append(vc)
-        rootController?.cities.append(city)
         rootController?.setViewControllers([vc], direction: .forward, animated: true, completion: nil)
     }
     
