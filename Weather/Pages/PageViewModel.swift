@@ -17,16 +17,15 @@ class PageViewModel {
     
     var dataDidLoad: PageViewUpdate?
     
+    var cityIsUpdated: (()->Void)?
+    
     var cities = [String]()
     
-    var forecastsCount: Int?
+    var cityName: String? 
     
-    var cityName: String?
-    
-    func getDataForCity(_ city: String) {
-        self.data.getWeatherForecast(city, .daily) {
-            self.dailyForecast = self.data.realm.objects(WeatherForecast.self)
-            self.forecastsCount = self.dailyForecast?.count
+    func getDataForCity(_ city: String, _ period: ForecastPeriod) {
+        self.data.getWeatherForecast(city, period) {
+            self.forecastRawValues = self.data.realm.objects(WeatherForecast.self)
         }
     }
     
@@ -47,20 +46,22 @@ class PageViewModel {
     var tempMin: Double?
     
     var tempMax: Double?
-    
-    var dailyForecast: Results<WeatherForecast>? {
-        didSet {
-            dataDidLoad?.dataDidLoad()
-        }
+
+    var forecastRawValues: Results<WeatherForecast>? {
+    didSet {
+        dataDidLoad?.dataDidLoad()
+        cityIsUpdated?()
     }
+}
     
-    func getDailyForecast(index: Int, city: String) {
-        guard let dailyForecast = self.dailyForecast?.filter("index = \(index) AND city = '\(city)'") else { return }
-        self.date = dailyForecast[0].dt
-        self.title = dailyForecast[0].weatherDescription
-        self.tempMin = dailyForecast[0].tempMin
-        self.tempMax = dailyForecast[0].tempMax
-        self.icon = dailyForecast[0].weatherIcon
+    func getForecast(index: Int, city: String, period: ForecastPeriod) {
+        guard let forecastRawValues = forecastRawValues else { return }
+        let forecastValues = forecastRawValues.filter("index = \(index) AND city = '\(city)' AND forecastType = '\(period)'")
+        self.date = forecastValues[0].dt
+        self.title = forecastValues[0].weatherDescription
+        self.tempMin = forecastValues[0].tempMin
+        self.tempMax = forecastValues[0].tempMax
+        self.icon = forecastValues[0].weatherIcon
     }
     
     init(index: Int, city: String? = nil, data: DataFromNetwork) {
@@ -69,9 +70,12 @@ class PageViewModel {
         guard let city = city else { return }
         if !cities.contains(city) {
             self.cityName = city
-            getDataForCity(city)
+            getDataForCity(city, .daily)
+            getDataForCity(city, .hourly)
+            getDataForCity(city, .current)
         } else {
-            getDailyForecast(index: index, city: city)
+            getForecast(index: index, city: city, period: .daily)
+            getForecast(index: index, city: city, period: .hourly)
         }
         
     }

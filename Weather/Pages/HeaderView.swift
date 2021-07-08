@@ -9,6 +9,8 @@ import Foundation
 
 class HeaderView: UIView {
     
+    var viewModel: HeaderViewModel
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -29,18 +31,18 @@ class HeaderView: UIView {
         
     }
     
-    let dawnTime: UILabel = {
+    lazy var dawnTime: UILabel = {
         let label = UILabel()
-        label.text = "05:00"
+        label.text = viewModel.sundawn?.getFormattedDate(format: "HH:mm")
         label.textColor = .white
         label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.frame = CGRect(x: 0, y: 0, width: 40, height: 19)
         return label
     }()
     
-    let sunsetTime: UILabel = {
+    lazy var sunsetTime: UILabel = {
         let label = UILabel()
-        label.text = "22:30"
+        label.text = viewModel.sunset?.getFormattedDate(format: "HH:mm")
         label.textColor = .white
         label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.frame = CGRect(x: 0, y: 0, width: 40, height: 19)
@@ -202,9 +204,9 @@ class HeaderView: UIView {
         return label
     }()
     
-    let currentFullDate: UILabel = {
-        
-        let date = Date()
+    var date = Date()
+    
+    lazy var currentFullDate: UILabel = {
         let color = UIColor(red: 0.967, green: 0.868, blue: 0.004, alpha: 1)
         let formate = date.getFormattedDate(format: "HH:mm, E d MMM")
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 20))
@@ -248,15 +250,24 @@ class HeaderView: UIView {
         currentFullDate.frame.origin.y = self.frame.origin.y + 171
     }
     
-    override init(frame: CGRect) {
+    init(_ vm: HeaderViewModel) {
+        
+        viewModel = vm
+
         super.init(frame: CGRect(x: 0, y: 0, width: 344, height: 212))
+        
+        viewModel.updateData = { [self] in
+            dawnTime.text = viewModel.sundawn?.getFormattedDate(format: "HH:mm")
+            sunsetTime.text = viewModel.sunset?.getFormattedDate(format: "HH:mm")
+        }
+        
+        
         backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         self.layer.cornerRadius = 5
         self.clipsToBounds = true
         self.addSubviews(secondaryTemperature, currentTemperature, weatherStateText, dawnTimeIcon, sunsetTimeIcon, weatherStackIcons, currentFullDate, dawnTime, sunsetTime)
         
         setFrames()
-        
     }
-    
+
 }

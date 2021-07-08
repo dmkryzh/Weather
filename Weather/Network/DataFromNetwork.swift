@@ -11,7 +11,7 @@ import SwiftyJSON
 import RealmSwift
 
 enum ForecastPeriod: String {
-    case mixed = "mixed"
+    case current = "current"
     case hourly = "hourly"
     case daily = "daily"
 }
@@ -47,20 +47,11 @@ class DataFromNetwork {
         "User-Agent": "WeatherForecast 0.2 https://github.com/dmkryzh/Weather"
     ]
     
-    private var cityPoint: [String: Any] = [
-        "lat": "37.622513",
-        "lon": "55.75322",
-        "appid": "c1ec333963b5e6cb184dd81488128a84",
-        "exclude": "current,minutely,alerts",
-        "units": "metric",
-        "lang": "ru"
-    ]
-    
     private var parametersForGetForecast: [String: Any] = [
         "lat": "",
         "lon": "",
         "appid": "c1ec333963b5e6cb184dd81488128a84",
-        "exclude": "current,minutely,alerts",
+        "exclude": "minutely,alerts",
         "units": "metric",
         "lang": "ru"
     ]
@@ -105,14 +96,14 @@ class DataFromNetwork {
                 var index = 0
                 
                 switch period {
-                case .mixed:
-                    forecastArray = json["hourly"].arrayValue + json["daily"].arrayValue
+                case .current:
+                    forecastArray = [json["current"]]
                 case .daily:
                     forecastArray = json["daily"].arrayValue
                 case .hourly:
                     forecastArray = json["hourly"].arrayValue
                 }
-
+                
                 for day in forecastArray {
                     let newCity = WeatherForecast()
                     
@@ -133,12 +124,12 @@ class DataFromNetwork {
                     
                     newCity.humidity = day["humidity"].intValue
                     newCity.moonPhase = day["moon_phase"].doubleValue
-                    newCity.moonrise = day["moonrise"].intValue
-                    newCity.moonset = day["moonset"].intValue
+                    newCity.moonrise = Date(timeIntervalSince1970: day["moonrise"].doubleValue)
+                    newCity.moonset = Date(timeIntervalSince1970: day["moonset"].doubleValue)
                     newCity.pop = day["pop"].intValue
                     newCity.pressure = day["pressure"].intValue
-                    newCity.sunrise = day["sunrise"].intValue
-                    newCity.sunset = day["sunset"].intValue
+                    newCity.sunrise = Date(timeIntervalSince1970: day["sunrise"].doubleValue)
+                    newCity.sunset = Date(timeIntervalSince1970: day["sunset"].doubleValue)
                     
                     newCity.tempDay = day["temp"]["day"].doubleValue
                     newCity.tempEve = day["temp"]["eve"].doubleValue
@@ -157,7 +148,6 @@ class DataFromNetwork {
                     newCity.windDeg = day["wind_deg"].doubleValue
                     newCity.windGust = day["wind_gust"].doubleValue
                     newCity.windSpeed = day["wind_speed"].doubleValue
-                
                     try! self.realm.write() {
                         self.realm.add(newCity)
                     }

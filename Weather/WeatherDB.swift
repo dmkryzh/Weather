@@ -31,10 +31,10 @@ class WeatherForecast: Object {
     @objc dynamic var city = ""
     @objc dynamic var forecastType = ""
     @objc dynamic var dt = Date()
-    @objc dynamic var sunrise = 0
-    @objc dynamic var sunset = 0
-    @objc dynamic var moonrise = 0
-    @objc dynamic var moonset = 0
+    @objc dynamic var sunrise = Date()
+    @objc dynamic var sunset = Date()
+    @objc dynamic var moonrise = Date()
+    @objc dynamic var moonset = Date()
     @objc dynamic var moonPhase = 0.0
     @objc dynamic var tempDay = 0.0
     @objc dynamic var tempMin = 0.0

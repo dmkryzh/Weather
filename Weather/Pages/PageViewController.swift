@@ -50,7 +50,7 @@ class PageViewConroller: UIViewController {
     
     private let severDaysButton: UIButton = {
         let view = UIButton(type: .system)
-        let title = NSAttributedString(string: "25 дней", attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 16) as Any])
+        let title = NSAttributedString(string: "7 дней", attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 16) as Any])
         view.setAttributedTitle(title, for: .normal)
         view.titleLabel?.textAlignment = .right
         let color = UIColor(red: 0.154, green: 0.152, blue: 0.135, alpha: 1)
@@ -59,7 +59,8 @@ class PageViewConroller: UIViewController {
     }()
     
     private lazy var headerView: UIView = {
-        let view = HeaderView()
+        let vm = HeaderViewModel(viewModel)
+        let view = HeaderView(vm)
         return view
     }()
     
@@ -281,7 +282,7 @@ extension PageViewConroller: UICollectionViewDataSource {
             secondCollection.layer.borderWidth = 0
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
             
-            viewModel.getDailyForecast(index: indexPath.item, city: viewModel.cityName ?? "")
+            viewModel.getForecast(index: indexPath.item, city: viewModel.cityName ?? "", period: .daily)
             
             secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
             secondCollection.title.text = viewModel.title
