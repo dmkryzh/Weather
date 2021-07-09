@@ -91,17 +91,17 @@ class DetailedForecastViewController: UIViewController {
         coordinator.backToPreviousView()
     }
     
-    lazy var charts: HourlyForecastChartView = {
-        var view = UIView() as! HourlyForecastChartView
-        viewModel.updateData = { [self] in
-            let timeLine = viewModel.timeline!
-            let array = viewModel.arrayOfHourlyForecast!
-        view = HourlyForecastChartView(timeLine, array, .zero)
-        }
-        return view
-    }()
+//    lazy var charts: HourlyForecastChartView = {
+//        var view = UIView() as! HourlyForecastChartView
+//        viewModel.updateData = { [self] in
+//            let timeLine = viewModel.timeline!
+//            let array = viewModel.arrayOfHourlyForecast!
+//        view = HourlyForecastChartView(timeLine, array, .zero)
+//        }
+//        return view
+//    }()
     
-    let test = HourlyForecastChartView(["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"], [20, 0, 20, 10, 12, 15, 30.0, 0], CGRect(x: 0, y: 0, width: 400, height: 150))
+//    let test = HourlyForecastChartView(["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"], [20, 0, 20, 10, 12, 15, 30.0, 0], CGRect(x: 0, y: 0, width: 400, height: 150))
     
     func setConstraints() {
         
@@ -143,7 +143,7 @@ class DetailedForecastViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        test.backgroundColor = .white
+//        test.backgroundColor = .white
         contentView.addSubviews(cityName, chartsCollectionView, detailedTable)
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
@@ -235,17 +235,10 @@ extension DetailedForecastViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath)
-//        guard let _ = viewModel.timeline else { return cell}
-       
-      
-//            let view = HourlyForecastChartView(["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"], [20, 0, 20, 10, 12, 15, 30.0, 0], CGRect(x: 0, y: 0, width: 400, height: 150))
-//            cell.addSubview(view)
         let time = viewModel.timeline!
         let array = viewModel.arrayOfHourlyForecast!
-            let view = HourlyForecastChartView(time, array, CGRect(x: 0, y: 0, width: 400, height: 150))
-                        cell.addSubview(view)
-        print(viewModel.arrayOfHourlyForecast!)
-        
+        let view = HourlyForecastChartView(time, array, CGRect(x: 0, y: 0, width: 400, height: 150))
+        cell.addSubview(view)
         return cell
 }
 }

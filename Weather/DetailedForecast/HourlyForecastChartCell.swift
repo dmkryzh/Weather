@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 class HourlyForecastChartView: UIView {
-    
+
     var strideX: Double = 0
   
     var timeLine: [String]
@@ -31,10 +31,9 @@ class HourlyForecastChartView: UIView {
     
     lazy var tempMin = temperature.min()!
     lazy var tempMax = temperature.max()!
-    lazy var scaledStride = 50 / (tempMax - tempMin)
+    lazy var scaledStride = 50 / (tempMax)
     
     func addPointsTextAndImages() {
-        
         tempPoints.forEach { element in
             let image = UIView()
             image.backgroundColor = .white
@@ -103,11 +102,11 @@ class HourlyForecastChartView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        drawChart(inContext: context)
-        drawTimeLine(inContext: context)
-        drawDashedLines(inContext: context)
-        drawFilledShape(inContext: context)
+            guard let context = UIGraphicsGetCurrentContext() else { return }
+            drawChart(inContext: context)
+            drawTimeLine(inContext: context)
+            drawDashedLines(inContext: context)
+            drawFilledShape(inContext: context)
         
     }
 
@@ -195,13 +194,7 @@ func drawTimeLine(inContext context: CGContext) {
         backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         addPointsTextAndImages()
     }
-
-//override init(frame: CGRect) {
-//    super.init(frame: frame)
-//    backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
-//    addPointsTextAndImages()
-//}
-
+    
 required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
 }
