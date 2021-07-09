@@ -14,7 +14,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let windStatus: UILabel = {
+    let windStatus: UILabel = {
         let view = UILabel()
         view.text = "2 m/s CCЗ"
         view.textAlignment = .right
@@ -23,7 +23,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let rainFallStatus: UILabel = {
+    let rainFallStatus: UILabel = {
         let view = UILabel()
         view.text = "0%"
         view.textAlignment = .right
@@ -32,7 +32,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let cloudyStatus: UILabel = {
+    let cloudyStatus: UILabel = {
         let view = UILabel()
         view.text = "29%"
         view.textAlignment = .right
@@ -42,7 +42,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
     }()
     
     
-    private let dateLabel: UILabel = {
+    let dateLabel: UILabel = {
         let date = Date()
         let view = UILabel()
         view.text = date.getFormattedDate(format: "E d/MM")
@@ -50,7 +50,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let timeLabel: UILabel = {
+    let timeLabel: UILabel = {
         let view = UILabel()
         view.text = "12:00"
         view.font = UIFont(name: "Rubik-Regular", size: 14)
@@ -145,22 +145,19 @@ class DetailedForecastTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let degreesLabel: UILabel = {
+    let iconGradus: NSAttributedString = {
+        let view = NSTextAttachment()
+        view.image = UIImage(systemName: "circle")
+        view.bounds = CGRect(x: 1, y: 12, width: 3, height: 3)
+        let string = NSAttributedString(attachment: view)
+        return string
+    }()
+    
+    let degreesLabel: UILabel = {
         let view = UILabel()
         view.textColor = .black
         view.textAlignment = .center
         view.font = UIFont(name: "Rubik-Regular", size: 18)
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(systemName: "circle")
-        imageAttachment.bounds = CGRect(x: 1, y: 12, width: 3, height: 3)
-        
-        let attachmentString = NSAttributedString(attachment: imageAttachment)
-        
-        let completeText = NSMutableAttributedString(string: "13")
-        completeText.append(attachmentString)
-        
-        view.attributedText = completeText
         return view
         
     }()
@@ -181,7 +178,7 @@ class DetailedForecastTableViewCell: UITableViewCell {
         
         degreesLabel.snp.makeConstraints { make in
             make.top.equalTo(timeLabel.snp.bottom).offset(10)
-            make.width.equalTo(25)
+            make.width.equalTo(30)
             make.leading.equalTo(contentView.snp.leading).offset(22)
         }
         

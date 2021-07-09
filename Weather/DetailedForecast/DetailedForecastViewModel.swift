@@ -37,6 +37,8 @@ class DetailedForecastViewModel {
     
     var currentTemp: Double?
     
+    var currentTempArray: [Double]?
+    
     var sundawn: Date?
     
     var sunset: Date?
@@ -47,17 +49,26 @@ class DetailedForecastViewModel {
     
     var timeline: [String]?
     
+    var wind: [Double]?
+    
+    var clouds: [Int]?
+    
+    
     func test() {
         
         var temporaryTemp = [Double]()
         var temporaryTime = [String]()
         var temporaryIcon = [String]()
+        var temporaryWind = [Double]()
+        var temporaryCloud = [Int]()
         
         forecastValues?.forEach { element in
             if element.index < 24 {
                 temporaryTemp.append(element.temp)
                 temporaryTime.append("\(element.dt.getFormattedDate(format: "HH:00"))")
                 temporaryIcon.append(element.weatherIcon)
+                temporaryWind.append(element.windSpeed)
+                temporaryCloud.append(element.clouds)
             }
         }
         
@@ -80,16 +91,22 @@ class DetailedForecastViewModel {
             }
         }
         
-        print(arrayOfHourlyForecast)
-        print(timeline)
+        for (index, element) in temporaryWind.enumerated() {
+            if [0,3,6,9,12,15,18,21,24].contains(index) {
+                wind == nil ? wind = [element] : wind?.append(element)
+            }
+        }
         
-//        dataDidLoad?.dataDidLoad()
-//
-//        guard let update = updateData else { return }
-//        update()
+        for (index, element) in temporaryCloud.enumerated() {
+            if [0,3,6,9,12,15,18,21,24].contains(index) {
+                clouds == nil ? clouds = [element] : clouds?.append(element)
+            }
+        }
     }
     
-    var forecastValues: Results<WeatherForecast>?
+    
+    
+    var forecastValues: Results<WeatherForecast>? 
     
     
     init(city: String, data: DataFromNetwork) {
@@ -98,9 +115,9 @@ class DetailedForecastViewModel {
         test()
         
         
-//        data.getWeatherForecast(city, .hourly) {
-//            self.forecastValues = data.realm.objects(WeatherForecast.self).filter("city = '\(city)' AND forecastType = 'hourly'")
-//        }
+        //        data.getWeatherForecast(city, .hourly) {
+        //            self.forecastValues = data.realm.objects(WeatherForecast.self).filter("city = '\(city)' AND forecastType = 'hourly'")
+        //        }
     }
-        
+    
 }

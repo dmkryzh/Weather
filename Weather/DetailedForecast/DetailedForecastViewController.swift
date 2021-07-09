@@ -78,9 +78,8 @@ class DetailedForecastViewController: UIViewController {
         return view
     }()
     
-    private let cityName: UILabel = {
+    let cityName: UILabel = {
         let view = UILabel()
-        view.text = "Чита"
         view.font = UIFont(name: "Rubik-Medium", size: 18)
         view.textAlignment = .left
         return view
@@ -179,7 +178,7 @@ class DetailedForecastViewController: UIViewController {
 extension DetailedForecastViewController: DetailedForecastViewModelUpdate {
     func dataDidLoad() {
         chartsCollectionView.reloadData()
-        print("Zashel")
+        detailedTable.reloadData()
     }
     
     
@@ -205,11 +204,28 @@ extension DetailedForecastViewController: UITableViewDelegate {
 
 extension DetailedForecastViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        8
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailedForecastTableViewCell
+        
+        
+        
+        cell.cloudyStatus.text = "\(String(describing: viewModel.clouds![indexPath.item]))%"
+        cell.windStatus.text = "\(String(describing: viewModel.wind![indexPath.item]))"
+        cell.timeLabel.text = viewModel.timeline![indexPath.item]
+        
+        let completedText = NSMutableAttributedString(string: "")
+        let temp = NSAttributedString(string: "\(String(describing: Int(viewModel.arrayOfHourlyForecast![indexPath.item]) ))")
+        completedText.append(temp)
+        completedText.append(cell.iconGradus)
+        cell.degreesLabel.attributedText = completedText
+        
+        if indexPath.item != 0 {
+            cell.dateLabel.text = ""
+        }
+        
         return cell
     }
     

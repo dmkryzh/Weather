@@ -52,6 +52,7 @@ class CarouselCoordinator: Coordinator {
         let vm = DetailedForecastViewModel(city: rootController?.navigationItem.title ?? "", data: data)
         vm.parentViewModel = mainViewModel
         let vc = DetailedForecastViewController(coordinator: self, vm: vm)
+        vc.cityName.text = rootController?.navigationItem.title
         navController?.pushViewController(vc, animated: true)
         
     }
