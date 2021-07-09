@@ -237,7 +237,8 @@ extension DetailedForecastViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath)
         let time = viewModel.timeline!
         let array = viewModel.arrayOfHourlyForecast!
-        let view = HourlyForecastChartView(time, array, CGRect(x: 0, y: 0, width: 400, height: 150))
+        let icons = viewModel.icons!
+        let view = HourlyForecastChartView(time, array, CGRect(x: 0, y: 0, width: 400, height: 150), icons)
         cell.addSubview(view)
         return cell
 }

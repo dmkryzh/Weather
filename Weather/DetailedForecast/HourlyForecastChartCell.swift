@@ -17,6 +17,8 @@ class HourlyForecastChartView: UIView {
     
     var temperature: [Double]
     
+    var icons: [String]
+    
     lazy var maxY = tempPoints.max { a, b in a.y < b.y }
     
     lazy var minY = tempPoints.min { a, b in a.y < b.y }
@@ -92,8 +94,8 @@ class HourlyForecastChartView: UIView {
         
         var strideForTimeLineRain: Double = 0
         
-        timeLine.forEach { element in
-            let image = WeatherIcons.rain.getIcon()
+        icons.forEach { element in
+            let image = UIImage(named: WeatherIcon.getMappedIcon(element)) 
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: strideForTimeLineRain, y: 78, width: 17, height: 20)
             self.addSubview(imageView)
@@ -187,9 +189,10 @@ func drawTimeLine(inContext context: CGContext) {
     
 }
     
-    init(_ timeline: [String], _ arrayHours: [Double], _ frame: CGRect) {
+    init(_ timeline: [String], _ arrayHours: [Double], _ frame: CGRect, _ icons: [String]) {
         self.timeLine = timeline
         temperature = arrayHours
+        self.icons = icons
         super.init(frame: frame)
         backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         addPointsTextAndImages()

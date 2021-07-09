@@ -27,7 +27,7 @@ class DetailedForecastViewModel {
     
     var date: Date?
     
-    var icon: String?
+    var icons: [String]?
     
     var title: String?
     
@@ -51,11 +51,13 @@ class DetailedForecastViewModel {
         
         var temporaryTemp = [Double]()
         var temporaryTime = [String]()
+        var temporaryIcon = [String]()
         
         forecastValues?.forEach { element in
             if element.index < 24 {
                 temporaryTemp.append(element.temp)
                 temporaryTime.append("\(element.dt.getFormattedDate(format: "HH:00"))")
+                temporaryIcon.append(element.weatherIcon)
             }
         }
         
@@ -69,6 +71,12 @@ class DetailedForecastViewModel {
         for (index, element) in temporaryTime.enumerated() {
             if [0,3,6,9,12,15,18,21,24].contains(index) {
                 timeline == nil ? timeline = [element] : timeline?.append(element)
+            }
+        }
+        
+        for (index, element) in temporaryIcon.enumerated() {
+            if [0,3,6,9,12,15,18,21,24].contains(index) {
+                icons == nil ? icons = [element] : icons?.append(element)
             }
         }
         
