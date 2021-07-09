@@ -277,35 +277,44 @@ extension PageViewConroller: UICollectionViewDataSource {
             
         } else if collectionView == self.secondCollectionView {
             
+            print("Зашел")
+            
             let secondCollection = collectionView.dequeueReusableCell(withReuseIdentifier: "secondCollection", for: indexPath) as! DailyForecastCollectionViewCell
             secondCollection.layer.cornerRadius = 5
             secondCollection.layer.borderWidth = 0
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
             
-            viewModel.getForecast(index: indexPath.item, city: viewModel.cityName ?? "", period: .daily)
             
-            secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
-            secondCollection.title.text = viewModel.title
-            secondCollection.tempMin = NSMutableAttributedString(string: "\(Int(viewModel.tempMin ?? 0))")
-            secondCollection.tempMax = NSMutableAttributedString(string: " -\(Int(viewModel.tempMax ?? 0))")
-            
-            let completedText = NSMutableAttributedString(string: "")
-            completedText.append(secondCollection.tempMin)
-            completedText.append(secondCollection.imageAttachment)
-            completedText.append(secondCollection.tempMax)
-            completedText.append(secondCollection.imageAttachment)
-            secondCollection.temperature.attributedText = completedText
-            
-            if let icon = viewModel.icon {
-                secondCollection.imageForIcon.image = UIImage(named: WeatherIcon.getMappedIcon(icon))
-                let attachmentIcon = NSMutableAttributedString(attachment: secondCollection.imageForIcon)
-                let completedTextForIcon = NSMutableAttributedString(string: "")
-                let percentage = NSAttributedString(string: " 0%")
-                completedTextForIcon.append(attachmentIcon)
-                completedTextForIcon.append(percentage)
-                secondCollection.icon.attributedText = completedTextForIcon
+           
+                viewModel.getForecast(index: indexPath.item, city: viewModel.cityName ?? "", period: .daily)
+            DataFromNetwork.shared.dataDidLoad = {
+                print(DataFromNetwork.shared.getData()?.count)
             }
-
+            
+                
+//                secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
+//                secondCollection.title.text = viewModel.title
+//                secondCollection.tempMin = NSMutableAttributedString(string: "\(Int(viewModel.tempMin ?? 0))")
+//                secondCollection.tempMax = NSMutableAttributedString(string: " -\(Int(viewModel.tempMax ?? 0))")
+//                
+//                let completedText = NSMutableAttributedString(string: "")
+//                completedText.append(secondCollection.tempMin)
+//                completedText.append(secondCollection.imageAttachment)
+//                completedText.append(secondCollection.tempMax)
+//                completedText.append(secondCollection.imageAttachment)
+//                secondCollection.temperature.attributedText = completedText
+//                
+//                if let icon = viewModel.icon {
+//                    secondCollection.imageForIcon.image = UIImage(named: WeatherIcon.getMappedIcon(icon))
+//                    let attachmentIcon = NSMutableAttributedString(attachment: secondCollection.imageForIcon)
+//                    let completedTextForIcon = NSMutableAttributedString(string: "")
+//                    let percentage = NSAttributedString(string: " 0%")
+//                    completedTextForIcon.append(attachmentIcon)
+//                    completedTextForIcon.append(percentage)
+//                    secondCollection.icon.attributedText = completedTextForIcon
+//                    
+//                }
+   
             return secondCollection
         }
         return UICollectionViewCell(frame: .zero)
@@ -349,6 +358,7 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
             cellForecast.time.textColor = .white
             cellForecast.temperatureLabel.textColor = .white
             collectionView.reloadItems(at: oldIndex)
+            coordinator.startDetailedView()
         }
     }
 }

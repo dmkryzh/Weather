@@ -49,6 +49,7 @@ class DetailedForecastViewController: UIViewController {
         view.dataSource = self
         view.separatorColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         view.register(DetailedForecastTableViewCell.self, forCellReuseIdentifier: "cell")
+        view.allowsSelection = false
         return view
     }()
     
@@ -200,6 +201,7 @@ extension DetailedForecastViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         0
     }
+    
 }
 
 extension DetailedForecastViewController: UITableViewDataSource {

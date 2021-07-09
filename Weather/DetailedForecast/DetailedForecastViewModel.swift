@@ -109,9 +109,9 @@ class DetailedForecastViewModel {
     var forecastValues: Results<WeatherForecast>? 
     
     
-    init(city: String, data: DataFromNetwork) {
-        self.data = data
-        self.forecastValues = data.realm.objects(WeatherForecast.self).filter("city = '\(city)' AND forecastType = 'hourly'")
+    init(city: String) {
+        
+        self.forecastValues = DataFromNetwork.shared.getData("city = '\(city)' AND forecastType = 'hourly'")
         test()
         
         

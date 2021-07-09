@@ -16,8 +16,6 @@ class CarouselCoordinator: Coordinator {
     
     var mainViewModel: PageViewModel?
     
-    let data = DataFromNetwork()
-    
     func start() {
         
         let vc = CarouselViewController(coordinator: self)
@@ -49,7 +47,7 @@ class CarouselCoordinator: Coordinator {
     }
     
     func startDetailedView() {
-        let vm = DetailedForecastViewModel(city: rootController?.navigationItem.title ?? "", data: data)
+        let vm = DetailedForecastViewModel(city: rootController?.navigationItem.title ?? "")
         vm.parentViewModel = mainViewModel
         let vc = DetailedForecastViewController(coordinator: self, vm: vm)
         vc.cityName.text = rootController?.navigationItem.title
@@ -79,7 +77,7 @@ class CarouselCoordinator: Coordinator {
     
     func createPageForCarousel(_ city: String) {
         guard let index = rootController?.pages.count else { return }
-        let vm = PageViewModel(index: index, city: city, data: data)
+        let vm = PageViewModel(index: index, city: city)
         mainViewModel = vm
         rootController?.cities.append(city)
         vm.cities = rootController?.cities ?? [""]
