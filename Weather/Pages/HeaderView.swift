@@ -49,24 +49,22 @@ class HeaderView: UIView {
         return label
     }()
     
-    lazy var currentTemperature: UILabel = {
-        let label = UILabel()
-        label.frame = CGRect(x: 0, y: 0, width: 50, height: 40)
-        label.textColor = .white
-        label.textAlignment = .center
-        label.font = UIFont(name: "Rubik-Regular", size: 36)
+    lazy var imageGradus: NSAttributedString = {
         
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(systemName: "circle")?.maskWithColor(color: .white)
         imageAttachment.bounds = CGRect(x: 3, y: 24, width: 5, height: 5)
         
-        let attachmentString = NSAttributedString(attachment: imageAttachment)
-        
-        let completeText = NSMutableAttributedString(string: "13")
-        completeText.append(attachmentString)
-        
-        
-        label.attributedText = completeText
+        let string = NSAttributedString(attachment: imageAttachment)
+        return string
+    }()
+    
+    lazy var currentTemperature: UILabel = {
+        let label = UILabel()
+        label.frame = CGRect(x: 0, y: 0, width: 55, height: 40)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont(name: "Rubik-Regular", size: 36)
         return label
         
     }()
@@ -101,12 +99,7 @@ class HeaderView: UIView {
         label.font = UIFont(name: "Rubik-Regular", size: 16)
         label.numberOfLines = 1
         label.frame = CGRect(x: 0, y: 0, width: 227, height: 20)
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.05
-        
-        label.attributedText = NSMutableAttributedString(string: "Возможен небольшой дождь", attributes: [NSAttributedString.Key.kern: 0.16, NSAttributedString.Key.paragraphStyle: paragraphStyle]).trunc(length: 25)
-        
+        label.textAlignment = .center
         return label
     }()
     
@@ -259,6 +252,14 @@ class HeaderView: UIView {
         viewModel.updateData = { [self] in
             dawnTime.text = viewModel.sundawn?.getFormattedDate(format: "HH:mm")
             sunsetTime.text = viewModel.sunset?.getFormattedDate(format: "HH:mm")
+            
+            let currentTempText = NSMutableAttributedString(string: "")
+            currentTempText.append(NSAttributedString(string: "\(Int(viewModel.currentTemp ?? 0))"))
+            currentTempText.append(imageGradus)
+            
+            currentTemperature.attributedText = currentTempText
+            weatherStateText.text = viewModel.title
+            
         }
         
         

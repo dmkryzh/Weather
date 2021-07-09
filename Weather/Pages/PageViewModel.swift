@@ -71,11 +71,10 @@ class PageViewModel {
         if !cities.contains(city) {
             self.cityName = city
             getDataForCity(city, .daily)
-            getDataForCity(city, .hourly)
             getDataForCity(city, .current)
+            getDataForCity(city, .hourly)
         } else {
             getForecast(index: index, city: city, period: .daily)
-            getForecast(index: index, city: city, period: .hourly)
         }
         
     }

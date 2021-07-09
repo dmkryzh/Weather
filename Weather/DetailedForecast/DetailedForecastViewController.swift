@@ -11,6 +11,8 @@ import SnapKit
 
 class DetailedForecastViewController: UIViewController {
     
+    var viewModel: DetailedForecastViewModel
+    
     var coordinator: CarouselCoordinator
    
     private let scrollView: UIScrollView = {
@@ -33,7 +35,7 @@ class DetailedForecastViewController: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: chartsCollectionLayout)
         view.dataSource = self
         view.delegate = self
-        view.register(HourlyForecastChartCell.self, forCellWithReuseIdentifier: "collection")
+        view.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "collection")
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
         view.allowsSelection = true
@@ -89,6 +91,18 @@ class DetailedForecastViewController: UIViewController {
         coordinator.backToPreviousView()
     }
     
+    lazy var charts: HourlyForecastChartView = {
+        var view = UIView() as! HourlyForecastChartView
+        viewModel.updateData = { [self] in
+            let timeLine = viewModel.timeline!
+            let array = viewModel.arrayOfHourlyForecast!
+        view = HourlyForecastChartView(timeLine, array, .zero)
+        }
+        return view
+    }()
+    
+    let test = HourlyForecastChartView(["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"], [20, 0, 20, 10, 12, 15, 30.0, 0], CGRect(x: 0, y: 0, width: 400, height: 150))
+    
     func setConstraints() {
         
         scrollView.snp.makeConstraints() { make in
@@ -103,6 +117,13 @@ class DetailedForecastViewController: UIViewController {
             make.top.equalTo(contentView.snp.top).offset(10)
             make.leading.equalTo(contentView.snp.leading).offset(48)
         }
+        
+//        test.snp.makeConstraints{ make in
+//            make.top.equalTo(cityName.snp.bottom).offset(15)
+//            make.height.equalTo(150)
+//            make.width.equalTo(400)
+//            make.centerX.equalTo(contentView.snp.centerX)
+//        }
         
         chartsCollectionView.snp.makeConstraints() { make in
             make.top.equalTo(cityName.snp.bottom).offset(10)
@@ -122,11 +143,11 @@ class DetailedForecastViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        test.backgroundColor = .white
         contentView.addSubviews(cityName, chartsCollectionView, detailedTable)
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
         setConstraints()
-        
     }
     
     var height: CGFloat = 0
@@ -141,13 +162,24 @@ class DetailedForecastViewController: UIViewController {
     }
     
     
-    init(coordinator: CarouselCoordinator) {
+    init(coordinator: CarouselCoordinator, vm: DetailedForecastViewModel) {
         self.coordinator = coordinator
+        self.viewModel = vm
         super.init(nibName: nil, bundle: nil)
+        vm.dataDidLoad = self
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+}
+
+extension DetailedForecastViewController: DetailedForecastViewModelUpdate {
+    func dataDidLoad() {
+        chartsCollectionView.reloadData()
+        print("Zashel")
     }
     
     
@@ -202,10 +234,18 @@ extension DetailedForecastViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath) as! HourlyForecastChartCell
-        return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath)
+//        guard let _ = viewModel.timeline else { return cell}
+       
+      
+//            let view = HourlyForecastChartView(["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"], [20, 0, 20, 10, 12, 15, 30.0, 0], CGRect(x: 0, y: 0, width: 400, height: 150))
+//            cell.addSubview(view)
+        let time = viewModel.timeline!
+        let array = viewModel.arrayOfHourlyForecast!
+            let view = HourlyForecastChartView(time, array, CGRect(x: 0, y: 0, width: 400, height: 150))
+                        cell.addSubview(view)
+        print(viewModel.arrayOfHourlyForecast!)
         
-    }
-    
-    
+        return cell
+}
 }

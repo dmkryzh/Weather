@@ -1,5 +1,5 @@
 //
-//  HourlyForecastChartCell.swift
+//  HourlyForecastChartView.swift
 //  Weather
 //
 //  Created by Dmitrii KRY on 28.06.2021.
@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 import SnapKit
 
-class HourlyForecastChartCell: UICollectionViewCell {
+class HourlyForecastChartView: UIView {
     
     var strideX: Double = 0
+  
+    var timeLine: [String]
     
-    var timeLine = ["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"]
-    
-    var temperature = [20, 23, -20, 10, 12, 15, 30.0, -5.0]
+    var temperature: [Double]
     
     lazy var maxY = tempPoints.max { a, b in a.y < b.y }
     
@@ -110,8 +110,6 @@ class HourlyForecastChartCell: UICollectionViewCell {
         drawFilledShape(inContext: context)
         
     }
-    
-
 
 func drawDashedLines(inContext context: CGContext) {
     context.setLineWidth(0.3)
@@ -189,12 +187,20 @@ func drawTimeLine(inContext context: CGContext) {
     context.strokePath()
     
 }
+    
+    init(_ timeline: [String], _ arrayHours: [Double], _ frame: CGRect) {
+        self.timeLine = timeline
+        temperature = arrayHours
+        super.init(frame: frame)
+        backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
+        addPointsTextAndImages()
+    }
 
-override init(frame: CGRect) {
-    super.init(frame: frame)
-    backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
-    addPointsTextAndImages()
-}
+//override init(frame: CGRect) {
+//    super.init(frame: frame)
+//    backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
+//    addPointsTextAndImages()
+//}
 
 required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")

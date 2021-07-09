@@ -131,6 +131,8 @@ class DataFromNetwork {
                     newCity.sunrise = Date(timeIntervalSince1970: day["sunrise"].doubleValue)
                     newCity.sunset = Date(timeIntervalSince1970: day["sunset"].doubleValue)
                     
+                    newCity.temp = day["temp"].doubleValue
+                    
                     newCity.tempDay = day["temp"]["day"].doubleValue
                     newCity.tempEve = day["temp"]["eve"].doubleValue
                     newCity.tempMax = day["temp"]["max"].doubleValue
