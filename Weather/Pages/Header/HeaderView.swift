@@ -11,26 +11,6 @@ class HeaderView: UIView {
     
     var viewModel: HeaderViewModel
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func draw(_ rect: CGRect) {
-        
-        let path = UIBezierPath(ovalIn: CGRect(x: 33, y: 17, width: 280, height: 246))
-        
-        let clip = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 344, height: 140))
-        
-        let color = UIColor(red: 0.967, green: 0.868, blue: 0.004, alpha: 1)
-        
-        clip.addClip()
-        path.lineWidth = 3
-        path.lineCapStyle = .round
-        color.setStroke()
-        path.stroke()
-        
-    }
-    
     lazy var dawnTime: UILabel = {
         let label = UILabel()
         label.text = viewModel.sundawn?.getFormattedDate(format: "HH:mm")
@@ -210,10 +190,6 @@ class HeaderView: UIView {
         return label
     }()
     
-    func setConstraints() {
-        
-    }
-    
     func setFrames() {
         dawnTime.frame.origin.x = self.frame.origin.x + 17
         dawnTime.frame.origin.y = self.frame.origin.y + 167
@@ -243,13 +219,36 @@ class HeaderView: UIView {
         currentFullDate.frame.origin.y = self.frame.origin.y + 171
     }
     
-    init(_ vm: HeaderViewModel) {
+    override func draw(_ rect: CGRect) {
+        
+        let path = UIBezierPath(ovalIn: CGRect(x: 33, y: 17, width: 280, height: 246))
+        
+        let clip = UIBezierPath(rect: CGRect(x: 0, y: 0, width: 344, height: 140))
+        
+        let color = UIColor(red: 0.967, green: 0.868, blue: 0.004, alpha: 1)
+        
+        clip.addClip()
+        path.lineWidth = 3
+        path.lineCapStyle = .round
+        color.setStroke()
+        path.stroke()
+        
+    }
+    
+    init(_ vm: HeaderViewModel, _ city: String?) {
         
         viewModel = vm
-
         super.init(frame: CGRect(x: 0, y: 0, width: 344, height: 212))
+        backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        self.layer.cornerRadius = 5
+        self.clipsToBounds = true
+        self.addSubviews(secondaryTemperature, currentTemperature, weatherStateText, dawnTimeIcon, sunsetTimeIcon, weatherStackIcons, currentFullDate, dawnTime, sunsetTime)
+        setFrames()
         
-        viewModel.updateData = { [self] in
+        guard let city = city else { return }
+        
+        viewModel.getCurrentForecast(city: city, forecastType: .current) { [self] in
+            
             dawnTime.text = viewModel.sundawn?.getFormattedDate(format: "HH:mm")
             sunsetTime.text = viewModel.sunset?.getFormattedDate(format: "HH:mm")
             
@@ -259,16 +258,11 @@ class HeaderView: UIView {
             
             currentTemperature.attributedText = currentTempText
             weatherStateText.text = viewModel.title
-            
         }
-        
-        
-        backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
-        self.layer.cornerRadius = 5
-        self.clipsToBounds = true
-        self.addSubviews(secondaryTemperature, currentTemperature, weatherStateText, dawnTimeIcon, sunsetTimeIcon, weatherStackIcons, currentFullDate, dawnTime, sunsetTime)
-        
-        setFrames()
     }
-
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
 }

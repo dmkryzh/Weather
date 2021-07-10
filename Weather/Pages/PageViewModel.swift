@@ -12,12 +12,11 @@ protocol PageViewUpdate {
     func dataDidLoad()
 }
 
-
 class PageViewModel {
     
     var dataDidLoad: PageViewUpdate?
     
-    var cityIsUpdated: (()->Void)?
+    var rawForecastIsLoaded: (()->Void)?
     
     var cities = [String]()
     
@@ -53,6 +52,8 @@ class PageViewModel {
     var forecastRawValues: Results<WeatherForecast>? {
         didSet {
             dataDidLoad?.dataDidLoad()
+            guard let rawForecastIsLoaded = rawForecastIsLoaded else { return }
+            rawForecastIsLoaded()
         }
     }
     

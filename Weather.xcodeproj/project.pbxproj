@@ -26,8 +26,7 @@
 		5043076E269602FA0016F421 /* MappingIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043076D269602FA0016F421 /* MappingIcons.swift */; };
 		504307702696F1920016F421 /* HeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043076F2696F1920016F421 /* HeaderViewModel.swift */; };
 		5043077226972F3E0016F421 /* DetailedForecastViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043077126972F3E0016F421 /* DetailedForecastViewModel.swift */; };
-		5043077426981D4F0016F421 /* SpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043077326981D4F0016F421 /* SpriteView.swift */; };
-		5043077626987EB30016F421 /* DataForWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043077526987EB30016F421 /* DataForWeather.swift */; };
+		50430778269A49360016F421 /* HourlyForecastViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50430777269A49350016F421 /* HourlyForecastViewModel.swift */; };
 		50720644266E9CED0009DBEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50720643266E9CED0009DBEF /* AppDelegate.swift */; };
 		50720646266E9CED0009DBEF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50720645266E9CED0009DBEF /* SceneDelegate.swift */; };
 		50720648266E9CED0009DBEF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50720647266E9CED0009DBEF /* OnboardingViewController.swift */; };
@@ -68,8 +67,7 @@
 		5043076D269602FA0016F421 /* MappingIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingIcons.swift; sourceTree = "<group>"; };
 		5043076F2696F1920016F421 /* HeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderViewModel.swift; sourceTree = "<group>"; };
 		5043077126972F3E0016F421 /* DetailedForecastViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedForecastViewModel.swift; sourceTree = "<group>"; };
-		5043077326981D4F0016F421 /* SpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteView.swift; sourceTree = "<group>"; };
-		5043077526987EB30016F421 /* DataForWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataForWeather.swift; sourceTree = "<group>"; };
+		50430777269A49350016F421 /* HourlyForecastViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastViewModel.swift; sourceTree = "<group>"; };
 		50720640266E9CED0009DBEF /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50720643266E9CED0009DBEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50720645266E9CED0009DBEF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -121,10 +119,9 @@
 				50720660267200FB0009DBEF /* PageViewController.swift */,
 				50430769268F64C30016F421 /* AddCityAlert.swift */,
 				5072065D26714F190009DBEF /* PageViewModel.swift */,
-				507206672673F3430009DBEF /* HeaderView.swift */,
-				5043076F2696F1920016F421 /* HeaderViewModel.swift */,
-				5072066B267680640009DBEF /* HourlyForecastCollectionCell.swift */,
 				508D4AA42677E3A0002F185F /* DailyForecastCollectionViewCell.swift */,
+				5043077A269A49580016F421 /* Header */,
+				50430779269A493E0016F421 /* HourlyForecast */,
 			);
 			path = Pages;
 			sourceTree = "<group>";
@@ -148,9 +145,26 @@
 			isa = PBXGroup;
 			children = (
 				50430767268DB1EF0016F421 /* DataFromNetwork.swift */,
-				5043077526987EB30016F421 /* DataForWeather.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		50430779269A493E0016F421 /* HourlyForecast */ = {
+			isa = PBXGroup;
+			children = (
+				5072066B267680640009DBEF /* HourlyForecastCollectionCell.swift */,
+				50430777269A49350016F421 /* HourlyForecastViewModel.swift */,
+			);
+			path = HourlyForecast;
+			sourceTree = "<group>";
+		};
+		5043077A269A49580016F421 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				507206672673F3430009DBEF /* HeaderView.swift */,
+				5043076F2696F1920016F421 /* HeaderViewModel.swift */,
+			);
+			path = Header;
 			sourceTree = "<group>";
 		};
 		50720637266E9CED0009DBEF = {
@@ -230,7 +244,6 @@
 				508D4AB3267D17C8002F185F /* DetailedForecastTableViewCell.swift */,
 				5043075E268A327C0016F421 /* HourlyForecastChartCell.swift */,
 				5043077126972F3E0016F421 /* DetailedForecastViewModel.swift */,
-				5043077326981D4F0016F421 /* SpriteView.swift */,
 			);
 			path = DetailedForecast;
 			sourceTree = "<group>";
@@ -358,12 +371,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50430778269A49360016F421 /* HourlyForecastViewModel.swift in Sources */,
 				5043073F267E3DB90016F421 /* MainCoordinator.swift in Sources */,
 				507206582670EBA30009DBEF /* GenericExtentions.swift in Sources */,
 				507206682673F3430009DBEF /* HeaderView.swift in Sources */,
 				5043076C2690A4DF0016F421 /* WeatherDB.swift in Sources */,
 				5043075926885E0D0016F421 /* AirQualityView.swift in Sources */,
-				5043077426981D4F0016F421 /* SpriteView.swift in Sources */,
 				50720661267200FB0009DBEF /* PageViewController.swift in Sources */,
 				508D4AB2267D17A0002F185F /* DetailedForecastViewController.swift in Sources */,
 				504307492684C7DC0016F421 /* DailyForecastViewController.swift in Sources */,
@@ -384,7 +397,6 @@
 				50720646266E9CED0009DBEF /* SceneDelegate.swift in Sources */,
 				504307532685EB110016F421 /* DailyForecastCollectionCell.swift in Sources */,
 				5043076E269602FA0016F421 /* MappingIcons.swift in Sources */,
-				5043077626987EB30016F421 /* DataForWeather.swift in Sources */,
 				5043077226972F3E0016F421 /* DetailedForecastViewModel.swift in Sources */,
 				5072065C26714DC80009DBEF /* CarouselViewController.swift in Sources */,
 				5043076A268F64C30016F421 /* AddCityAlert.swift in Sources */,

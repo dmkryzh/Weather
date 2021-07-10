@@ -80,7 +80,7 @@ class DataFromNetwork {
                     $0["GeoObject"]["Point"]["pos"].stringValue
                 }
                 if let point = pos.first?.components(separatedBy: " ") {
-                    self.updateParamsForForecast(point.first ?? "", point.last ?? "")
+                    self.updateParamsForForecast(point.last ?? "", point.first ?? "")
                 }
                 
                 self.getDataForForecast(self.parametersForGetForecast, completion: completion)

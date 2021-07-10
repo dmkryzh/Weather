@@ -91,18 +91,6 @@ class DetailedForecastViewController: UIViewController {
         coordinator.backToPreviousView()
     }
     
-//    lazy var charts: HourlyForecastChartView = {
-//        var view = UIView() as! HourlyForecastChartView
-//        viewModel.updateData = { [self] in
-//            let timeLine = viewModel.timeline!
-//            let array = viewModel.arrayOfHourlyForecast!
-//        view = HourlyForecastChartView(timeLine, array, .zero)
-//        }
-//        return view
-//    }()
-    
-//    let test = HourlyForecastChartView(["12:00", "15:00", "19:00", "21:00", "00:00", "03:00", "06:00", "08:00"], [20, 0, 20, 10, 12, 15, 30.0, 0], CGRect(x: 0, y: 0, width: 400, height: 150))
-    
     func setConstraints() {
         
         scrollView.snp.makeConstraints() { make in
@@ -117,14 +105,7 @@ class DetailedForecastViewController: UIViewController {
             make.top.equalTo(contentView.snp.top).offset(10)
             make.leading.equalTo(contentView.snp.leading).offset(48)
         }
-        
-//        test.snp.makeConstraints{ make in
-//            make.top.equalTo(cityName.snp.bottom).offset(15)
-//            make.height.equalTo(150)
-//            make.width.equalTo(400)
-//            make.centerX.equalTo(contentView.snp.centerX)
-//        }
-        
+
         chartsCollectionView.snp.makeConstraints() { make in
             make.top.equalTo(cityName.snp.bottom).offset(10)
             make.leading.equalTo(contentView.snp.leading)
@@ -143,7 +124,6 @@ class DetailedForecastViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-//        test.backgroundColor = .white
         contentView.addSubviews(cityName, chartsCollectionView, detailedTable)
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
@@ -211,8 +191,6 @@ extension DetailedForecastViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DetailedForecastTableViewCell
-        
-        
         
         cell.cloudyStatus.text = "\(String(describing: viewModel.clouds![indexPath.item]))%"
         cell.windStatus.text = "\(String(describing: viewModel.wind![indexPath.item]))"

@@ -60,7 +60,7 @@ class PageViewConroller: UIViewController {
     
     private lazy var headerView: UIView = {
         let vm = HeaderViewModel(viewModel)
-        let view = HeaderView(vm)
+        let view = HeaderView(vm, viewModel.cityName)
         return view
     }()
     
@@ -193,7 +193,7 @@ class PageViewConroller: UIViewController {
     @objc private func navigateToDetailedController() {
         coordinator.startDetailedView()
     }
-    
+ 
     //MARK: Lifecycle
     
     init(vm: PageViewModel, coordinator: CarouselCoordinator) {

@@ -53,8 +53,9 @@ class DetailedForecastViewModel {
     
     var clouds: [Int]?
     
+    var forecastValues: Results<WeatherForecast>?
     
-    func test() {
+    func addTemperatureChart() {
         
         var temporaryTemp = [Double]()
         var temporaryTime = [String]()
@@ -104,20 +105,9 @@ class DetailedForecastViewModel {
         }
     }
     
-    
-    
-    var forecastValues: Results<WeatherForecast>? 
-    
-    
     init(city: String) {
-        
         self.forecastValues = DataFromNetwork.shared.getData("city = '\(city)' AND forecastType = 'hourly'")
-        test()
-        
-        
-        //        data.getWeatherForecast(city, .hourly) {
-        //            self.forecastValues = data.realm.objects(WeatherForecast.self).filter("city = '\(city)' AND forecastType = 'hourly'")
-        //        }
+        addTemperatureChart()
     }
-    
 }
+
