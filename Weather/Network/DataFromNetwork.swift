@@ -69,7 +69,7 @@ class DataFromNetwork {
     }
     
     
-    func getWeatherForecast(_ city: String, _ period: ForecastPeriod, completion: (()->Void)? = nil) {
+    func getWeatherForecast(_ city: String, completion: (()->Void)? = nil) {
         self.city = city
         parametersForCoordinates["geocode"] = city
         AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
@@ -83,7 +83,7 @@ class DataFromNetwork {
                     self.updateParamsForForecast(point.first ?? "", point.last ?? "")
                 }
                 
-                self.getDataForForecast(self.parametersForGetForecast, period, completion: completion)
+                self.getDataForForecast(self.parametersForGetForecast, completion: completion)
                 
             case .failure(let error):
                 print(error)
@@ -150,7 +150,7 @@ class DataFromNetwork {
     }
     
     
-    private func getDataForForecast(_ params: [String: Any], _ period: ForecastPeriod, completion: (()->Void)? = nil) {
+    private func getDataForForecast(_ params: [String: Any], completion: (()->Void)? = nil) {
         
         AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: params, headers: headersForForecast).responseJSON { response in
             
@@ -194,6 +194,7 @@ class DataFromNetwork {
     func getData(_ textFilter: String? = nil) -> Results<WeatherForecast>? {
         if let text = textFilter {
             let object = realm?.objects(WeatherForecast.self).filter(text)
+            print(realm?.objects(WeatherForecast.self).filter(text).count)
             return object
         } else {
             let object = realm?.objects(WeatherForecast.self)

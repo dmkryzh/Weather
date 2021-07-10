@@ -23,7 +23,7 @@ class HeaderViewModel {
     var cityName: String? {
         didSet {
             guard let city = parentViewModel.cityName else { return }
-            getCurrentForecast(city: city, period: .current)
+//            getCurrentForecast(city: city, period: .current)
         }
         
     }
@@ -54,29 +54,29 @@ class HeaderViewModel {
     
     var updateData: (()->Void)?
     
-    func getCurrentForecast(city: String, period: ForecastPeriod) {
-        guard let forecastValues = self.parentViewModel.forecastRawValues?.filter("city = '\(city)' AND forecastType = '\(period)'") else { return }
-        guard let _ = forecastValues.first else { return }
-        self.date = forecastValues[0].dt
-        self.title = forecastValues[0].weatherDescription
-        self.tempMin = forecastValues[0].tempMin
-        self.tempMax = forecastValues[0].tempMax
-        self.icon = forecastValues[0].weatherIcon
-        self.currentTemp = forecastValues[0].temp
-        self.sunset = forecastValues[0].sunset
-        self.sundawn = forecastValues[0].sunrise
-        
-        guard let updateData = updateData else { return }
-        updateData()
-    }
+//    func getCurrentForecast(city: String, period: ForecastPeriod) {
+//        guard let forecastValues = self.parentViewModel.forecastRawValues?.filter("city = '\(city)' AND forecastType = '\(period)'") else { return }
+//        guard let _ = forecastValues.first else { return }
+//        self.date = forecastValues[0].dt
+//        self.title = forecastValues[0].weatherDescription
+//        self.tempMin = forecastValues[0].tempMin
+//        self.tempMax = forecastValues[0].tempMax
+//        self.icon = forecastValues[0].weatherIcon
+//        self.currentTemp = forecastValues[0].temp
+//        self.sunset = forecastValues[0].sunset
+//        self.sundawn = forecastValues[0].sunrise
+//
+//        guard let updateData = updateData else { return }
+//        updateData()
+//    }
     
     
     
     init(_ parentViewModel: PageViewModel) {
         self.parentViewModel = parentViewModel
-        parentViewModel.cityIsUpdated = {
-            self.getCurrentForecast(city: parentViewModel.cityName ?? "", period: .current)
-        }
+//        parentViewModel.cityIsUpdated = {
+//            self.getCurrentForecast(city: parentViewModel.cityName ?? "", period: .current)
+//        }
     }
         
 }
