@@ -10,10 +10,12 @@ import UIKit
 import SnapKit
 
 class PageViewConroller: UIViewController {
-
+    
     var coordinator: CarouselCoordinator
     
     var viewModel: PageViewModel
+    
+    var detailedViewModel: DetailedForecastViewModel
     
     private var height: CGFloat = 0
     
@@ -193,14 +195,16 @@ class PageViewConroller: UIViewController {
     @objc private func navigateToDetailedController() {
         coordinator.startDetailedView()
     }
- 
+    
     //MARK: Lifecycle
     
-    init(vm: PageViewModel, coordinator: CarouselCoordinator) {
+    init(vm: PageViewModel, detailedVm: DetailedForecastViewModel, coordinator: CarouselCoordinator) {
         viewModel = vm
+        detailedViewModel = detailedVm
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
         vm.dataDidLoad = self
+        detailedVm.dataDidLoad = self
         title = vm.cityName
     }
     
@@ -233,8 +237,9 @@ class PageViewConroller: UIViewController {
 
 //MARK: Extentions
 
-extension PageViewConroller: PageViewUpdate {
+extension PageViewConroller: PageViewUpdate, DetailedForecastViewModelUpdate {
     func dataDidLoad() {
+        firstCollectionView.reloadData()
         secondCollectionView.reloadData()
         print("EXECUTED")
     }
@@ -246,7 +251,7 @@ extension PageViewConroller: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if collectionView == self.firstCollectionView {
-            return 10
+            return 8
             
         } else if collectionView == self.secondCollectionView {
             return 8
@@ -261,7 +266,6 @@ extension PageViewConroller: UICollectionViewDataSource {
             
             let cellForecast = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath) as! HourlyForecastCollectionCell
             
-            
             if viewModel.selectedCell.contains(indexPath) {
                 cellForecast.layer.sublayers?[0].isHidden = false
                 cellForecast.time.textColor = .white
@@ -273,6 +277,22 @@ extension PageViewConroller: UICollectionViewDataSource {
                 cellForecast.temperatureLabel.textColor = .black
             }
             
+            if let _ = viewModel.forecastRawValues {
+                
+                detailedViewModel.getHourlyForecast(detailedViewModel.cityName ?? "")
+                
+                let icon = detailedViewModel.icons![indexPath.item]
+                
+                cellForecast.centralImage.image = UIImage(named: WeatherIcon.getMappedIcon(icon))
+                cellForecast.time.text = detailedViewModel.timeline?[indexPath.item]
+                
+                let tempValue = Int((detailedViewModel.arrayOfHourlyForecast?[indexPath.item])!)
+                
+                let temp = NSMutableAttributedString(string: "\(tempValue)")
+                temp.append(cellForecast.iconGradus)
+                cellForecast.temperatureLabel.attributedText = temp
+            }
+  
             return cellForecast
             
         } else if collectionView == self.secondCollectionView {
@@ -285,7 +305,7 @@ extension PageViewConroller: UICollectionViewDataSource {
             secondCollection.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
             
             if let _ = viewModel.forecastRawValues  {
-            
+                
                 viewModel.getForecast(index: indexPath.item, city: viewModel.cityName ?? "", forecatType: .daily)
                 
                 secondCollection.date.text = viewModel.date?.getFormattedDate(format: "EE/dd")
@@ -311,7 +331,7 @@ extension PageViewConroller: UICollectionViewDataSource {
                     
                 }
             }
-          
+            
             return secondCollection
         }
         return UICollectionViewCell(frame: .zero)

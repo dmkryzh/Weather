@@ -53,7 +53,14 @@ class DetailedForecastViewModel {
     
     var clouds: [Int]?
     
-    var forecastValues: Results<WeatherForecast>?
+    var forecastValues: Results<WeatherForecast>? {
+        didSet {
+            addTemperatureChart()
+            guard let _ = forecastValues else { return }
+            guard let updateData = updateData else { return }
+            updateData()
+        }
+    }
     
     func addTemperatureChart() {
         
@@ -105,9 +112,15 @@ class DetailedForecastViewModel {
         }
     }
     
-    init(city: String) {
-        self.forecastValues = DataFromNetwork.shared.getData("city = '\(city)' AND forecastType = 'hourly'")
-        addTemperatureChart()
+    func getHourlyForecast(_ city: String) {
+        forecastValues = DataFromNetwork.shared.getData("city = '\(city)' AND forecastType = 'hourly'")
+    }
+    
+    init(city: String? = nil) {
+        guard let city = city else { return }
+        cityName = city
+        getHourlyForecast(city)
+        
     }
 }
 

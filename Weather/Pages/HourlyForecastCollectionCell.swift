@@ -29,16 +29,17 @@ class HourlyForecastCollectionCell: UICollectionViewCell {
         return view
     }()
     
-    let temperatureText: NSMutableAttributedString = {
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(systemName: "circle")
-        imageAttachment.bounds = CGRect(x: 1, y: 10, width: 3, height: 3)
-        
-        let attachmentString = NSAttributedString(attachment: imageAttachment)
-        
+    let iconGradus: NSAttributedString = {
+        let view = NSTextAttachment()
+        view.image = UIImage(systemName: "circle")
+        view.bounds = CGRect(x: 1, y: 10, width: 3, height: 3)
+        let string = NSAttributedString(attachment: view)
+        return string
+    }()
+    
+    lazy var temperatureText: NSMutableAttributedString = {
         let completeText = NSMutableAttributedString(string: "13")
-        completeText.append(attachmentString)
+        completeText.append(iconGradus)
         return completeText
     }()
     
@@ -110,7 +111,7 @@ class HourlyForecastCollectionCell: UICollectionViewCell {
     func setConstraints() {
         time.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(8)
-            make.width.equalTo(32)
+            make.width.equalTo(34)
             make.height.equalTo(18)
             make.centerX.equalTo(self.snp.centerX)
         }

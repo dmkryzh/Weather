@@ -22,7 +22,8 @@ class CarouselViewController: UIPageViewController {
         self.delegate = self
         self.view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         let vm = PageViewModel(index: 0)
-        let initialVC = PageViewConroller(vm: vm, coordinator: coordinator)
+        let detailedVm = DetailedForecastViewModel()
+        let initialVC = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
         initialVC.coordinator = coordinator
         initialVC.makeAllContentHidden()
         self.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
@@ -116,7 +117,8 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         index -= 1
         
         let vm = PageViewModel(index: index, city: cities[index])
-        let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
+        let detailedVm = DetailedForecastViewModel(city: cities[index])
+        let vc: PageViewConroller = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
         
@@ -136,7 +138,8 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
             index += 1
             
             let vm = PageViewModel(index: index)
-            let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
+            let detailedVm = DetailedForecastViewModel()
+            let vc: PageViewConroller = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
             vc.coordinator = self.coordinator
             vc.makeAllContentHidden()
             
@@ -150,7 +153,8 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         index += 1
         
         let vm = PageViewModel(index: index, city: cities[index])
-        let vc: PageViewConroller = PageViewConroller(vm: vm, coordinator: coordinator)
+        let detailedVm = DetailedForecastViewModel(city: cities[index])
+        let vc: PageViewConroller = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
         
