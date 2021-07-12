@@ -13,7 +13,6 @@ class DailyForecastHeaderCell: UITableViewHeaderFooterView {
     
     var header: UILabel = {
         let view = UILabel()
-        view.text = "День"
         view.font = UIFont(name: "Rubik-Medium", size: 18)
         view.textAlignment = .left
         return view
@@ -22,32 +21,22 @@ class DailyForecastHeaderCell: UITableViewHeaderFooterView {
     let centralTemperatureImage: NSTextAttachment = {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage(named: "Frame-2")
-        imageAttachment.bounds = CGRect(x: 0, y: -6, width: 16, height: 19)
+        imageAttachment.bounds = CGRect(x: 0, y: -4, width: 25, height: 33)
         return imageAttachment
+    }()
+    
+    let gradusIcon: NSTextAttachment = {
+        let secondImageAttachment = NSTextAttachment()
+        secondImageAttachment.image = UIImage(systemName: "circle")
+        secondImageAttachment.bounds = CGRect(x: 0, y: 20, width: 4, height: 4)
+        return secondImageAttachment
     }()
     
     lazy var centralTemperature: UILabel = {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 75, height: 37))
         label.textColor = .black
-        label.font = UIFont(name: "Rubik-Regular", size: 14)
-        
-        let secondImageAttachment = NSTextAttachment()
-        secondImageAttachment.image = UIImage(systemName: "circle")
-        secondImageAttachment.bounds = CGRect(x: 0, y: 12, width: 3, height: 3)
-        
-        let secondAttachmentString = NSAttributedString(attachment: secondImageAttachment)
-        
-        let attachmentString = NSAttributedString(attachment: centralTemperatureImage)
-        
-        let completeText = NSMutableAttributedString(string: "")
-        completeText.append(attachmentString)
-        
-        let textAfterIcon = NSAttributedString(string: " 13")
-        completeText.append(textAfterIcon)
-        completeText.append(secondAttachmentString)
-        
+        label.font = UIFont(name: "Rubik-Regular", size: 30)
         label.textAlignment = .center
-        label.attributedText = completeText
         return label
     }()
     

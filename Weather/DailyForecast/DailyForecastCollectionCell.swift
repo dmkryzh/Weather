@@ -11,10 +11,7 @@ import SnapKit
 
 class DailyForecastCollectionCell: UICollectionViewCell {
     let date: UILabel = {
-        let date = Date()
-        let formate = date.getFormattedDate(format: "d/MM EE")
         let label = UILabel()
-        label.text = formate
         label.textColor = .black
         label.textAlignment = .center
         label.font = UIFont(name: "Rubik-Regular", size: 18)
@@ -35,7 +32,6 @@ class DailyForecastCollectionCell: UICollectionViewCell {
         contentView.addSubview(date)
         self.layer.cornerRadius = 5
         backgroundColor = .white
-        //            UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         setConstrains()
         
     }

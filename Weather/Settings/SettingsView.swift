@@ -9,8 +9,25 @@ import Foundation
 import UIKit
 import SnapKit
 import TOSegmentedControl
+import RealmSwift
 
 class SettingsView: UIView {
+    
+    private let config = Realm.Configuration(
+        schemaVersion: 1,
+        migrationBlock: { migration, oldSchemaVersion in
+            if (oldSchemaVersion < 1) {
+            }
+        })
+    
+    lazy var realm: Realm? = {
+        return try? Realm(configuration: config)
+    }()
+    
+    lazy var settingsData: Results<Settings>? = {
+        let x = realm?.objects(Settings.self)
+        return x
+    }()
     
     let settingsLabel: UILabel = {
         let view = UILabel()
@@ -55,8 +72,23 @@ class SettingsView: UIView {
     
     lazy var temperatureSlider: SegmentedControl = {
         let view = SegmentedControl(items: ["C", "F"])
+        if let settings = self.settingsData?.first {
+            view.selectedSegmentIndex = settings.tempType
+        }
         view.segmentTappedHandler = { segmentIndex, reversed in
-            print("Segment \(segmentIndex) was tapped!")
+            if segmentIndex == 1 {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.tempType = 1
+                }
+                }
+            } else {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.tempType = 0
+                }
+                }
+            }
         }
         view.cornerRadius = 5
         view.itemColor = .black
@@ -72,10 +104,25 @@ class SettingsView: UIView {
         return view
     }()
     
-    let windSpeedSlider: SegmentedControl = {
-        let view = SegmentedControl(items: ["Mi", "Km"])
+    lazy var windSpeedSlider: SegmentedControl = {
+        let view = SegmentedControl(items: ["Km", "Mi"])
+        if let settings = self.settingsData?.first {
+            view.selectedSegmentIndex = settings.windSpeed
+        }
         view.segmentTappedHandler = { segmentIndex, reversed in
-            print("Segment \(segmentIndex) was tapped!")
+            if segmentIndex == 1 {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.windSpeed = 1
+                }
+                }
+            } else {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.windSpeed = 0
+                }
+                }
+            }
         }
         view.cornerRadius = 5
         view.itemColor = .black
@@ -91,10 +138,25 @@ class SettingsView: UIView {
         return view
     }()
     
-    let timeFormatSlider: SegmentedControl = {
-        let view = SegmentedControl(items: ["12", "24"])
+    lazy var timeFormatSlider: SegmentedControl = {
+        let view = SegmentedControl(items: ["24", "12"])
+        if let settings = self.settingsData?.first {
+            view.selectedSegmentIndex = settings.timeFormat
+        }
         view.segmentTappedHandler = { segmentIndex, reversed in
-            print("Segment \(segmentIndex) was tapped!")
+            if segmentIndex == 1 {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.timeFormat = 1
+                }
+                }
+            } else {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.timeFormat = 0
+                }
+                }
+            }
         }
         view.cornerRadius = 5
         view.itemColor = .black
@@ -110,10 +172,25 @@ class SettingsView: UIView {
         return view
     }()
     
-    let notificationSlider: SegmentedControl = {
-        let view = SegmentedControl(items: ["On", "Off"])
+    lazy var notificationSlider: SegmentedControl = {
+        let view = SegmentedControl(items: ["Off", "On"])
+        if let settings = self.settingsData?.first {
+            view.selectedSegmentIndex = settings.notifications
+        }
         view.segmentTappedHandler = { segmentIndex, reversed in
-            print("Segment \(segmentIndex) was tapped!")
+            if segmentIndex == 1 {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.notifications = 1
+                }
+                }
+            } else {
+                if let settings = self.settingsData?.first {
+                    try? self.realm?.write {
+                        settings.notifications = 0
+                }
+                }
+            }
         }
         view.cornerRadius = 5
         view.itemColor = .black

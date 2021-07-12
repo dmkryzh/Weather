@@ -65,6 +65,9 @@ class WeatherForecast: Object {
     @objc dynamic var visibility = 0
 }
 
-//class Properties: Object {
-//
-//}
+class Settings: Object {
+    @objc dynamic var tempType = 1
+    @objc dynamic var windSpeed = 1
+    @objc dynamic var timeFormat = 1
+    @objc dynamic var notifications = 1
+}

@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum WeatherIcon: String {
     case showerRain = "Frame-2"
     case fewClouds = "Group"
@@ -16,6 +15,8 @@ enum WeatherIcon: String {
     case thunderstorm = "Frame-1"
     case wind = "wind-1"
     case rain = "Group-1"
+    case temperature = "Frame-6"
+    case ultravioletLevel = "uvi"
     
     static func getMappedIcon(_ icon: String) -> String {
         switch icon {

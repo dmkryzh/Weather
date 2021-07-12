@@ -11,33 +11,36 @@ import SnapKit
 
 class DailyForecastCell: UITableViewCell {
     
-    lazy var statusCircle: NSAttributedString = {
+   private lazy var statusCircle: NSAttributedString = {
         let secondImageAttachment = NSTextAttachment()
         secondImageAttachment.image = UIImage(systemName: "circle")
         secondImageAttachment.bounds = CGRect(x: 0, y: 12, width: 3, height: 3)
-        
         let secondAttachmentString = NSAttributedString(attachment: secondImageAttachment)
-        
         return secondAttachmentString
     }()
     
-    lazy var status: UILabel = {
+    private var status: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 18)
         view.textAlignment = .right
         return view
     }()
     
-    lazy var leftLabelImage: NSTextAttachment = {
+    private var leftLabelImage: NSTextAttachment = {
         let imageAttachment = NSTextAttachment()
         return imageAttachment
+    }()
+    
+    private var leftLabelText: NSAttributedString = {
+        let string = NSAttributedString()
+        return string
     }()
     
     func iconTextAndBounds(icon: UIImage, iconText: String, statusText: String, isWithCircle: Bool = false, bounds: CGRect) {
         leftLabelImage.image = icon
         leftLabelImage.bounds = bounds
-        leftLabelText.append(NSAttributedString(string: iconText))
-        leftLabel.attributedText = leftLabelText
+        leftLabelText = NSAttributedString(string: iconText)
+        leftLabel.attributedText = completeText
         status.text = statusText
         if isWithCircle {
             let text = NSMutableAttributedString(string: statusText)
@@ -47,23 +50,22 @@ class DailyForecastCell: UITableViewCell {
         
     }
     
-    lazy var leftLabelText: NSMutableAttributedString = {
-        
+    private lazy var completeText: NSMutableAttributedString = {
         let attachmentString = NSAttributedString(attachment: leftLabelImage)
-        
         let completeText = NSMutableAttributedString(string: "")
         completeText.append(attachmentString)
+        completeText.append(leftLabelText)
         return completeText
     }()
     
-    lazy var leftLabel: UILabel = {
+    private lazy var leftLabel: UILabel = {
         let view = UILabel()
         view.font = UIFont(name: "Rubik-Regular", size: 14)
         view.textAlignment = .left
         return view
     }()
     
-    func setConstraints() {
+    private func setConstraints() {
         
         leftLabel.snp.makeConstraints { make in
             make.centerY.equalTo(self.snp.centerY)

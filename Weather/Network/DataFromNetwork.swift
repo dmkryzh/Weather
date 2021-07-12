@@ -35,7 +35,6 @@ class DataFromNetwork {
         })
     
     lazy var realm: Realm? = {
-        try? FileManager().removeItem(at: config.fileURL!)
         return try? Realm(configuration: config)
     }()
     
@@ -194,7 +193,6 @@ class DataFromNetwork {
     func getData(_ textFilter: String? = nil) -> Results<WeatherForecast>? {
         if let text = textFilter {
             let object = realm?.objects(WeatherForecast.self).filter(text)
-            print(realm?.objects(WeatherForecast.self).filter(text).count)
             return object
         } else {
             let object = realm?.objects(WeatherForecast.self)

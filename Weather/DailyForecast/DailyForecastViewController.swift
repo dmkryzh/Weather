@@ -55,9 +55,8 @@ class DailyForecastViewController: UIViewController {
         return view
     }()
     
-    private let cityName: UILabel = {
+    let cityName: UILabel = {
         let view = UILabel()
-        view.text = "Чита"
         view.font = UIFont(name: "Rubik-Medium", size: 18)
         view.textAlignment = .left
         return view
@@ -171,13 +170,21 @@ class DailyForecastViewController: UIViewController {
         view.backgroundColor = .white
         let back = UIBarButtonItem(customView: backButton)
         navigationItem.setLeftBarButton(back, animated: true)
+        cityName.text = viewModel.cityName
         setConstraints()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let indexPath = IndexPath(item: viewModel.index ?? 0, section: 0)
+        self.collectionView.scrollToItem(at: indexPath, at: [.centeredVertically, .centeredHorizontally], animated: true)
     }
     
     init(vm: DailyForecastViewModel, coordinator: CarouselCoordinator) {
         viewModel = vm
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
+        vm.dataDidLoad = self
     }
     
     required init?(coder: NSCoder) {
@@ -186,15 +193,45 @@ class DailyForecastViewController: UIViewController {
     
 }
 
+extension DailyForecastViewController: DailyForecastViewModelUpdate {
+    func dataDidLoad() {
+        dayTable.reloadData()
+        nightTable.reloadData()
+    }
+}
+
 extension DailyForecastViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if tableView == dayTable {
             let day = DailyForecastHeaderCell()
             day.header.text = "День"
+            day.centralTemperatureImage.image = UIImage(named: WeatherIcon.getMappedIcon(viewModel.icon ?? ""))
+            day.weatherStateText.text = viewModel.title
+            let completedText = NSMutableAttributedString(string: "")
+            let temp = NSAttributedString(string: " \(Int(viewModel.temperatureDay ?? 0))")
+            let gradus = NSAttributedString(attachment: day.gradusIcon)
+            let image = NSAttributedString(attachment: day.centralTemperatureImage)
+            completedText.append(image)
+            completedText.append(temp)
+            completedText.append(gradus)
+            day.centralTemperature.attributedText = completedText
             return day
+            
         } else if tableView == nightTable {
             let night = DailyForecastHeaderCell()
             night.header.text = "Ночь"
+            
+            night.centralTemperatureImage.image = UIImage(named: WeatherIcon.getMappedIcon(viewModel.icon ?? ""))
+            night.weatherStateText.text = viewModel.title
+            let completedText = NSMutableAttributedString(string: "")
+            let temp = NSAttributedString(string: " \(Int(viewModel.temperatureNight ?? 0))")
+            let gradus = NSAttributedString(attachment: night.gradusIcon)
+            let image = NSAttributedString(attachment: night.centralTemperatureImage)
+            completedText.append(image)
+            completedText.append(temp)
+            completedText.append(gradus)
+            night.centralTemperature.attributedText = completedText
+            
             return night
         }
         return nil
@@ -225,27 +262,40 @@ extension DailyForecastViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+//        viewModel.getForecast(index: indexPath.item, city: viewModel.cityName)
+        
+        var tempFeel = 0
+        
+        if tableView == dayTable {
+            tempFeel = Int(viewModel.tempFeelsLikeDay ?? 0)
+          
+        } else if tableView == nightTable {
+            tempFeel = Int(viewModel.tempFeelsLikeNight ?? 0)
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
+        
+        
         
         switch indexPath.item {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
-            cell.iconTextAndBounds(icon: WeatherIcons.temperature.getIcon(), iconText: "   По ощущениям", statusText: "11", isWithCircle: true, bounds: CGRect(x: 0, y: -7, width: 24, height: 26))
+            cell.iconTextAndBounds(icon: WeatherIcons.temperature.getIcon(), iconText: "   По ощущениям", statusText: "\(tempFeel)", isWithCircle: true, bounds: CGRect(x: 0, y: -7, width: 24, height: 26))
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
-            cell.iconTextAndBounds(icon: WeatherIcons.wind.getIcon(), iconText: "   Ветер", statusText: "5 m\\s ЗЮЗ", bounds: CGRect(x: 0, y: -2, width: 24, height: 14))
+            let text = Int(viewModel.wind ?? 0)
+            cell.iconTextAndBounds(icon: WeatherIcons.wind.getIcon(), iconText: "   Ветер", statusText: "\(text) м/с", bounds: CGRect(x: 0, y: -2, width: 24, height: 14))
             return cell
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
-            cell.iconTextAndBounds(icon: WeatherIcons.ultravioletLevel.getIcon(), iconText: "   Уф индекс", statusText: "4( умерен.)", bounds: CGRect(x: 0, y: -7, width: 24, height: 27))
+            let text = Int(viewModel.uvi ?? 0)
+            cell.iconTextAndBounds(icon: WeatherIcons.ultravioletLevel.getIcon(), iconText: "   Уф индекс", statusText: "\(text)", bounds: CGRect(x: 0, y: -7, width: 24, height: 27))
             return cell
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
-            cell.iconTextAndBounds(icon: WeatherIcons.rain.getIcon(), iconText: "   Дождь", statusText: "55%", bounds: CGRect(x: 0, y: -9, width: 24, height: 30))
+            let text = Int(viewModel.rain ?? 0)
+            cell.iconTextAndBounds(icon: WeatherIcons.rain.getIcon(), iconText: "   Дождь", statusText: "\(text)%", bounds: CGRect(x: 0, y: -9, width: 24, height: 30))
             return cell
         case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! DailyForecastCell
-            cell.iconTextAndBounds(icon: WeatherIcons.cloud.getIcon(), iconText: "   Облачность", statusText: "72%", bounds: CGRect(x: 0, y: -6, width: 24, height: 17))
+            let text = viewModel.clouds
+            cell.iconTextAndBounds(icon: WeatherIcons.cloud.getIcon(), iconText: "   Облачность", statusText: "\(text ?? 0)%", bounds: CGRect(x: 0, y: -6, width: 24, height: 17))
             return cell
         default:
             return UITableViewCell()
@@ -266,12 +316,17 @@ extension DailyForecastViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard !viewModel.selectedCell.contains(indexPath) else { return }
+        guard !viewModel.selectedCell.contains(indexPath.item) else { return }
         let cell = collectionView.cellForItem(at: indexPath) as! DailyForecastCollectionCell
-        viewModel.selectedCell = [indexPath]
+        viewModel.selectedCell = [indexPath.item]
         cell.backgroundColor = .blue
         cell.date.textColor = .white
         collectionView.reloadData()
+        
+        viewModel.getForecast(index: indexPath.item, city: viewModel.cityName!)
+        
+        dayTable.reloadData()
+        nightTable.reloadData()
     }
     
     
@@ -281,13 +336,14 @@ extension DailyForecastViewController: UICollectionViewDelegateFlowLayout {
 extension DailyForecastViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        20
+        8
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collection", for: indexPath) as! DailyForecastCollectionCell
+        cell.date.text = viewModel.datesArray[indexPath.item]
         
-        if viewModel.selectedCell.contains(indexPath) {
+        if viewModel.selectedCell.contains(indexPath.item) {
             cell.backgroundColor = .blue
             cell.date.textColor = .white
         }
@@ -295,6 +351,7 @@ extension DailyForecastViewController: UICollectionViewDataSource {
             cell.backgroundColor = .white
             cell.date.textColor = .black
         }
+        
         return cell
         
     }

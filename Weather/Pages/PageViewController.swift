@@ -297,8 +297,6 @@ extension PageViewConroller: UICollectionViewDataSource {
             
         } else if collectionView == self.secondCollectionView {
             
-            print("Зашел")
-            
             let secondCollection = collectionView.dequeueReusableCell(withReuseIdentifier: "secondCollection", for: indexPath) as! DailyForecastCollectionViewCell
             secondCollection.layer.cornerRadius = 5
             secondCollection.layer.borderWidth = 0
@@ -364,7 +362,7 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if collectionView == self.secondCollectionView {
-            coordinator.startDailyView()
+            coordinator.startDailyView(indexPath.item, viewModel.cityName!)
             
         } else if collectionView == self.firstCollectionView {
             guard !viewModel.selectedCell.contains(indexPath) else { return }

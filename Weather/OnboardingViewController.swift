@@ -9,9 +9,22 @@ import UIKit
 import SnapKit
 import CoreLocation
 import MapKit
+import RealmSwift
 
 
 class OnboardingViewController: UIViewController {
+    
+    private let config = Realm.Configuration(
+        schemaVersion: 1,
+        migrationBlock: { migration, oldSchemaVersion in
+            if (oldSchemaVersion < 1) {
+            }
+        })
+    
+    lazy var realm: Realm? = {
+//        try? FileManager().removeItem(at: config.fileURL!)
+        return try? Realm(configuration: config)
+    }()
     
     var coordinator: MainCoordinator?
     
@@ -134,6 +147,20 @@ class OnboardingViewController: UIViewController {
         
     }
     
+    func setInitialSettings() {
+        guard let realm = realm else { return }
+        if realm.objects(Settings.self).isEmpty {
+            try? self.realm?.write() {
+                let defaultSettings = Settings()
+                defaultSettings.tempType = 0
+                defaultSettings.timeFormat = 0
+                defaultSettings.windSpeed = 0
+                defaultSettings.notifications = 0
+                realm.add(defaultSettings)
+            }
+        }
+    }
+    
     func constraints() {
         
         scrollView.snp.makeConstraints() { make in
@@ -189,6 +216,7 @@ class OnboardingViewController: UIViewController {
         scrollView.addSubview(containertView)
         containertView.addSubviews(onboardingLogo, headerLabel, firstTextLabel, secondTextLabel, useLocationButton, denyButton)
         constraints()
+        setInitialSettings()
     }
     
     override func viewWillAppear(_ animated: Bool) {

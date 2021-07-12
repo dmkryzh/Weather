@@ -21,7 +21,7 @@ class PageViewModel {
     var cities = [String]()
     
     var cityName: String? 
- 
+    
     let currentDate = Date()
     
     var pageIndex: Int
@@ -61,14 +61,21 @@ class PageViewModel {
         guard let _ = forecastRawValues else { return }
         forecast = DataFromNetwork.shared.getData("index = \(index) AND city = '\(city)' AND forecastType = '\(forecatType.rawValue)'")
     }
-  
+    
     
     init(index: Int, city: String? = nil) {
         cityName = city
         pageIndex = index
         guard let city = city else { return }
-        DataFromNetwork.shared.getWeatherForecast(city) {
+        if cities.contains(city) {
             self.forecastRawValues = DataFromNetwork.shared.getData()
+            DataFromNetwork.shared.getWeatherForecast(city) {
+                self.forecastRawValues = DataFromNetwork.shared.getData()
+            }
+        } else {
+            DataFromNetwork.shared.getWeatherForecast(city) {
+                self.forecastRawValues = DataFromNetwork.shared.getData()
+            }
         }
     }
 }

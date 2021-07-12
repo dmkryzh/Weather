@@ -55,9 +55,11 @@ class CarouselCoordinator: Coordinator {
         
     }
     
-    func startDailyView() {
-        let vm = DailyForecastViewModel()
+    func startDailyView(_ index: Int, _ city: String) {
+        let vm = DailyForecastViewModel(index: index, city: city)
+        vm.selectedCell = [index]
         let vc = DailyForecastViewController(vm: vm, coordinator: self)
+        
         navController?.pushViewController(vc, animated: true)
     }
     
