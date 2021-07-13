@@ -14,6 +14,10 @@ protocol PageViewUpdate {
 
 class PageViewModel {
     
+    lazy var realm: Realm? = {
+        return try? Realm()
+    }()
+    
     var dataDidLoad: PageViewUpdate?
     
     var rawForecastIsLoaded: (()->Void)?
@@ -67,15 +71,41 @@ class PageViewModel {
         cityName = city
         pageIndex = index
         guard let city = city else { return }
-        if cities.contains(city) {
+        var temp = [String]()
+        
+        print(realm?.objects(City.self))
+        
+        let cities = realm!.objects(City.self)
+            
+            
+            cities.forEach { element in
+                temp.append(element.city)
+           
+            }
+            if !temp.contains(city) {
+            
+            try? realm?.write {
+                let cityName = City()
+                cityName.city = city
+                cityName.index = index
+                realm?.add(cityName)
+            }
+            }
+        
+        
+        DataFromNetwork.shared.getWeatherForecast(city) {
             self.forecastRawValues = DataFromNetwork.shared.getData()
-            DataFromNetwork.shared.getWeatherForecast(city) {
-                self.forecastRawValues = DataFromNetwork.shared.getData()
-            }
-        } else {
-            DataFromNetwork.shared.getWeatherForecast(city) {
-                self.forecastRawValues = DataFromNetwork.shared.getData()
-            }
         }
+
+//        if cities.contains(city) {
+//            self.forecastRawValues = DataFromNetwork.shared.getData()
+//            DataFromNetwork.shared.getWeatherForecast(city) {
+//                self.forecastRawValues = DataFromNetwork.shared.getData()
+//            }
+//        } else {
+//            DataFromNetwork.shared.getWeatherForecast(city) {
+//                self.forecastRawValues = DataFromNetwork.shared.getData()
+//            }
+//        }
     }
 }

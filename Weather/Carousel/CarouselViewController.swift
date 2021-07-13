@@ -13,20 +13,38 @@ class CarouselViewController: UIPageViewController {
     
     var pages: [PageViewConroller] = []
     
-    var cities = [String]()
-    
     var coordinator: CarouselCoordinator
-
+    
+    var viewModel: CarouselViewModel
+    
     private func definePageViewController() {
         self.dataSource = self
         self.delegate = self
         self.view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
+        viewModel.getCities()
+        if viewModel.cities.count > 0 {
+        viewModel.cities.forEach { element in
+            let vm = PageViewModel(index: element.value, city: element.key)
+            let detailedVm = DetailedForecastViewModel(city: element.key)
+            let vc = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
+            pages.append(vc)
+        }
+
+        pages.sort(by: { $0.viewModel.pageIndex < $1.viewModel.pageIndex })
+            let vm = PageViewModel(index: pages.count)
+            let detailedVm = DetailedForecastViewModel()
+            let initialVC = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
+            initialVC.makeAllContentHidden()
+            self.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
+            
+        } else {
+            
         let vm = PageViewModel(index: 0)
         let detailedVm = DetailedForecastViewModel()
         let initialVC = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
-        initialVC.coordinator = coordinator
         initialVC.makeAllContentHidden()
         self.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
+        }
     }
     
     func configureBarItems() {
@@ -58,15 +76,17 @@ class CarouselViewController: UIPageViewController {
     
     //MARK: Init
     
-    init(coordinator: CarouselCoordinator) {
+    init(coordinator: CarouselCoordinator, vm: CarouselViewModel) {
         self.coordinator = coordinator
+        viewModel = vm
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        viewModel.getCities()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     //MARK: Lifecycle
     
     override func viewDidLoad() {
@@ -103,6 +123,9 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
+        
+        
+        
         guard let currentVC = viewController as? PageViewConroller else {
             return nil
         }
@@ -115,9 +138,10 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         }
         
         index -= 1
+  
         
-        let vm = PageViewModel(index: index, city: cities[index])
-        let detailedVm = DetailedForecastViewModel(city: cities[index])
+        let vm = PageViewModel(index: index, city: pages[index].viewModel.cityName)
+        let detailedVm = DetailedForecastViewModel(city: pages[index].viewModel.cityName)
         let vc: PageViewConroller = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
@@ -133,7 +157,7 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         
         var index = currentVC.viewModel.pageIndex
         
-        if index == self.pages.indices.endIndex - 1 {
+        if index == self.pages.count - 1 {
             
             index += 1
             
@@ -146,14 +170,14 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
             return vc
         }
         
-        if index >= self.pages.count - 1 {
+        if index > self.pages.count - 1 {
             return nil
         }
         
         index += 1
         
-        let vm = PageViewModel(index: index, city: cities[index])
-        let detailedVm = DetailedForecastViewModel(city: cities[index])
+        let vm = PageViewModel(index: index, city: pages[index].viewModel.cityName)
+        let detailedVm = DetailedForecastViewModel(city: pages[index].viewModel.cityName)
         let vc: PageViewConroller = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
         vc.view.backgroundColor = .white
         vc.coordinator = self.coordinator
@@ -170,7 +194,6 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
               let firstViewControllerIndex = pages.firstIndex(of: firstViewController as! PageViewConroller) else {
             return 0
         }
-        
         return firstViewControllerIndex
     }
     

@@ -17,8 +17,8 @@ class CarouselCoordinator: Coordinator {
     var mainViewModel: PageViewModel?
     
     func start() {
-        
-        let vc = CarouselViewController(coordinator: self)
+        let vm = CarouselViewModel()
+        let vc = CarouselViewController(coordinator: self, vm: vm)
         rootController = vc
         navController?.navigationBar.backgroundColor = .clear
         navController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Rubik-Medium", size: 18) as Any]
@@ -78,12 +78,13 @@ class CarouselCoordinator: Coordinator {
     
     
     func createPageForCarousel(_ city: String) {
-        guard let index = rootController?.pages.count else { return }
+        let index = rootController!.pages.count - 1
+        
         let vm = PageViewModel(index: index, city: city)
         let detailedVm = DetailedForecastViewModel(city: city)
-        mainViewModel = vm
-        rootController?.cities.append(city)
-        vm.cities = rootController?.cities ?? [""]
+//        mainViewModel = vm
+//        rootController?.cities.append(city)
+//        vm.cities = rootController?.cities ?? [""]
         let vc = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: self)
         vc.view.backgroundColor = .white
         rootController?.navigationItem.title = city

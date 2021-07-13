@@ -71,3 +71,12 @@ class Settings: Object {
     @objc dynamic var timeFormat = 1
     @objc dynamic var notifications = 1
 }
+
+class City: Object {
+    @objc dynamic var city = ""
+    @objc dynamic var index = 0
+}
+
+class Cities: Object {
+    let cities = List<City>()
+}
