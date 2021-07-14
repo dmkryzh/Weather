@@ -32,7 +32,7 @@ class OnboardingViewController: UIViewController {
         })
     
     lazy var realm: Realm? = {
-        //        try? FileManager().removeItem(at: config.fileURL!)
+        try? FileManager().removeItem(at: config.fileURL!)
         return try? Realm(configuration: config)
     }()
     
@@ -78,6 +78,7 @@ class OnboardingViewController: UIViewController {
         
         button.setAttributedTitle(attributedText, for: .normal)
         button.contentHorizontalAlignment = .right
+        button.addTarget(self, action: #selector(deny), for: .touchUpInside)
         
         return button
     }()
@@ -117,18 +118,22 @@ class OnboardingViewController: UIViewController {
     var carouselIsAlreadyShown: Bool = false
     
     @objc func requestLocation() {
+        
         location.requestAlwaysAuthorization()
         location.requestWhenInUseAuthorization()
         startLocationManager()
+        isCoordinatesLoaded = { [self] in
+            coordinator?.didShown = true
+            coordinator?.startCarousel(coordinates)
+        }
+    }
+    
+    @objc func deny() {
         if carouselIsAlreadyShown {
             coordinator?.showCarousel()
         } else {
-            isCoordinatesLoaded = { [self] in
-                coordinator?.startCarousel(coordinates)
-            }
+            coordinator?.startCarousel()
         }
-        
-        
     }
     
     func startLocationManager() {

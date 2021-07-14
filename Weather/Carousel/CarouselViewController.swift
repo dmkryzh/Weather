@@ -31,21 +31,28 @@ class CarouselViewController: UIPageViewController {
             self.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
             
         } else {
-            
-            viewModel.cities.forEach { element in
+            let sortedCities = viewModel.cities.sorted(by: { $0.value < $1.value })
+            sortedCities.forEach { element in
                 let vm = PageViewModel(index: element.value, city: element.key)
                 let detailedVm = DetailedForecastViewModel(city: element.key)
                 let vc = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
-                self.viewControllers?.forEach { addedVc in
-                    let addedVc = addedVc as! PageViewConroller
-                    if addedVc.viewModel.cityName != element.key {
-                        pages.append(vc)
+                if self.viewControllers!.count > 0 {
+                    self.viewControllers?.forEach { addedVc in
+                        let addedVc = addedVc as! PageViewConroller
+                        if addedVc.viewModel.cityName != element.key {
+                            pages.append(vc)
+                        }
                     }
+                    self.setViewControllers([pages[0]], direction: .forward, animated: false, completion: nil)
+                    
+                } else {
+                    pages.append(vc)
                 }
-                
-                self.setViewControllers([pages[0]], direction: .forward, animated: false, completion: nil)
-                
             }
+//            pages.sort(by: { $0.viewModel.pageIndex < $1.viewModel.pageIndex })
+            pages[0].view.backgroundColor = .white
+            self.setViewControllers([pages[0]], direction: .forward, animated: false, completion: nil)
+            navigationItem.title = pages[0].viewModel.cityName
         }
     }
     

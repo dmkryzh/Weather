@@ -12,6 +12,8 @@ class MainCoordinator: Coordinator {
     
     var navController: UINavigationController?
     
+    var didShown = false
+    
     init(nav: UINavigationController = UINavigationController()) {
         navController = nav
     }
@@ -21,7 +23,7 @@ class MainCoordinator: Coordinator {
         navController?.pushViewController(vc, animated: true)
     }
     
-    func startCarousel(_ coordinates: String?) {
+    func startCarousel(_ coordinates: String? = nil) {
         let coordinator = CarouselCoordinator(nav: navController!)
         coordinator.parentCoordinator = self
         if let coordinates = coordinates {
@@ -30,6 +32,8 @@ class MainCoordinator: Coordinator {
                 coordinator.createPageForCarousel(DataFromNetwork.shared.cityFromCoordinates ?? "")
             }
             
+        } else if didShown {
+            coordinator.createPageForCarousel(DataFromNetwork.shared.cityFromCoordinates ?? "")
         } else {
             coordinator.start()
         }
