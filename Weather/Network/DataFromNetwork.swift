@@ -23,6 +23,8 @@ enum MeasurementUnits: String {
 
 class DataFromNetwork {
     
+    var cityFromCoordinates: String?
+    
     static let shared = DataFromNetwork()
     
     private(set) var city = ""
@@ -50,7 +52,7 @@ class DataFromNetwork {
         "User-Agent": "WeatherForecast 0.2 https://github.com/dmkryzh/Weather"
     ]
     
-    private var parametersForGetForecast: [String: Any] = [
+    var parametersForGetForecast: [String: Any] = [
         "lat": "",
         "lon": "",
         "appid": "c1ec333963b5e6cb184dd81488128a84",
@@ -67,6 +69,61 @@ class DataFromNetwork {
         parametersForGetForecast["units"] = units
     }
     
+    func getCityByCoordinates(geocode: String, completion: (() -> Void)? = nil) {
+        
+        parametersForCoordinates["geocode"] = geocode
+        var cityToReturn = ""
+        AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                let point = json["response"]["GeoObjectCollection"]["featureMember"].arrayValue.map {
+                    $0["GeoObject"]["description"].stringValue
+                }
+                
+                if let city = point.first?.components(separatedBy: ", ") {
+                    cityToReturn = city.first ?? ""
+                }
+                self.cityFromCoordinates = cityToReturn
+                guard let completion = completion else { return }
+                completion()
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
+    
+    
+    func getWeatherForecast(_ city: String, geocode: String? = nil, completion: (()->Void)? = nil) {
+        self.city = city
+        
+        if let geocode = geocode {
+            parametersForCoordinates["geocode"] = geocode
+        } else {
+            parametersForCoordinates["geocode"] = city
+        }
+        
+        AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                let pos = json["response"]["GeoObjectCollection"]["featureMember"].arrayValue.map {
+                    $0["GeoObject"]["Point"]["pos"].stringValue
+                }
+                if let point = pos.first?.components(separatedBy: " ") {
+                    self.updateParamsForForecast(point.last ?? "", point.first ?? "")
+                }
+                
+                self.getDataForForecast(self.parametersForGetForecast, completion: completion)
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
     
     func getWeatherForecast(_ city: String, completion: (()->Void)? = nil) {
         self.city = city
@@ -90,6 +147,7 @@ class DataFromNetwork {
         }
         
     }
+    
     
     private func createEntity(forecastArray: [JSON], forecastType: String) {
         var index = 0
@@ -149,7 +207,7 @@ class DataFromNetwork {
     }
     
     
-    private func getDataForForecast(_ params: [String: Any], completion: (()->Void)? = nil) {
+    func getDataForForecast(_ params: [String: Any], completion: (()->Void)? = nil) {
         
         AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: params, headers: headersForForecast).responseJSON { response in
             

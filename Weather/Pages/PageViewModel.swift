@@ -73,10 +73,7 @@ class PageViewModel {
         guard let city = city else { return }
         var temp = [String]()
         
-        print(realm?.objects(City.self))
-        
         let cities = realm!.objects(City.self)
-            
             
             cities.forEach { element in
                 temp.append(element.city)
@@ -96,16 +93,5 @@ class PageViewModel {
         DataFromNetwork.shared.getWeatherForecast(city) {
             self.forecastRawValues = DataFromNetwork.shared.getData()
         }
-
-//        if cities.contains(city) {
-//            self.forecastRawValues = DataFromNetwork.shared.getData()
-//            DataFromNetwork.shared.getWeatherForecast(city) {
-//                self.forecastRawValues = DataFromNetwork.shared.getData()
-//            }
-//        } else {
-//            DataFromNetwork.shared.getWeatherForecast(city) {
-//                self.forecastRawValues = DataFromNetwork.shared.getData()
-//            }
-//        }
     }
 }

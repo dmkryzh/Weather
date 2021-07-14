@@ -27,7 +27,6 @@ class CarouselCoordinator: Coordinator {
         navController?.navigationBar.shadowImage = UIImage()
         navController?.navigationBar.tintColor = .black
         navController?.pushViewController(vc, animated: true)
-        
     }
     
     func navigateBackToOnboarding() {
@@ -76,15 +75,19 @@ class CarouselCoordinator: Coordinator {
         navController?.present(alert.addCityAlert, animated: true)
     }
     
-    
     func createPageForCarousel(_ city: String) {
-        let index = rootController!.pages.count - 1
+        var isCityAlreadyAdded = false
+        rootController?.pages.forEach { element in
+            if city == element.viewModel.cityName {
+                isCityAlreadyAdded = true
+            }
+        }
+
+        guard !isCityAlreadyAdded else { return }
         
+        let index = rootController!.pages.count
         let vm = PageViewModel(index: index, city: city)
         let detailedVm = DetailedForecastViewModel(city: city)
-//        mainViewModel = vm
-//        rootController?.cities.append(city)
-//        vm.cities = rootController?.cities ?? [""]
         let vc = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: self)
         vc.view.backgroundColor = .white
         rootController?.navigationItem.title = city

@@ -21,10 +21,18 @@ class MainCoordinator: Coordinator {
         navController?.pushViewController(vc, animated: true)
     }
     
-    func startCarousel() {
+    func startCarousel(_ coordinates: String?) {
         let coordinator = CarouselCoordinator(nav: navController!)
         coordinator.parentCoordinator = self
-        coordinator.start()
+        if let coordinates = coordinates {
+            DataFromNetwork.shared.getCityByCoordinates(geocode: coordinates) {
+                coordinator.start()
+                coordinator.createPageForCarousel(DataFromNetwork.shared.cityFromCoordinates ?? "")
+            }
+            
+        } else {
+            coordinator.start()
+        }
         
     }
     

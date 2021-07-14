@@ -22,16 +22,9 @@ class CarouselViewController: UIPageViewController {
         self.delegate = self
         self.view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         viewModel.getCities()
-        if viewModel.cities.count > 0 {
-        viewModel.cities.forEach { element in
-            let vm = PageViewModel(index: element.value, city: element.key)
-            let detailedVm = DetailedForecastViewModel(city: element.key)
-            let vc = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
-            pages.append(vc)
-        }
-
-        pages.sort(by: { $0.viewModel.pageIndex < $1.viewModel.pageIndex })
-            let vm = PageViewModel(index: pages.count)
+        if viewModel.cities.count == 0 {
+            
+            let vm = PageViewModel(index: 0)
             let detailedVm = DetailedForecastViewModel()
             let initialVC = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
             initialVC.makeAllContentHidden()
@@ -39,11 +32,20 @@ class CarouselViewController: UIPageViewController {
             
         } else {
             
-        let vm = PageViewModel(index: 0)
-        let detailedVm = DetailedForecastViewModel()
-        let initialVC = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
-        initialVC.makeAllContentHidden()
-        self.setViewControllers([initialVC], direction: .forward, animated: false, completion: nil)
+            viewModel.cities.forEach { element in
+                let vm = PageViewModel(index: element.value, city: element.key)
+                let detailedVm = DetailedForecastViewModel(city: element.key)
+                let vc = PageViewConroller(vm: vm, detailedVm: detailedVm, coordinator: coordinator)
+                self.viewControllers?.forEach { addedVc in
+                    let addedVc = addedVc as! PageViewConroller
+                    if addedVc.viewModel.cityName != element.key {
+                        pages.append(vc)
+                    }
+                }
+                
+                self.setViewControllers([pages[0]], direction: .forward, animated: false, completion: nil)
+                
+            }
         }
     }
     
@@ -57,7 +59,6 @@ class CarouselViewController: UIPageViewController {
     func decoratePageControl() {
         let pageControl = UIPageControl.appearance(whenContainedInInstancesOf: [CarouselViewController.self])
         pageControl.backgroundStyle = .minimal
-        pageControl.numberOfPages = pages.count
         pageControl.currentPageIndicatorTintColor = .black
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.hidesForSinglePage = true
@@ -138,7 +139,7 @@ extension CarouselViewController: UIPageViewControllerDataSource, UIPageViewCont
         }
         
         index -= 1
-  
+        
         
         let vm = PageViewModel(index: index, city: pages[index].viewModel.cityName)
         let detailedVm = DetailedForecastViewModel(city: pages[index].viewModel.cityName)

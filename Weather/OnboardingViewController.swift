@@ -14,6 +14,16 @@ import RealmSwift
 
 class OnboardingViewController: UIViewController {
     
+    
+    var isCoordinatesLoaded: (() -> Void)?
+    
+    var coordinates: String? {
+        didSet {
+            guard let isCoordinatesLoaded = isCoordinatesLoaded else { return }
+            isCoordinatesLoaded()
+        }
+    }
+    
     private let config = Realm.Configuration(
         schemaVersion: 1,
         migrationBlock: { migration, oldSchemaVersion in
@@ -22,7 +32,7 @@ class OnboardingViewController: UIViewController {
         })
     
     lazy var realm: Realm? = {
-//        try? FileManager().removeItem(at: config.fileURL!)
+        //        try? FileManager().removeItem(at: config.fileURL!)
         return try? Realm(configuration: config)
     }()
     
@@ -52,10 +62,7 @@ class OnboardingViewController: UIViewController {
     let useLocationButton: UIButton = {
         let button = UIButton(type: .system)
         
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.05
-        
-        let attributedText = NSMutableAttributedString(string: "ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ  УСТРОЙСТВА", attributes: [NSAttributedString.Key.kern: -0.12, NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 12) as Any, NSAttributedString.Key.foregroundColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1)])
+        let attributedText = NSMutableAttributedString(string: "ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ  УСТРОЙСТВА", attributes: [ NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 12) as Any, NSAttributedString.Key.foregroundColor: UIColor(red: 1, green: 1, blue: 1, alpha: 1)])
         
         button.setAttributedTitle(attributedText, for: .normal)
         
@@ -67,11 +74,7 @@ class OnboardingViewController: UIViewController {
     
     let denyButton: UIButton = {
         let button = UIButton(type: .system)
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.11
-        
-        let attributedText = NSMutableAttributedString(string: "НЕТ, Я БУДУ ДОБАВЛЯТЬ ЛОКАЦИИ", attributes: [NSAttributedString.Key.kern: 0.16, NSAttributedString.Key.paragraphStyle: paragraphStyle, NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 16) as Any, NSAttributedString.Key.foregroundColor: UIColor(red: 0.992, green: 0.986, blue: 0.963, alpha: 1)])
+        let attributedText = NSMutableAttributedString(string: "НЕТ, Я БУДУ ДОБАВЛЯТЬ ЛОКАЦИИ", attributes: [ NSAttributedString.Key.font: UIFont(name: "Rubik-Regular", size: 16) as Any, NSAttributedString.Key.foregroundColor: UIColor(red: 0.992, green: 0.986, blue: 0.963, alpha: 1)])
         
         button.setAttributedTitle(attributedText, for: .normal)
         button.contentHorizontalAlignment = .right
@@ -85,12 +88,7 @@ class OnboardingViewController: UIViewController {
         label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.11
-        
-        label.attributedText = NSMutableAttributedString(string: "Разрешить приложению  Weather \nиспользовать данные \nо местоположении вашего устройства", attributes: [NSAttributedString.Key.kern: 0.16, NSAttributedString.Key.paragraphStyle: paragraphStyle])
-        
+        label.attributedText = NSMutableAttributedString(string: "Разрешить приложению  Weather \nиспользовать данные \nо местоположении вашего устройства")
         return label
     }()
     
@@ -100,10 +98,7 @@ class OnboardingViewController: UIViewController {
         label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.21
-        
-        label.attributedText = NSMutableAttributedString(string: "Чтобы получить более точные прогнозы погоды во время движения или путешествия", attributes: [NSAttributedString.Key.kern: 0.14, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        label.attributedText = NSMutableAttributedString(string: "Чтобы получить более точные прогнозы погоды во время движения или путешествия")
         
         return label
     }()
@@ -114,11 +109,7 @@ class OnboardingViewController: UIViewController {
         label.font = UIFont(name: "Rubik-Regular", size: 14)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.21
-        
-        label.attributedText = NSMutableAttributedString(string: "Вы можете изменить свой выбор в любое время из меню приложения", attributes: [NSAttributedString.Key.kern: 0.14, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+        label.attributedText = NSMutableAttributedString(string: "Вы можете изменить свой выбор в любое время из меню приложения")
         
         return label
     }()
@@ -132,7 +123,9 @@ class OnboardingViewController: UIViewController {
         if carouselIsAlreadyShown {
             coordinator?.showCarousel()
         } else {
-            coordinator?.startCarousel()
+            isCoordinatesLoaded = { [self] in
+                coordinator?.startCarousel(coordinates)
+            }
         }
         
         
@@ -233,12 +226,18 @@ class OnboardingViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func addCoordinates(_ lon: CLLocationDegrees, _ lat: CLLocationDegrees) {
+        guard let _ = coordinates else {
+            coordinates = "\(lon),\(lat)"
+            return }
+    }
+    
 }
 
 extension OnboardingViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
+        addCoordinates(locValue.longitude, locValue.latitude)
     }
 }
 
