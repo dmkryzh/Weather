@@ -22,6 +22,7 @@ class CarouselViewController: UIPageViewController {
         self.delegate = self
         self.view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         viewModel.getCities()
+        print(viewModel.cities)
         if viewModel.cities.count == 0 {
             
             let vm = PageViewModel(index: 0)

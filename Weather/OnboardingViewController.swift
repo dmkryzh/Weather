@@ -36,7 +36,7 @@ class OnboardingViewController: UIViewController {
         return try? Realm(configuration: config)
     }()
     
-    var coordinator: MainCoordinator?
+    weak var coordinator: MainCoordinator?
     
     let location: CLLocationManager = {
         let locationManager = CLLocationManager()

@@ -8,24 +8,6 @@
 import Foundation
 import RealmSwift
 
-//class CityPoint: Object {
-//    @objc dynamic var pos: [String: Any] = [
-//        "lat": "",
-//        "lon": ""
-//    ]
-//
-//    @objc dynamic var city = ""
-//
-//    static func create(latitude: String, longtitude: String, city: String) -> CityPoint {
-//        let coordinates = CityPoint()
-//        coordinates.pos["lat"] = latitude
-//        coordinates.pos["lon"] = longtitude
-//        coordinates.city = city
-//        return coordinates
-//    }
-//}
-
-
 class WeatherForecast: Object {
     @objc dynamic var index = 0
     @objc dynamic var city = ""

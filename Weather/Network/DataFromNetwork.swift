@@ -28,16 +28,9 @@ class DataFromNetwork {
     static let shared = DataFromNetwork()
     
     private(set) var city = ""
-    
-    private let config = Realm.Configuration(
-        schemaVersion: 1,
-        migrationBlock: { migration, oldSchemaVersion in
-            if (oldSchemaVersion < 1) {
-            }
-        })
-    
+
     lazy var realm: Realm? = {
-        return try? Realm(configuration: config)
+        return try? Realm()
     }()
     
     
@@ -141,6 +134,8 @@ class DataFromNetwork {
                 
                 self.getDataForForecast(self.parametersForGetForecast, completion: completion)
                 
+               
+                
             case .failure(let error):
                 print(error)
             }
@@ -241,7 +236,7 @@ class DataFromNetwork {
                 
                 guard let dataDidLoad = self.dataDidLoad else { return }
                 dataDidLoad()
-                
+    
             case .failure(let error):
                 print(error)
             }

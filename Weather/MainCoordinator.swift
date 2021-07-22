@@ -24,7 +24,8 @@ class MainCoordinator: Coordinator {
     }
     
     func startCarousel(_ coordinates: String? = nil) {
-        let coordinator = CarouselCoordinator(nav: navController!)
+        guard let navController = navController else { return }
+        let coordinator = CarouselCoordinator(nav: navController)
         coordinator.parentCoordinator = self
         if let coordinates = coordinates {
             DataFromNetwork.shared.getCityByCoordinates(geocode: coordinates) {
