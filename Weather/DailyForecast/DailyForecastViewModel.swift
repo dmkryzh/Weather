@@ -9,30 +9,6 @@ import Foundation
 import UIKit
 import RealmSwift
 
-enum WeatherIcons {
-    
-    case wind
-    case cloud
-    case temperature
-    case ultravioletLevel
-    case rain
-    
-    func getIcon() -> UIImage {
-        switch self {
-        case .cloud:
-            return UIImage(named: "Frame-3") ?? UIImage()
-        case .wind:
-            return UIImage(named: "wind-1") ?? UIImage()
-        case .temperature:
-            return UIImage(named: "Frame-6") ?? UIImage()
-        case .ultravioletLevel:
-            return UIImage(named: "Frame") ?? UIImage()
-        case .rain:
-            return UIImage(named: "Frame-2") ?? UIImage()
-        }
-    }
-}
-
 protocol DailyForecastViewModelUpdate {
     func dataDidLoad()
 }
@@ -82,19 +58,19 @@ class DailyForecastViewModel {
     var forecast: Results<WeatherForecast>? {
         didSet {
             guard let forecastValues = forecast else { return }
-            self.date = forecastValues[0].dt
-            self.title = forecastValues[0].weatherDescription
-            self.wind = forecastValues[0].windSpeed
-            self.rain = forecastValues[0].rain
-            self.clouds = forecastValues[0].clouds
-            self.icon = forecastValues[0].weatherIcon
-            self.tempFeelsLike = forecastValues[0].feelsLike
-            self.uvi = forecastValues[0].uvi
-            self.temperature = forecastValues[0].temp
-            self.temperatureDay = forecastValues[0].tempDay
-            self.temperatureNight = forecastValues[0].tempNight
-            self.tempFeelsLikeDay = forecastValues[0].feelsLikeDay
-            self.tempFeelsLikeNight = forecastValues[0].feelsLikeNight
+            self.date = forecastValues.first?.dt
+            self.title = forecastValues.first?.weatherDescription
+            self.wind = forecastValues.first?.windSpeed
+            self.rain = forecastValues.first?.rain
+            self.clouds = forecastValues.first?.clouds
+            self.icon = forecastValues.first?.weatherIcon
+            self.tempFeelsLike = forecastValues.first?.feelsLike
+            self.uvi = forecastValues.first?.uvi
+            self.temperature = forecastValues.first?.temp
+            self.temperatureDay = forecastValues.first?.tempDay
+            self.temperatureNight = forecastValues.first?.tempNight
+            self.tempFeelsLikeDay = forecastValues.first?.feelsLikeDay
+            self.tempFeelsLikeNight = forecastValues.first?.feelsLikeNight
         }
     }
     

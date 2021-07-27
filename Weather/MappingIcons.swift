@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum WeatherIcon: String {
     case showerRain = "Frame-2"
@@ -34,6 +35,29 @@ enum WeatherIcon: String {
             return "Frame-1"
         default:
             return "eya_1"
+        }
+    }
+    
+    func getIconImage() -> UIImage? {
+        switch self {
+        case .showerRain:
+            return UIImage(named: "Frame-2")
+        case .fewClouds:
+            return UIImage(named: "Group")
+        case .scatteredClouds:
+            return UIImage(named: "Frame-3")
+        case .clearSky:
+            return UIImage(named: "Frame")
+        case .thunderstorm:
+            return UIImage(named: "Frame-1")
+        case .wind:
+            return UIImage(named: "wind-1")
+        case .rain:
+            return UIImage(named: "Group-1")
+        case .temperature: 
+            return UIImage(named: "Frame-6")
+        case .ultravioletLevel:
+            return UIImage(named: "uvi")
         }
     }
     

@@ -45,11 +45,11 @@ class PageViewModel {
     var forecast: Results<WeatherForecast>? {
         didSet {
             guard let forecastValues = forecast else { return }
-            self.date = forecastValues[0].dt
-            self.title = forecastValues[0].weatherDescription
-            self.tempMin = forecastValues[0].tempMin
-            self.tempMax = forecastValues[0].tempMax
-            self.icon = forecastValues[0].weatherIcon
+            self.date = forecastValues.first?.dt
+            self.title = forecastValues.first?.weatherDescription
+            self.tempMin = forecastValues.first?.tempMin
+            self.tempMax = forecastValues.first?.tempMax
+            self.icon = forecastValues.first?.weatherIcon
         }
     }
     
@@ -74,12 +74,12 @@ class PageViewModel {
         var temp = [String]()
         
         let cities = realm!.objects(City.self)
+        
+        cities.forEach { element in
+            temp.append(element.city)
             
-            cities.forEach { element in
-                temp.append(element.city)
-           
-            }
-            if !temp.contains(city) {
+        }
+        if !temp.contains(city) {
             
             try? realm?.write {
                 let cityName = City()
@@ -87,7 +87,7 @@ class PageViewModel {
                 cityName.index = index
                 realm?.add(cityName)
             }
-            }
+        }
         
         
         DataFromNetwork.shared.getWeatherForecast(city) {

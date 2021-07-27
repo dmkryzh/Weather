@@ -10,7 +10,7 @@ import UIKit
 
 class MainCoordinator: Coordinator {
     
-    var navController: UINavigationController?
+    var navController: UINavigationController
     
     var didShown = false
     
@@ -20,11 +20,10 @@ class MainCoordinator: Coordinator {
     
     func start() {
         let vc = OnboardingViewController(coordinator: self)
-        navController?.pushViewController(vc, animated: true)
+        navController.pushViewController(vc, animated: true)
     }
     
     func startCarousel(_ coordinates: String? = nil) {
-        guard let navController = navController else { return }
         let coordinator = CarouselCoordinator(nav: navController)
         coordinator.parentCoordinator = self
         if let coordinates = coordinates {
@@ -42,7 +41,7 @@ class MainCoordinator: Coordinator {
     }
     
     func showCarousel() {
-        navController?.popViewController(animated: true)
+        navController.popViewController(animated: true)
     }
     
 }

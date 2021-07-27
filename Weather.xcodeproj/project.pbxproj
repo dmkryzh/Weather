@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		25C40FF0B23C0D9499836D19 /* Pods_Weather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8AE3FC565B523339FBCF2AF /* Pods_Weather.framework */; };
 		5033B02726A9DE85001D6921 /* DataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5033B02626A9DE85001D6921 /* DataParser.swift */; };
+		5033B02926A9FD3B001D6921 /* CoordinatesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5033B02826A9FD3B001D6921 /* CoordinatesData.swift */; };
+		5033B02B26A9FD89001D6921 /* ForecastData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5033B02A26A9FD89001D6921 /* ForecastData.swift */; };
 		5043073D267E38900016F421 /* CarouselCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043073C267E38900016F421 /* CarouselCoordinator.swift */; };
 		5043073F267E3DB90016F421 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043073E267E3DB90016F421 /* MainCoordinator.swift */; };
 		504307462684C60B0016F421 /* Rubik-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 504307452684C60B0016F421 /* Rubik-Medium.ttf */; };
@@ -51,6 +53,8 @@
 /* Begin PBXFileReference section */
 		2801C9CA5A7F743CC08D77C8 /* Pods-Weather.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather.release.xcconfig"; path = "Target Support Files/Pods-Weather/Pods-Weather.release.xcconfig"; sourceTree = "<group>"; };
 		5033B02626A9DE85001D6921 /* DataParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataParser.swift; sourceTree = "<group>"; };
+		5033B02826A9FD3B001D6921 /* CoordinatesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatesData.swift; sourceTree = "<group>"; };
+		5033B02A26A9FD89001D6921 /* ForecastData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastData.swift; sourceTree = "<group>"; };
 		5043073C267E38900016F421 /* CarouselCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCoordinator.swift; sourceTree = "<group>"; };
 		5043073E267E3DB90016F421 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		504307452684C60B0016F421 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Medium.ttf"; sourceTree = "<group>"; };
@@ -148,6 +152,8 @@
 			children = (
 				50430767268DB1EF0016F421 /* DataFromNetwork.swift */,
 				5033B02626A9DE85001D6921 /* DataParser.swift */,
+				5033B02A26A9FD89001D6921 /* ForecastData.swift */,
+				5033B02826A9FD3B001D6921 /* CoordinatesData.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -394,11 +400,13 @@
 				504307532685EB110016F421 /* DailyForecastCollectionCell.swift in Sources */,
 				5043076E269602FA0016F421 /* MappingIcons.swift in Sources */,
 				5043077226972F3E0016F421 /* DetailedForecastViewModel.swift in Sources */,
+				5033B02926A9FD3B001D6921 /* CoordinatesData.swift in Sources */,
 				5072065C26714DC80009DBEF /* CarouselViewController.swift in Sources */,
 				5043076A268F64C30016F421 /* AddCityAlert.swift in Sources */,
 				508D4AAC267BCC1F002F185F /* SettingsViewController.swift in Sources */,
 				508D4AAF267BCC94002F185F /* SettingsView.swift in Sources */,
 				5043074F2684C8840016F421 /* DailyForecastHeaderCell.swift in Sources */,
+				5033B02B26A9FD89001D6921 /* ForecastData.swift in Sources */,
 				5043075F268A327C0016F421 /* HourlyForecastChartCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

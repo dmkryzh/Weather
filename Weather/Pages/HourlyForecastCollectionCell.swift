@@ -61,53 +61,6 @@ class HourlyForecastCollectionCell: UICollectionViewCell {
         return imageView
     }()
     
-    
-    //    private lazy var forecastSmall: UIView = {
-    //        let time = UILabel(frame: CGRect(x: 0, y: 0, width: 32, height: 18))
-    //        time.text = "15:00"
-    //        time.textAlignment = .center
-    //        time.textColor = .white
-    //        time.font = UIFont(name: "Rubik-Regular", size: 12)
-    //
-    //        let imageAttachment = NSTextAttachment()
-    //        imageAttachment.image = UIImage(systemName: "circle")?.maskWithColor(color: .white)
-    //        imageAttachment.bounds = CGRect(x: 1, y: 10, width: 3, height: 3)
-    //
-    //        let attachmentString = NSAttributedString(attachment: imageAttachment)
-    //
-    //        let completeText = NSMutableAttributedString(string: "13")
-    //        completeText.append(attachmentString)
-    //
-    //        let temparature = UILabel(frame: CGRect(x: 0, y: 0, width: 25, height: 18))
-    //        temparature.attributedText = completeText
-    //        temparature.textAlignment = .center
-    //        temparature.textColor = .white
-    //        temparature.font = UIFont(name: "Rubik-Regular", size: 16)
-    //
-    //
-    //        let image = UIImage(named: "Frame")
-    //        let imageView = UIImageView(image: image)
-    //        imageView.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
-    //        imageView.backgroundColor = .clear
-    //
-    //        let view = UILabel(frame: CGRect(x: 0, y: 0, width: 42, height: 83))
-    //        view.layer.cornerRadius = 22
-    //        view.clipsToBounds = true
-    //        view.layer.addSublayer(backgroundLayer)
-    //
-    //        view.addSubviews(imageView, time, temparature)
-    //
-    //        view.subviews[0].center = view.center
-    //
-    //        view.subviews[1].frame.origin.x = view.frame.minX + 5
-    //        view.subviews[1].frame.origin.y = view.frame.minY + 8
-    //
-    //        view.subviews[2].frame.origin.x = view.frame.minX + 10
-    //        view.subviews[2].frame.origin.y = view.subviews[0].frame.maxY + 4
-    //
-    //        return view
-    //    }()
-    
     func setConstraints() {
         time.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top).offset(8)

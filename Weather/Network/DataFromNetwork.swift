@@ -32,9 +32,7 @@ class DataFromNetwork {
     lazy var realm: Realm? = {
         return try? Realm()
     }()
-    
-    
-    
+ 
     private lazy var parametersForCoordinates: [String: Any] = [
         "apikey": "63f2307a-7e04-4070-a049-6ba223752433",
         "format": "json",
@@ -63,21 +61,13 @@ class DataFromNetwork {
     }
     
     func getCityByCoordinates(geocode: String, completion: (() -> Void)? = nil) {
-        
         parametersForCoordinates["geocode"] = geocode
-        var cityToReturn = ""
-        AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
+        AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseData { response in
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let point = json["response"]["GeoObjectCollection"]["featureMember"].arrayValue.map {
-                    $0["GeoObject"]["description"].stringValue
-                }
+            case .success(let object):
+                let city = DataParser.decodeCity(object)
+                self.cityFromCoordinates = city
                 
-                if let city = point.first?.components(separatedBy: ", ") {
-                    cityToReturn = city.first ?? ""
-                }
-                self.cityFromCoordinates = cityToReturn
                 guard let completion = completion else { return }
                 completion()
                 
@@ -98,17 +88,16 @@ class DataFromNetwork {
             parametersForCoordinates["geocode"] = city
         }
         
-        AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
+        AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseData { response in
+            
             switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let pos = json["response"]["GeoObjectCollection"]["featureMember"].arrayValue.map {
-                    $0["GeoObject"]["Point"]["pos"].stringValue
-                }
-                if let point = pos.first?.components(separatedBy: " ") {
-                    self.updateParamsForForecast(point.last ?? "", point.first ?? "")
-                }
+            case .success(let object):
                 
+                if let coordinates = DataParser.decodeCoordinates(object) {
+                    print(coordinates)
+                    self.updateParamsForForecast(coordinates.keys.first ?? "", coordinates.values.first ?? "")
+                }
+
                 self.getDataForForecast(self.parametersForGetForecast, completion: completion)
                 
             case .failure(let error):
@@ -117,120 +106,21 @@ class DataFromNetwork {
         }
         
     }
-    
-    func getWeatherForecast(_ city: String, completion: (()->Void)? = nil) {
-        self.city = city
-        parametersForCoordinates["geocode"] = city
-        AF.request("https://geocode-maps.yandex.ru/1.x/", method: .get, parameters: parametersForCoordinates).responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-                let pos = json["response"]["GeoObjectCollection"]["featureMember"].arrayValue.map {
-                    $0["GeoObject"]["Point"]["pos"].stringValue
-                }
-                if let point = pos.first?.components(separatedBy: " ") {
-                    self.updateParamsForForecast(point.last ?? "", point.first ?? "")
-                }
-                
-                self.getDataForForecast(self.parametersForGetForecast, completion: completion)
-                
-               
-                
-            case .failure(let error):
-                print(error)
-            }
-        }
-        
-    }
-    
-    
-    private func createEntity(forecastArray: [JSON], forecastType: String) {
-        var index = 0
-        for day in forecastArray {
-            let newCity = WeatherForecast()
-            
-            newCity.index = index
-            index += 1
-            newCity.city = self.city
-            newCity.forecastType = forecastType
-            newCity.clouds = day["clouds"].intValue
-            newCity.dewPoint = day["dew_point"].doubleValue
-            
-            let date = Date(timeIntervalSince1970: day["dt"].doubleValue)
-            newCity.dt = date
-            
-            newCity.feelsLikeDay = day["feels_like"]["day"].doubleValue
-            newCity.feelsLikeEve = day["feels_like"]["eve"].doubleValue
-            newCity.feelsLikeMorn = day["feels_like"]["morn"].doubleValue
-            newCity.feelsLikeNight = day["feels_like"]["night"].doubleValue
-            
-            newCity.humidity = day["humidity"].intValue
-            newCity.moonPhase = day["moon_phase"].doubleValue
-            newCity.moonrise = Date(timeIntervalSince1970: day["moonrise"].doubleValue)
-            newCity.moonset = Date(timeIntervalSince1970: day["moonset"].doubleValue)
-            newCity.pop = day["pop"].intValue
-            newCity.pressure = day["pressure"].intValue
-            newCity.sunrise = Date(timeIntervalSince1970: day["sunrise"].doubleValue)
-            newCity.sunset = Date(timeIntervalSince1970: day["sunset"].doubleValue)
-            
-            newCity.temp = day["temp"].doubleValue
-            
-            newCity.tempDay = day["temp"]["day"].doubleValue
-            newCity.tempEve = day["temp"]["eve"].doubleValue
-            newCity.tempMax = day["temp"]["max"].doubleValue
-            newCity.tempMin = day["temp"]["min"].doubleValue
-            newCity.tempMorn = day["temp"]["morn"].doubleValue
-            newCity.tempNight = day["temp"]["night"].doubleValue
-            
-            newCity.uvi = day["uvi"].doubleValue
-            
-            newCity.weatherId = day["weather"].arrayValue.map {$0["id"].intValue }.first ?? 0
-            newCity.weatherMain = day["weather"].arrayValue.map {$0["main"].stringValue }.first ?? ""
-            newCity.weatherIcon = day["weather"].arrayValue.map {$0["icon"].stringValue }.first ?? ""
-            newCity.weatherDescription = day["weather"].arrayValue.map {$0["description"].stringValue }.first ?? ""
-            
-            newCity.windDeg = day["wind_deg"].doubleValue
-            newCity.windGust = day["wind_gust"].doubleValue
-            newCity.windSpeed = day["wind_speed"].doubleValue
-            
-            try? self.realm?.write() {
-                self.realm?.add(newCity)
-            }
-            
-        }
-        
-    }
-    
     
     func getDataForForecast(_ params: [String: Any], completion: (()->Void)? = nil) {
         
-        AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: params, headers: headersForForecast).responseJSON { response in
+        AF.request("https://api.openweathermap.org/data/2.5/onecall", method: .get, parameters: params, headers: headersForForecast).responseData { response in
             
             switch response.result {
             
             case .success(let object):
-                
-                let json = JSON(object)
-                var forecastArray = [JSON]()
-                var forecastType = ""
-                
-                for (key, value) in json.dictionary! {
-                    
-                    if key == "current" {
-                        forecastArray = [value]
-                        forecastType = "current"
-                        self.createEntity(forecastArray: forecastArray, forecastType: forecastType)
-                    } else if key == "daily" {
-                        forecastArray = value.arrayValue
-                        forecastType = "daily"
-                        self.createEntity(forecastArray: forecastArray, forecastType: forecastType)
-                    } else if key == "hourly" {
-                        forecastArray = value.arrayValue
-                        forecastType = "hourly"
-                        self.createEntity(forecastArray: forecastArray, forecastType: forecastType)
-                    }
+                print(response)
+                DataParser.decodeForecast(object) { [self] element in
+                    DataParser.createEntity(city, ForecastPeriod.current.rawValue, [element.current])
+                    DataParser.createEntity(city, ForecastPeriod.hourly.rawValue, element.hourly)
+                    DataParser.createEntity(city, ForecastPeriod.daily.rawValue, element.daily)
                 }
-                
+
                 guard let completion = completion else { return }
                 completion()
                 

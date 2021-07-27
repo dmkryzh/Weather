@@ -10,7 +10,7 @@ import UIKit
 
 class CarouselCoordinator: Coordinator {
     
-    var navController: UINavigationController?
+    var navController: UINavigationController
     var rootController: CarouselViewController?
     var parentCoordinator: MainCoordinator?
     
@@ -20,29 +20,29 @@ class CarouselCoordinator: Coordinator {
         let vm = CarouselViewModel()
         let vc = CarouselViewController(coordinator: self, vm: vm)
         rootController = vc
-        navController?.navigationBar.backgroundColor = .clear
-        navController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Rubik-Medium", size: 18) as Any]
-        navController?.navigationBar.isTranslucent = true
-        navController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navController?.navigationBar.shadowImage = UIImage()
-        navController?.navigationBar.tintColor = .black
-        navController?.pushViewController(vc, animated: true)
+        navController.navigationBar.backgroundColor = .clear
+        navController.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Rubik-Medium", size: 18) as Any]
+        navController.navigationBar.isTranslucent = true
+        navController.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navController.navigationBar.shadowImage = UIImage()
+        navController.navigationBar.tintColor = .black
+        navController.pushViewController(vc, animated: true)
     }
     
     func navigateBackToOnboarding() {
         guard let parent = parentCoordinator else { return }
         let vc = OnboardingViewController(coordinator: parent)
         vc.carouselIsAlreadyShown = true
-        navController?.pushViewController(vc, animated: true)
+        navController.pushViewController(vc, animated: true)
     }
     
     func startSettings() {
         let vc = SettingsViewController()
-        navController?.pushViewController(vc, animated: true)
+        navController.pushViewController(vc, animated: true)
     }
     
     func backToPreviousView() {
-        navController?.popViewController(animated: true)
+        navController.popViewController(animated: true)
     }
     
     func startDetailedView() {
@@ -50,7 +50,7 @@ class CarouselCoordinator: Coordinator {
         vm.parentViewModel = mainViewModel
         let vc = DetailedForecastViewController(coordinator: self, vm: vm)
         vc.cityName.text = rootController?.navigationItem.title
-        navController?.pushViewController(vc, animated: true)
+        navController.pushViewController(vc, animated: true)
         
     }
     
@@ -59,7 +59,7 @@ class CarouselCoordinator: Coordinator {
         vm.selectedCell = [index]
         let vc = DailyForecastViewController(vm: vm, coordinator: self)
         
-        navController?.pushViewController(vc, animated: true)
+        navController.pushViewController(vc, animated: true)
     }
     
     func startCityAlert() {
@@ -67,12 +67,12 @@ class CarouselCoordinator: Coordinator {
         
         
         alert.configureAddAction { [self] in
-            navController?.dismiss(animated: true) {
+            navController.dismiss(animated: true) {
                 let cityName = alert.addCityAlert.textFields?[0].text ?? ""
                 createPageForCarousel(cityName)
             }
         }
-        navController?.present(alert.addCityAlert, animated: true)
+        navController.present(alert.addCityAlert, animated: true)
     }
     
     func createPageForCarousel(_ city: String) {

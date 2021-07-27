@@ -279,23 +279,23 @@ extension DailyForecastViewController: UITableViewDataSource {
         
         switch indexPath.item {
         case 0:
-            cell.iconTextAndBounds(icon: WeatherIcons.temperature.getIcon(), iconText: "   По ощущениям", statusText: "\(tempFeel)", isWithCircle: true, bounds: CGRect(x: 0, y: -7, width: 24, height: 26))
+            cell.iconTextAndBounds(icon: WeatherIcon.temperature.getIconImage() ?? UIImage(), iconText: "   По ощущениям", statusText: "\(tempFeel)", isWithCircle: true, bounds: CGRect(x: 0, y: -7, width: 24, height: 26))
             return cell
         case 1:
             let text = Int(viewModel.wind ?? 0)
-            cell.iconTextAndBounds(icon: WeatherIcons.wind.getIcon(), iconText: "   Ветер", statusText: "\(text) м/с", bounds: CGRect(x: 0, y: -2, width: 24, height: 14))
+            cell.iconTextAndBounds(icon: WeatherIcon.wind.getIconImage() ?? UIImage(), iconText: "   Ветер", statusText: "\(text) м/с", bounds: CGRect(x: 0, y: -2, width: 24, height: 14))
             return cell
         case 2:
             let text = Int(viewModel.uvi ?? 0)
-            cell.iconTextAndBounds(icon: WeatherIcons.ultravioletLevel.getIcon(), iconText: "   Уф индекс", statusText: "\(text)", bounds: CGRect(x: 0, y: -7, width: 24, height: 27))
+            cell.iconTextAndBounds(icon: WeatherIcon.ultravioletLevel.getIconImage() ?? UIImage(), iconText: "   Уф индекс", statusText: "\(text)", bounds: CGRect(x: 0, y: -7, width: 24, height: 27))
             return cell
         case 3:
             let text = Int(viewModel.rain ?? 0)
-            cell.iconTextAndBounds(icon: WeatherIcons.rain.getIcon(), iconText: "   Дождь", statusText: "\(text)%", bounds: CGRect(x: 0, y: -9, width: 24, height: 30))
+            cell.iconTextAndBounds(icon: WeatherIcon.rain.getIconImage() ?? UIImage(), iconText: "   Дождь", statusText: "\(text)%", bounds: CGRect(x: 0, y: -9, width: 24, height: 30))
             return cell
         case 4:
             let text = viewModel.clouds
-            cell.iconTextAndBounds(icon: WeatherIcons.cloud.getIcon(), iconText: "   Облачность", statusText: "\(text ?? 0)%", bounds: CGRect(x: 0, y: -6, width: 24, height: 17))
+            cell.iconTextAndBounds(icon: WeatherIcon.fewClouds.getIconImage() ?? UIImage(), iconText: "   Облачность", statusText: "\(text ?? 0)%", bounds: CGRect(x: 0, y: -6, width: 24, height: 17))
             return cell
         default:
             return UITableViewCell()

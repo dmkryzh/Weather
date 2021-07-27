@@ -369,7 +369,7 @@ extension PageViewConroller: UICollectionViewDelegateFlowLayout {
             let cellForecast = collectionView.cellForItem(at: indexPath) as! HourlyForecastCollectionCell
             let oldIndex = viewModel.selectedCell
             viewModel.selectedCell = [indexPath]
-            cellForecast.layer.sublayers?[0].isHidden = false
+            cellForecast.layer.sublayers?.first?.isHidden = false
             cellForecast.time.textColor = .white
             cellForecast.temperatureLabel.textColor = .white
             collectionView.reloadItems(at: oldIndex)

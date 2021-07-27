@@ -80,31 +80,32 @@ class DetailedForecastViewModel {
             }
         }
         
+        
         for (index, element) in temporaryTemp.enumerated() {
             if [0,3,6,9,12,15,18,21,24].contains(index) {
                 arrayOfHourlyForecast == nil ? arrayOfHourlyForecast = [element] : arrayOfHourlyForecast?.append(element)
-                
+
             }
         }
-        
+
         for (index, element) in temporaryTime.enumerated() {
             if [0,3,6,9,12,15,18,21,24].contains(index) {
                 timeline == nil ? timeline = [element] : timeline?.append(element)
             }
         }
-        
+
         for (index, element) in temporaryIcon.enumerated() {
             if [0,3,6,9,12,15,18,21,24].contains(index) {
                 icons == nil ? icons = [element] : icons?.append(element)
             }
         }
-        
+
         for (index, element) in temporaryWind.enumerated() {
             if [0,3,6,9,12,15,18,21,24].contains(index) {
                 wind == nil ? wind = [element] : wind?.append(element)
             }
         }
-        
+
         for (index, element) in temporaryCloud.enumerated() {
             if [0,3,6,9,12,15,18,21,24].contains(index) {
                 clouds == nil ? clouds = [element] : clouds?.append(element)

@@ -19,7 +19,7 @@ class DailyForecastCollectionViewCell: UICollectionViewCell {
     
     let imageForIcon: NSTextAttachment = {
         let imageAttachment = NSTextAttachment()
-        imageAttachment.image = WeatherIcons.rain.getIcon()
+        imageAttachment.image = WeatherIcon.fewClouds.getIconImage()
         imageAttachment.bounds = CGRect(x: 0, y: -4, width: 15, height: 17)
         return imageAttachment
     }()
